@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.supplier.SpCategoryFormController">
+   <children>
+      <AnchorPane prefHeight="86.0" prefWidth="605.0" style="-fx-background-color: #FF4233;">
+         <children>
+            <HBox alignment="CENTER" layoutX="94.0" layoutY="8.0" prefHeight="71.0" prefWidth="418.0" spacing="20.0">
+               <children>
+                  <ImageView fx:id="catHeaderImage" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="catHeaderLbl" textFill="WHITE">
+                     <font>
+                        <Font name="FreeSans Bold" size="26.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <VBox alignment="CENTER" layoutY="86.0" prefHeight="314.0" prefWidth="605.0" spacing="50.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label text="Ονομα κατηγοριας:" />
+                  <TextField fx:id="categoryNameFld" />
+               </children>
+            </HBox>
+            <JFXButton fx:id="submitCatBtn" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #FF4233;" text="Αποθηκευση" textFill="WHITE" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

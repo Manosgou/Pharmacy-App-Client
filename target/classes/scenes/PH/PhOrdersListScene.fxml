@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.pharmacist.PhOrdersListController">
+   <children>
+      <AnchorPane prefHeight="86.0" prefWidth="1200.0" style="-fx-background-color: #FF4233;">
+         <children>
+            <JFXButton layoutX="1101.0" layoutY="43.0" style="-fx-background-color: white;" text="Ανανεωση" textFill="#ff4233" />
+            <HBox alignment="CENTER" layoutX="303.0" layoutY="8.0" prefHeight="71.0" prefWidth="418.0" spacing="20.0">
+               <children>
+                  <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../assets/icons/clipboard.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Λιστα παραγγελειων" textFill="WHITE">
+                     <font>
+                        <Font name="FreeSans Bold" size="26.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <TableView fx:id="ordersTable" layoutY="86.0" prefHeight="516.0" prefWidth="1200.0">
+         <columns>
+            <TableColumn fx:id="medicineNameCol" prefWidth="75.0" text="Ονομα φαρμακου" />
+            <TableColumn fx:id="medCategoryCol" prefWidth="75.0" text="Κατηγορια φαρμακου" />
+            <TableColumn fx:id="orderQuantityCol" prefWidth="75.0" text="Ποσοτητα" />
+            <TableColumn fx:id="orderTotalPriceCol" prefWidth="75.0" text="Τελικη τιμη" />
+            <TableColumn fx:id="orderStatusCol" prefWidth="75.0" text="Κατασταση παραγγελιας" />
+            <TableColumn fx:id="orderDateTimeCol" prefWidth="75.0" text="Ημ. παραγγελίας" />
+            <TableColumn fx:id="orderOptionsCol" prefWidth="75.0" text="Επιλογες" />
+         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+</AnchorPane>

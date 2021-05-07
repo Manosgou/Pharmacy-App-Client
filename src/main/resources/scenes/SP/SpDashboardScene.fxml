@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.supplier.SpDashboardController">
+   <children>
+      <AnchorPane prefHeight="600.0" prefWidth="358.0" style="-fx-background-color: #FF4233;">
+         <children>
+            <VBox alignment="CENTER" fillWidth="false" prefHeight="600.0" prefWidth="358.0" spacing="50.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="335.0">
+                     <children>
+                        <Label text="Στοιχεια χρηστη" textFill="WHITE">
+                           <font>
+                              <Font name="FreeSans Bold" size="30.0" />
+                           </font>
+                        </Label>
+                        <HBox layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="213.0" spacing="5.0">
+                           <children>
+                              <Label text="ID:" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="idLbl" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="26.0" prefWidth="213.0" spacing="5.0">
+                           <children>
+                              <Label text="Username:" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="usernameLbl" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="36.0" prefHeight="26.0" prefWidth="213.0" spacing="5.0">
+                           <children>
+                              <Label text="Email:" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="emailLbl" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="36.0" prefHeight="26.0" prefWidth="213.0" spacing="5.0">
+                           <children>
+                              <Label text="Όνομα:" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="firstnameLbl" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="62.0" prefHeight="26.0" prefWidth="213.0" spacing="5.0">
+                           <children>
+                              <Label text="Επίθετο:" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lastnameLbl" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="26.0" prefWidth="213.0" spacing="5.0">
+                           <children>
+                              <Label text="Ιδιότητα:" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="passwordLbl" textFill="WHITE">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="335.0" spacing="10.0">
+                     <children>
+                        <JFXButton onAction="#addNewMedicine" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νεο φαρμακο" />
+                        <JFXButton onAction="#showAllMedicines" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λιστα φαρμακων" />
+                        <JFXButton onAction="#addNewCategory" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νεο κατηγορια φαρμακου" />
+                        <JFXButton onAction="#showAllCategories" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λιστα κατηγοριων φαρμακων" />
+                        <JFXButton onAction="#showOrders" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Παρραγελιες" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="87.0" prefWidth="358.0" spacing="10.0">
+                     <children>
+                        <JFXButton onAction="#updateUser" prefHeight="30.0" prefWidth="255.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Ενημερωση στοιχειων χρηστη" />
+                        <JFXButton fx:id="logout" onAction="#logout" prefHeight="30.0" prefWidth="255.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Αποσυνδεση" textFill="#dc2d18" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children></AnchorPane>
+      <VBox alignment="CENTER" fillWidth="false" layoutX="358.0" layoutY="339.0" prefHeight="261.0" prefWidth="666.0" spacing="20.0">
+         <children>
+            <Label text="Τελευταίες ενεργειες">
+               <font>
+                  <Font name="FreeSans Bold" size="25.0" />
+               </font>
+            </Label>
+            <HBox fillHeight="false" prefHeight="77.0" prefWidth="532.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20 20 20 20;">
+               <children>
+                  <VBox alignment="CENTER" fillWidth="false" prefHeight="77.0" prefWidth="534.0">
+                     <children>
+                        <Label text="Τελευταια παραγγελια" textFill="WHITE">
+                           <font>
+                              <Font name="FreeSans Bold" size="19.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" fillHeight="false" prefHeight="55.0" prefWidth="533.0" spacing="20.0">
+                           <children>
+                              <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="116.0" spacing="12.0">
+                                 <children>
+                                    <Label text="Ονοματεπώνυμο" textFill="WHITE">
+                                       <font>
+                                          <Font name="FreeSans Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="orderFullNameLbl" text="Label" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
+                                 <children>
+                                    <Label text="Φαρμακο" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="orderMedicineLbl" text="Label" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
+                                 <children>
+                                    <Label text="Ποσοτητα" textFill="WHITE">
+                                       <font>
+                                          <Font name="FreeSans Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="orderQuantityLbl" text="Label" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
+                                 <children>
+                                    <Label text="Τελικη τιμη" textFill="WHITE">
+                                       <font>
+                                          <Font name="FreeSans Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="orderTotalPriceLbl" text="Label" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="77.0" prefWidth="532.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20 20 20 20;">
+               <children>
+                  <VBox alignment="CENTER" fillWidth="false" prefHeight="77.0" prefWidth="534.0">
+                     <children>
+                        <Label text="Τελευταια προσθηκη φαρμακου" textFill="WHITE">
+                           <font>
+                              <Font name="FreeSans Bold" size="19.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" fillHeight="false" prefHeight="55.0" prefWidth="533.0" spacing="20.0">
+                           <children>
+                              <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="116.0" spacing="12.0">
+                                 <children>
+                                    <Label text="Ονομα" textFill="WHITE">
+                                       <font>
+                                          <Font name="FreeSans Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="medicineNameLbl" text="Label" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
+                                 <children>
+                                    <Label text="Κατηγορια" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="medicineCategoryLbl" text="Label" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
+                                 <children>
+                                    <Label text="Ποσοτητα" textFill="WHITE">
+                                       <font>
+                                          <Font name="FreeSans Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="medicineQuantityLbl" text="Label" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
+                                 <children>
+                                    <Label text="Τιμη" textFill="WHITE">
+                                       <font>
+                                          <Font name="FreeSans Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="medicinePriceLbl" text="Label" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <BarChart fx:id="barChart" layoutX="441.0" layoutY="14.0" legendVisible="false" prefHeight="330.0" prefWidth="500.0">
+        <xAxis>
+          <CategoryAxis prefWidth="439.0" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </BarChart>
+   </children>
+</AnchorPane>

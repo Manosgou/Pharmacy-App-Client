@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.UpdateUserDetailsController">
+   <children>
+      <VBox layoutX="47.0" layoutY="38.0" prefHeight="290.0" prefWidth="307.0" spacing="50.0">
+         <children>
+            <JFXTextField fx:id="usernameFld" focusColor="#ff4233" labelFloat="true" promptText="Username" />
+            <JFXTextField fx:id="emailFld" focusColor="#ff4233" labelFloat="true" promptText="email" />
+            <JFXTextField fx:id="lastnameFld" focusColor="#ff4233" labelFloat="true" promptText="Επίθετο" />
+            <JFXTextField fx:id="firstnameFld" focusColor="#ff4233" labelFloat="true" promptText="Όνομα" />
+         </children>
+      </VBox>
+      <JFXButton defaultButton="true" layoutX="145.0" layoutY="340.0" onAction="#updateUserInformation" prefHeight="46.0" prefWidth="110.0" style="-fx-background-color: #FF4233;" text="Αποθηκευση" textFill="WHITE" />
+   </children>
+</AnchorPane>

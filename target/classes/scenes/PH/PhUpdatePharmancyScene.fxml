@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.UpdateLocationDetailsController">
+   <children>
+      <VBox layoutX="47.0" layoutY="55.0" prefHeight="290.0" prefWidth="307.0" spacing="50.0">
+         <children>
+            <JFXTextField fx:id="streetFld" focusColor="#ff4233" labelFloat="true" promptText="Διεύθυνση" />
+            <JFXTextField fx:id="streetNumFld" focusColor="#ff4233" labelFloat="true" promptText="Αρ. διεύθυνσης" />
+            <JFXTextField fx:id="cityFld" focusColor="#ff4233" labelFloat="true" promptText="Πόλη" />
+            <JFXTextField fx:id="postalCodeFld" focusColor="#ff4233" labelFloat="true" promptText="Τ.Κ" />
+         </children>
+      </VBox>
+      <JFXButton defaultButton="true" layoutX="145.0" layoutY="345.0" onAction="#updatePharmancyInformation" prefHeight="46.0" prefWidth="110.0" style="-fx-background-color: #FF4233;" text="Αποθηκευση" textFill="WHITE" />
+   </children>
+</AnchorPane>
