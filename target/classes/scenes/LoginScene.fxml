@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -17,8 +18,11 @@
                   <Image url="@../assets/icons/login.png" />
                </image>
             </ImageView>
-         </children></AnchorPane>
-      <VBox alignment="CENTER" layoutX="14.0" layoutY="43.0" prefHeight="332.0" prefWidth="410.0">
+         </children>
+         <effect>
+            <DropShadow />
+         </effect></AnchorPane>
+      <VBox alignment="CENTER" layoutX="14.0" layoutY="29.0" prefHeight="415.0" prefWidth="410.0">
          <children>
             <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
                <children>
@@ -30,8 +34,8 @@
                   <JFXPasswordField fx:id="passwordFld" focusColor="#ff4233" labelFloat="true" promptText="Password" />
                </children>
             </VBox>
+            <JFXButton defaultButton="true" onAction="#login" prefHeight="56.0" prefWidth="143.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20 20 20 20;" text="Συνδεση" textFill="WHITE" />
          </children>
       </VBox>
-      <JFXButton defaultButton="true" layoutX="160.0" layoutY="385.0" onAction="#login" prefHeight="45.0" prefWidth="119.0" style="-fx-background-color: #FF4233;" text="Συνδεση" textFill="WHITE" />
    </children>
 </AnchorPane>

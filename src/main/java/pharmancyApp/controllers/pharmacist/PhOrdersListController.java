@@ -55,7 +55,7 @@ public class PhOrdersListController implements Initializable {
     @FXML
     private TableColumn<Order, String> orderOptionsCol;
 
-    Order order;
+    private Order order;
     private ObservableList<Order> orders = FXCollections.observableArrayList();
 
 
@@ -78,7 +78,7 @@ public class PhOrdersListController implements Initializable {
 
                 } else {
 
-                    JFXButton makeItAvailable = new JFXButton("Προβολη");
+                    JFXButton makeItAvailable = new JFXButton("Προσθήκη στο κατάστημα");
                     makeItAvailable.setStyle("-fx-background-color:" + Colors.VIEW);
                     makeItAvailable.setTextFill(Paint.valueOf(Colors.WHITE));
 

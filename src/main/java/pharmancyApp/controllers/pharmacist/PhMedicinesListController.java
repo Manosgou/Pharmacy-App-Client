@@ -24,14 +24,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
-import pharmancyApp.controllers.supplier.SpMedicineDetailsController;
-import pharmancyApp.controllers.supplier.SpMedicineFormController;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class PhMedicinesListController implements Initializable {

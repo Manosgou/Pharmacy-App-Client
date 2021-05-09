@@ -15,7 +15,7 @@
       <AnchorPane prefHeight="86.0" prefWidth="1200.0" style="-fx-background-color: #FF4233;">
          <children>
             <JFXButton layoutX="1101.0" layoutY="43.0" style="-fx-background-color: white;" text="Ανανεωση" textFill="#ff4233" />
-            <HBox alignment="CENTER" layoutX="303.0" layoutY="8.0" prefHeight="71.0" prefWidth="418.0" spacing="20.0">
+            <HBox alignment="CENTER" layoutX="391.0" layoutY="8.0" prefHeight="71.0" prefWidth="418.0" spacing="20.0">
                <children>
                   <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                      <image>

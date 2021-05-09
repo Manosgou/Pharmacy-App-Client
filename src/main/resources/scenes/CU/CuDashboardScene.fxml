@@ -179,13 +179,13 @@
          <children>
             <HBox fx:id="centerBtnBar" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="45.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="154.0" prefWidth="178.0">
+                  <Button mnemonicParsing="false" onAction="#makeOrder" prefHeight="154.0" prefWidth="178.0">
                      <graphic>
                         <VBox alignment="CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../assets/icons/order.png" />
+                                    <Image url="@../../assets/icons/make_order.png" />
                                  </image>
                               </ImageView>
                               <Label text="Νεα παραγγελια" textFill="WHITE">
@@ -196,13 +196,13 @@
                         </VBox>
                      </graphic>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="154.0" prefWidth="178.0">
+                  <Button mnemonicParsing="false" onAction="#showOrders" prefHeight="154.0" prefWidth="178.0">
                      <graphic>
                         <VBox alignment="CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../assets/icons/box.png" />
+                                    <Image url="@../../assets/icons/orders.png" />
                                  </image>
                               </ImageView>
                               <Label text="Παραγγελιες" textFill="WHITE">
@@ -213,7 +213,7 @@
                         </VBox>
                      </graphic>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="154.0" prefWidth="178.0">
+                  <Button mnemonicParsing="false" onAction="#showMedicinesList" prefHeight="154.0" prefWidth="178.0">
                      <graphic>
                         <VBox alignment="CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0">
                            <children>

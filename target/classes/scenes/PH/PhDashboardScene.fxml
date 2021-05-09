@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.pharmacist.PhDashboardController">
+<AnchorPane prefHeight="650.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.pharmacist.PhDashboardController">
    <children>
-      <AnchorPane prefHeight="600.0" prefWidth="358.0" style="-fx-background-color: #FF4233;">
+      <AnchorPane prefHeight="650.0" prefWidth="358.0" style="-fx-background-color: #FF4233;">
          <children>
-            <VBox alignment="CENTER" fillWidth="false" prefHeight="591.0" prefWidth="358.0">
+            <VBox alignment="CENTER" fillWidth="false" prefHeight="650.0" prefWidth="358.0">
                <children>
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="335.0" spacing="15.0">
                      <children>
@@ -183,9 +183,10 @@
                         <JFXButton onAction="#getOrdersList" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Παραγγελίες" />
                         <JFXButton onAction="#showAvailableMedicines" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λίστα διαθέσιμων φαρμάκων" />
                         <JFXButton onAction="#getMedicinesList" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Φαρμακα για πωληση" />
+                        <JFXButton onAction="#showCustomersOrders" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Παραγγελίες πελατων" />
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="87.0" prefWidth="358.0" spacing="10.0">
+                  <VBox alignment="CENTER" prefHeight="123.0" prefWidth="358.0" spacing="10.0">
                      <children>
                         <JFXButton onAction="#updatePharmancyDetails" prefHeight="30.0" prefWidth="255.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Ενημέρωση στοιχείων φαρμακείου" />
                         <JFXButton onAction="#updateUser" prefHeight="30.0" prefWidth="255.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Ενημέρωση στοιχείων χρήστη" />

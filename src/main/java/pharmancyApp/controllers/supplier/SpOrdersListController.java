@@ -23,9 +23,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SpOrdersListController implements Initializable {
@@ -49,7 +52,7 @@ public class SpOrdersListController implements Initializable {
     private TableColumn<Order, String> ordersOptionCol;
 
     private Order order;
-    private ObservableList<Order> orders = FXCollections.observableArrayList();
+    private final ObservableList<Order> orders = FXCollections.observableArrayList();
 
 
     @FXML
@@ -83,7 +86,7 @@ public class SpOrdersListController implements Initializable {
                         try {
                             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpOrderDetailsScene.fxml")));
                             Parent root = loader.load();
-                            SpOrderDetailsController spOrderDetailsController =loader.getController();
+                            SpOrderDetailsController spOrderDetailsController = loader.getController();
                             spOrderDetailsController.setOrder(order);
                             spOrderDetailsController.setFields();
                             Stage stage = new Stage();
@@ -100,13 +103,63 @@ public class SpOrdersListController implements Initializable {
 
 
                     deleteOrder.setOnMouseClicked((MouseEvent event) -> {
+                        order = getTableView().getItems().get(getIndex());
+                        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/delete/order/" + order.getId();
+                        Alert alert;
+
+                        ButtonType delete = new ButtonType("Διαγραφή", ButtonBar.ButtonData.OK_DONE);
+                        ButtonType cancel = new ButtonType("Ακύρωση", ButtonBar.ButtonData.CANCEL_CLOSE);
+                        alert = new Alert(Alert.AlertType.WARNING,
+                                "Είστε σίγουροι ότι θέλετε να διαγαψετε την παραγγελία του πελάτη " + order.getEmployee().getLastname() + " " + order.getEmployee().getFirstname() + ".\n(Η ενέργεια αυτή είναι μη αναστρέψιμη)",
+
+                                delete,
+                                cancel);
+
+                        alert.setTitle("Διαγραφή πελάτη");
+                        alert.setHeaderText("Προειδοποίηση!");
+                        alert.getDialogPane().setMinHeight(200);
+                        alert.getDialogPane().setMinWidth(500);
+                        alert.setResizable(false);
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.orElse(cancel) == delete) {
+                            try {
+                                Response response = HTTPMethods.delete(url);
+                                int respondCode = response.getRespondCode();
+                                if (respondCode > 200 && respondCode < 299) {
+                                    orders.removeIf(m -> m.getId() == order.getId());
+                                } else {
+                                    StringBuilder errorMessage = new StringBuilder();
+                                    JSONObject responseObj = new JSONObject(response);
+                                    Map<String, Object> i = responseObj.toMap();
+                                    for (Map.Entry<String, Object> entry : i.entrySet()) {
+                                        errorMessage.append(entry.getValue().toString()).append("\n");
+                                        System.out.println(entry.getKey() + "/" + entry.getValue());
+
+                                    }
+                                    alert = new Alert(Alert.AlertType.ERROR);
+                                    ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
+                                    alert.setResizable(false);
+                                    alert.setWidth(200);
+                                    alert.setHeight(300);
+                                    alert.setTitle("Σφάλμα");
+                                    alert.setHeaderText("Αδυναμια συνδεσης");
+                                    alert.setContentText(errorMessage.toString());
+                                    alert.showAndWait();
+                                    if (alert.getResult().equals(okBtn)) {
+                                        alert.close();
+                                    }
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
 
 
                     });
 
 
-
-                    HBox actionsBtns = new HBox(viewOrder,deleteOrder);
+                    HBox actionsBtns = new HBox(viewOrder, deleteOrder);
                     actionsBtns.setAlignment(Pos.CENTER);
                     actionsBtns.setSpacing(5);
 
@@ -143,16 +196,16 @@ public class SpOrdersListController implements Initializable {
                     JSONObject userObj = new JSONObject(employeeObj.getJSONObject("user").toString());
                     int employeeId = userObj.getInt("id");
                     String employeeUsername = userObj.getString("username");
-                    String  employeeEmail = userObj.getString("email");
-                    String  employeeLastName = userObj.getString("last_name");
-                    String  employeeFirstName = userObj.getString("first_name");
+                    String employeeEmail = userObj.getString("email");
+                    String employeeLastName = userObj.getString("last_name");
+                    String employeeFirstName = userObj.getString("first_name");
                     String employeeDomain = switch (employeeObj.getString("domain")) {
                         case "PH" -> "Φαρμακοποιός";
                         case "SP" -> "Προμηθευτής";
                         case "CU" -> "Πελάτης";
                         default -> "(κενό)";
                     };
-                    employee = new Employee(employeeId,employeeUsername,employeeEmail,employeeFirstName,employeeLastName,employeeDomain);
+                    employee = new Employee(employeeId, employeeUsername, employeeEmail, employeeFirstName, employeeLastName, employeeDomain);
                     JSONObject medicineObj = new JSONObject(jsonObject.getJSONObject("medicine").toString());
                     int medicineId = medicineObj.getInt("id");
                     String medicineName = medicineObj.getString("name");
@@ -165,10 +218,10 @@ public class SpOrdersListController implements Initializable {
                     JSONObject locationObj = new JSONObject(jsonObject.getJSONObject("location").toString());
                     int locationId = locationObj.getInt("id");
                     String locationStreet = locationObj.getString("street");
-                    int locationStreetNum =  locationObj.getInt("street_num");
+                    int locationStreetNum = locationObj.getInt("street_num");
                     String locationCity = locationObj.getString("city");
                     int lcoationPostalCode = locationObj.getInt("postal_code");
-                    location =  new Location(locationId,locationStreet,locationStreetNum,locationCity,lcoationPostalCode);
+                    location = new Location(locationId, locationStreet, locationStreetNum, locationCity, lcoationPostalCode);
                     int quantity = jsonObject.getInt("quantity");
                     float price = jsonObject.getFloat("total_price");
                     String orderStatusId = jsonObject.getString("order_status");
@@ -179,9 +232,9 @@ public class SpOrdersListController implements Initializable {
                         default -> "Καμία ενέργεια";
                     };
                     String orderDateTime = jsonObject.getString("date_ordered");
-                    orderStatus =  new OrderStatus(orderStatusId,ordStatus);
+                    orderStatus = new OrderStatus(orderStatusId, ordStatus);
                     medicine = new Medicine(medicineId, medicineName, medicineQuantity, medicinePrice, medicineCategory);
-                    Order order = new Order(id, employee, medicine, quantity, price, orderStatus ,location,orderDateTime);
+                    Order order = new Order(id, employee, medicine, quantity, price, orderStatus, location, orderDateTime);
                     orders.add(order);
 
 

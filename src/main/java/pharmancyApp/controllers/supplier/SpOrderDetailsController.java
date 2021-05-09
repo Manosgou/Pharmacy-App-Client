@@ -14,12 +14,7 @@ import models.Order;
 import models.OrderStatus;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
-
 import java.net.URL;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 import java.util.ResourceBundle;
 

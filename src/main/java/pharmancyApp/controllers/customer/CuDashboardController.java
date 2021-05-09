@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import pharmancyApp.Settings;
 import pharmancyApp.controllers.UpdateLocationDetailsController;
 import pharmancyApp.controllers.UpdateUserDetailsController;
+import pharmancyApp.controllers.pharmacist.PhMakeOrderController;
 
 import java.net.URL;
 import java.util.Map;
@@ -154,7 +155,84 @@ public class CuDashboardController implements Initializable {
 
         }
     }
+    @FXML
+    private void showOrders(){
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuOrdersListScene.fxml")));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Προβολή παραγγελιών");
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
 
+        }
+    }
+    @FXML
+    private void showMedicinesList(){
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuMedicinesListScene.fxml")));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Δημιουργία παραγγελίας");
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    private boolean checkIfPharmacistDetailsAreEmpty() {
+        return employee.usernameProperty().get().isEmpty() && employee.lastnameProperty().get().isEmpty() && employee.firstnameProperty().get().isEmpty() && employee.emailProperty().get().isEmpty();
+    }
+
+
+    private boolean checkIfLocationDetailsAreEmpty() {
+        return location.streetProperty().get().isEmpty() && location.streetNumProperty().get() == 0 && location.cityProperty().get().isEmpty() && location.postalCodeProperty().get() == 0;
+    }
+
+    @FXML
+    private void makeOrder() {
+
+        if(checkIfPharmacistDetailsAreEmpty() && checkIfLocationDetailsAreEmpty()) {
+            try {
+                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuMakeOrderScene.fxml")));
+                Parent root = loader.load();
+                CuMakeOrderController cuMakeOrderController = loader.getController();
+                cuMakeOrderController.setEmployee(employee);
+                cuMakeOrderController.setPharmancy(location);
+                cuMakeOrderController.fetchMedicines();
+                Stage stage = new Stage();
+                stage.setTitle("Δημιουργία παραγγελίας");
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
+            alert.setTitle("Σφάλμα");
+            alert.setHeaderText("Αδυναμια δημιουργία παραγγελίας");
+            alert.setContentText("Βεβαιωθείτε ότι έχετε συμπληρώσει όλα τα στοιχεία χρήστη και όλα τα στοιχεία τοποθεσίας.");
+            alert.showAndWait();
+            if (alert.getResult().equals(okBtn)) {
+                alert.close();
+            }
+        }
+    }
 
     @FXML
     private void logout(ActionEvent event) {

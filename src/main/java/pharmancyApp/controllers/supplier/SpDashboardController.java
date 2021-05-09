@@ -79,22 +79,22 @@ public class SpDashboardController implements Initializable {
     }
 
 
-    private void getBarChart(int totalOrders,int totalMedicines,int totalCategories){
+    private void getBarChart(int totalOrders, int totalMedicines, int totalCategories) {
         XYChart.Series data = new XYChart.Series();
         data.getData().add(new XYChart.Data("Παραγγελίες", totalOrders));
-        data.getData().add(new XYChart.Data("Φάρμακα"  , totalMedicines));
-        data.getData().add(new XYChart.Data("Κατηγορίες Φαρμάκων"  , totalCategories));
+        data.getData().add(new XYChart.Data("Φάρμακα", totalMedicines));
+        data.getData().add(new XYChart.Data("Κατηγορίες Φαρμάκων", totalCategories));
         barChart.getData().add(data);
 
     }
 
     private void lastActionsLabels(String customerName, String orderMedicine, int orderQuantity, float orderPrice, String medicineName, String medicineCategory, int medicineQuantity, float medicinePrice) {
-        orderFullNameLbl.setText(customerName);
-        orderMedicineLbl.setText(orderMedicine);
+        orderFullNameLbl.setText(customerName ==null ?"(κενό)":customerName);
+        orderMedicineLbl.setText(orderMedicine==null ?"(κενό)":orderMedicine);
         orderQuantityLbl.setText(Integer.toString(orderQuantity));
         orderTotalPriceLbl.setText(Float.toString(orderPrice));
-        medicineNameLbl.setText(medicineName);
-        medicineCategoryLbl.setText(medicineCategory);
+        medicineNameLbl.setText(medicineName==null ?"(κενό)":medicineName);
+        medicineCategoryLbl.setText(medicineCategory==null ?"(κενό)":medicineCategory);
         medicineQuantityLbl.setText(Integer.toString(medicineQuantity));
         medicinePriceLbl.setText(Float.toString(medicinePrice));
     }
@@ -114,20 +114,32 @@ public class SpDashboardController implements Initializable {
                 String firstname = user.getString("first_name");
                 String lastname = user.getString("last_name");
                 employee = new Employee(id, username, email, firstname, lastname, domain);
-                JSONObject lastOrder = jsonResponse.getJSONObject("last_order");
-                String customerName = lastOrder.getString("full_name");
-                String orderMedicine = lastOrder.getString("medicine");
-                int orderQuantity = lastOrder.getInt("quantity");
-                float orderPrice = lastOrder.getFloat("total_price");
-                JSONObject lastMedicine = jsonResponse.getJSONObject("last_medicine");
-                String medicineName = lastMedicine.getString("name");
-                String medicineCategory = lastMedicine.getString("category");
-                int medicineQuantity = lastMedicine.getInt("quantity");
-                float medicinePrice = lastMedicine.getFloat("price");
-                int totalOrders = jsonResponse.getInt("total_orders");
-                int totalMedicines = jsonResponse.getInt("total_medicines");
-                int totalCategories = jsonResponse.getInt("total_categories");
-                getBarChart(totalOrders,totalMedicines,totalCategories);
+                String customerName = null;
+                String orderMedicine = null;
+                int orderQuantity =0;
+                float orderPrice = 0.0f;
+                if (!(jsonResponse.isNull("last_order"))) {
+                    JSONObject lastOrder = jsonResponse.getJSONObject("last_order");
+                    customerName = lastOrder.getString("full_name");
+                    orderMedicine = lastOrder.getString("medicine");
+                    orderQuantity = lastOrder.getInt("quantity");
+                    orderPrice = lastOrder.getFloat("total_price");
+                }
+                String medicineName = null;
+                String medicineCategory =null;
+                int medicineQuantity =0;
+                float medicinePrice =0.0f;
+                if (!(jsonResponse.isNull("last_medicine"))) {
+                    JSONObject lastMedicine = jsonResponse.getJSONObject("last_medicine");
+                    medicineName = lastMedicine.getString("name");
+                    medicineCategory = lastMedicine.getString("category");
+                    medicineQuantity = lastMedicine.getInt("quantity");
+                    medicinePrice = lastMedicine.getFloat("price");
+                }
+                int totalOrders = jsonResponse.isNull("total_orders") ? 0 : jsonResponse.getInt("total_orders");
+                int totalMedicines = jsonResponse.isNull("total_medicines") ? 0 : jsonResponse.getInt("total_medicines");
+                int totalCategories = jsonResponse.isNull("total_categories") ? 0 : jsonResponse.getInt("total_categories");
+                getBarChart(totalOrders, totalMedicines, totalCategories);
                 bindEmployeeLabels(employee);
                 lastActionsLabels(customerName, orderMedicine, orderQuantity, orderPrice, medicineName, medicineCategory, medicineQuantity, medicinePrice);
             } else {

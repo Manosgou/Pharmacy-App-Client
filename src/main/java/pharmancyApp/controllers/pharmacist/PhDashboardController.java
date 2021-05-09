@@ -175,23 +175,35 @@ public class PhDashboardController implements Initializable {
 
     @FXML
     private void makeOrder() {
-        try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMakeOrderScene.fxml")));
-            Parent root = loader.load();
-            PhMakeOrderController phMakeOrderController = loader.getController();
-            phMakeOrderController.setEmployee(employee);
-            phMakeOrderController.setPharmancy(location);
-            phMakeOrderController.fetchMedicines();
-            Stage stage = new Stage();
-            stage.setTitle("Δημιουργία παραγγελίας");
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(checkIfPharmacistDetailsAreEmpty() && checkIfLocationDetailsAreEmpty()) {
+            try {
+                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMakeOrderScene.fxml")));
+                Parent root = loader.load();
+                PhMakeOrderController phMakeOrderController = loader.getController();
+                phMakeOrderController.setEmployee(employee);
+                phMakeOrderController.setPharmancy(location);
+                phMakeOrderController.fetchMedicines();
+                Stage stage = new Stage();
+                stage.setTitle("Δημιουργία παραγγελίας");
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
 
+            }
+        }else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
+            alert.setTitle("Σφάλμα");
+            alert.setHeaderText("Αδυναμια δημιουργία παραγγελίας");
+            alert.setContentText("Βεβαιωθείτε ότι έχετε συμπληρώσει όλα τα στοιχεία χρήστη και όλα τα στοιχεία τοποθεσίας.");
+            alert.showAndWait();
+            if (alert.getResult().equals(okBtn)) {
+                alert.close();
+            }
         }
     }
 
@@ -235,6 +247,24 @@ public class PhDashboardController implements Initializable {
     private void showAvailableMedicines() {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhAvailableMedicinesListScene.fxml")));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Δημιουργία παραγγελίας");
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    @FXML
+    private void showCustomersOrders(){
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhCustomersOrdersListScene.fxml")));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Δημιουργία παραγγελίας");
