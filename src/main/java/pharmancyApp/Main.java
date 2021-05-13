@@ -3,6 +3,7 @@ package pharmancyApp;
 import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
+import animatefx.animation.FadeIn;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;

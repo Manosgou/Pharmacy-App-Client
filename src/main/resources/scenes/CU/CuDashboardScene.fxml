@@ -23,7 +23,7 @@
             <GaussianBlur />
          </effect>
       </ImageView>
-      <AnchorPane prefHeight="458.0" prefWidth="342.0" style="-fx-background-color: #FF4233; -fx-background-radius: 0 0 70 0;">
+      <AnchorPane fx:id="userInformationContainer" prefHeight="458.0" prefWidth="342.0" style="-fx-background-color: #FF4233; -fx-background-radius: 0 0 70 0;">
          <children>
             <VBox alignment="TOP_CENTER" layoutX="10.0" prefHeight="458.0" prefWidth="325.0" spacing="8.0">
                <children>
@@ -159,7 +159,7 @@
             <DropShadow />
          </effect>
       </AnchorPane>
-      <AnchorPane layoutY="548.0" prefHeight="52.0" prefWidth="277.0" style="-fx-background-color: #FF4233; -fx-background-radius: 0 70 0 0;">
+      <AnchorPane fx:id="logOutContainer" layoutY="548.0" prefHeight="52.0" prefWidth="277.0" style="-fx-background-color: #FF4233; -fx-background-radius: 0 70 0 0;">
          <children>
             <JFXButton layoutX="46.0" layoutY="11.0" onAction="#logout" prefHeight="30.0" prefWidth="185.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Αποσυνδεση" textFill="#dc2d18" />
          </children>
@@ -229,7 +229,7 @@
             </HBox>
          </children>
       </VBox>
-      <HBox fillHeight="false" layoutX="477.0" layoutY="510.0" prefHeight="77.0" prefWidth="532.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20 20 20 20;">
+      <HBox fx:id="lastOrderContainer" alignment="CENTER" fillHeight="false" layoutX="477.0" layoutY="510.0" prefHeight="77.0" prefWidth="532.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20 20 20 20;">
          <children>
             <VBox alignment="CENTER" fillWidth="false" prefHeight="77.0" prefWidth="534.0">
                <children>

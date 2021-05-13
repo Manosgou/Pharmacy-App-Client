@@ -3,6 +3,8 @@ package pharmancyApp.controllers;
 import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
+import animatefx.animation.FadeInRight;
+import animatefx.util.ParallelAnimationFX;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,9 +13,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
+
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
@@ -25,9 +29,11 @@ public class LoginController implements Initializable {
     private TextField usernameFld;
     @FXML
     private TextField passwordFld;
+    @FXML
+    private AnchorPane rightContainer;
 
     @FXML
-    private void showDashboard(String domain,ActionEvent event) {
+    private void showDashboard(String domain, ActionEvent event) {
         switch (domain) {
             case "PH":
                 try {
@@ -102,10 +108,10 @@ public class LoginController implements Initializable {
                 Response response = HTTPMethods.post(jsonString, url);
                 int respondCode = response.getRespondCode();
                 JSONObject jsonResponse = new JSONObject(response.getResponse());
-                if (respondCode >=200 && respondCode<=299) {
+                if (respondCode >= 200 && respondCode <= 299) {
                     Authentication.token = jsonResponse.getString("token");
                     String domain = jsonResponse.getString("domain");
-                    showDashboard(domain,event);
+                    showDashboard(domain, event);
 
                 } else {
                     StringBuilder errorMessage = new StringBuilder();
@@ -137,6 +143,8 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        new ParallelAnimationFX(
+                new FadeInRight(rightContainer)).play();
 
     }
 }

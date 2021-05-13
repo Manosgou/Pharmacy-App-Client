@@ -3,6 +3,8 @@ package pharmancyApp.controllers.customer;
 import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
+import animatefx.animation.*;
+import animatefx.util.ParallelAnimationFX;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.Employee;
 import models.Location;
@@ -21,6 +25,7 @@ import org.json.JSONObject;
 import pharmancyApp.Settings;
 import pharmancyApp.controllers.UpdateLocationDetailsController;
 import pharmancyApp.controllers.UpdateUserDetailsController;
+
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
@@ -50,6 +55,14 @@ public class CuDashboardController implements Initializable {
     private Label orderQuantityLbl;
     @FXML
     private Label orderTotalPriceLbl;
+    @FXML
+    private AnchorPane logOutContainer;
+    @FXML
+    private AnchorPane userInformationContainer;
+    @FXML
+    private HBox centerBtnBar;
+    @FXML
+    private HBox lastOrderContainer;
 
 
     Employee employee;
@@ -86,11 +99,12 @@ public class CuDashboardController implements Initializable {
     }
 
 
-    private void setLastOrderLabels(String orderMedicine, int orderQuantity, float orderPrice){
-        orderMedicineLbl.setText(orderMedicine==null ?"(κενό)":orderMedicine);
+    private void setLastOrderLabels(String orderMedicine, int orderQuantity, float orderPrice) {
+        orderMedicineLbl.setText(orderMedicine == null ? "(κενό)" : orderMedicine);
         orderQuantityLbl.setText(Integer.toString(orderQuantity));
         orderTotalPriceLbl.setText(Float.toString(orderPrice));
     }
+
     private void initDashboard() {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/dashboard";
         try {
@@ -118,7 +132,7 @@ public class CuDashboardController implements Initializable {
                     String orderMedicine = lastOrder.getString("medicine");
                     int orderQuantity = lastOrder.getInt("quantity");
                     float orderPrice = lastOrder.getFloat("total_price");
-                    setLastOrderLabels(orderMedicine,orderQuantity,orderPrice);
+                    setLastOrderLabels(orderMedicine, orderQuantity, orderPrice);
                 }
                 bindLabels(employee, location);
             } else {
@@ -246,7 +260,6 @@ public class CuDashboardController implements Initializable {
             CuMakeOrderController cuMakeOrderController = loader.getController();
             cuMakeOrderController.setEmployee(employee);
             cuMakeOrderController.setPharmancy(location);
-            cuMakeOrderController.fetchMedicines();
             Stage stage = new Stage();
             stage.setTitle("Δημιουργία παραγγελίας");
             Scene scene = new Scene(root);
@@ -292,6 +305,11 @@ public class CuDashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        new ParallelAnimationFX(
+                new FadeInUp(logOutContainer),
+                new FadeInLeft(userInformationContainer),
+                new ZoomIn(centerBtnBar),
+                new SlideInUp(lastOrderContainer)).play();
         initDashboard();
     }
 }

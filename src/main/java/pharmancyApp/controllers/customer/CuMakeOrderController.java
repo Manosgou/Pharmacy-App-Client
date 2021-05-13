@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -16,17 +17,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.converter.NumberStringConverter;
 import models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
-
+import java.net.URL;
 import java.util.Map;
 import java.util.Random;
+import java.util.ResourceBundle;
 
-public class CuMakeOrderController {
+public class CuMakeOrderController implements Initializable {
     @FXML
     private TableView<CartItem> cartTable;
     @FXML
@@ -199,7 +200,7 @@ public class CuMakeOrderController {
         cartTable.setItems(this.cart);
     }
 
-    public void fetchMedicines() {
+    private void fetchMedicines() {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/customer/make/order";
         try {
             Response response = HTTPMethods.get(url);
@@ -332,4 +333,8 @@ public class CuMakeOrderController {
         }
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        fetchMedicines();
+    }
 }

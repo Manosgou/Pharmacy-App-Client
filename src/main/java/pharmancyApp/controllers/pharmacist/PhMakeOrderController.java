@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
@@ -23,9 +24,10 @@ import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
 
+import java.net.URL;
 import java.util.*;
 
-public class PhMakeOrderController {
+public class PhMakeOrderController implements Initializable {
 
     @FXML
     private TableView<CartItem> cartTable;
@@ -201,7 +203,7 @@ public class PhMakeOrderController {
         cartTable.setItems(this.cart);
     }
 
-    public void fetchMedicines() {
+    private void fetchMedicines() {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/pharmacist/make/order";
         try {
             Response response = HTTPMethods.get(url);
@@ -334,4 +336,8 @@ public class PhMakeOrderController {
     }
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        fetchMedicines();
+    }
 }

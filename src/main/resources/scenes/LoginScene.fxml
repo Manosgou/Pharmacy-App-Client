@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="480.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.LoginController">
    <children>
-      <AnchorPane layoutX="443.0" layoutY="-8.0" prefHeight="489.0" prefWidth="364.0" style="-fx-background-color: #FF4233;">
+      <AnchorPane fx:id="rightContainer" layoutX="443.0" layoutY="-8.0" prefHeight="489.0" prefWidth="364.0" style="-fx-background-color: #FF4233;">
          <children>
             <ImageView fitHeight="128.0" fitWidth="128.0" layoutX="118.0" layoutY="181.0" pickOnBounds="true" preserveRatio="true">
                <image>

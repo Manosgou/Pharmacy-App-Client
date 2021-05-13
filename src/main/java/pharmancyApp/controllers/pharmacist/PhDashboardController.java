@@ -252,7 +252,6 @@ public class PhDashboardController implements Initializable {
                 PhMakeOrderController phMakeOrderController = loader.getController();
                 phMakeOrderController.setEmployee(employee);
                 phMakeOrderController.setPharmancy(location);
-                phMakeOrderController.fetchMedicines();
                 Stage stage = new Stage();
                 stage.setTitle("Δημιουργία παραγγελίας");
                 Scene scene = new Scene(root);
