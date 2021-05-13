@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -22,7 +23,7 @@
                         <Image url="@../../assets/icons/make_order_b&amp;w.png" />
                      </image>
                   </ImageView>
-                  <Label text="Λίστα φαρμάκων" textFill="WHITE">
+                  <Label text="Νεα παραγγελια" textFill="WHITE">
                      <font>
                         <Font name="FreeSans Bold" size="26.0" />
                      </font>
@@ -30,6 +31,9 @@
                </children>
             </HBox>
          </children>
+         <effect>
+            <DropShadow />
+         </effect>
       </AnchorPane>
       <VBox alignment="CENTER" layoutY="86.0" prefHeight="590.0" prefWidth="1280.0">
          <children>

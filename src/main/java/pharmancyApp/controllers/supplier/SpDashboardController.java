@@ -4,6 +4,8 @@ import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
@@ -19,6 +22,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import models.Employee;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
 import pharmancyApp.controllers.UpdateUserDetailsController;
@@ -59,6 +63,8 @@ public class SpDashboardController implements Initializable {
     private Label medicinePriceLbl;
     @FXML
     private BarChart<String, Integer> barChart;
+    @FXML
+    private PieChart pieChart;
 
 
     Employee employee;
@@ -67,9 +73,21 @@ public class SpDashboardController implements Initializable {
     private void bindEmployeeLabels(Employee employee) {
         idLbl.textProperty().bind(employee.idProperty().asString());
         usernameLbl.textProperty().bind(employee.usernameProperty());
+        if(employee.emailProperty().get().isEmpty()){
+            employee.emailProperty().set("(κενό)");
+        }
         emailLbl.textProperty().bind(employee.emailProperty());
+
+        if(employee.firstnameProperty().get().isEmpty()){
+            employee.firstnameProperty().set("(κενό)");
+        }
         firstnameLbl.textProperty().bind(employee.firstnameProperty());
+
+        if(employee.lastnameProperty().get().isEmpty()){
+            employee.lastnameProperty().set("(κενό)");
+        }
         lastnameLbl.textProperty().bind(employee.lastnameProperty());
+
         passwordLbl.textProperty().bind(switch (employee.domainProperty().get()) {
             case "PH" -> new SimpleStringProperty("Φαρμακοποιός");
             case "SP" -> new SimpleStringProperty("Προμηθευτής");
@@ -97,6 +115,21 @@ public class SpDashboardController implements Initializable {
         medicineCategoryLbl.setText(medicineCategory==null ?"(κενό)":medicineCategory);
         medicineQuantityLbl.setText(Integer.toString(medicineQuantity));
         medicinePriceLbl.setText(Float.toString(medicinePrice));
+    }
+
+    private void getPieChart(JSONArray jsonArray) {
+        ObservableList<PieChart.Data> pieChartValuesList = FXCollections.observableArrayList();
+        PieChart.Data pieChartData = null;
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject obj = jsonArray.getJSONObject(i);
+            String[] keys = JSONObject.getNames(obj);
+            for (String key : keys) {
+                int value = obj.getInt(key);
+                pieChartData = new PieChart.Data(key, value);
+            }
+            pieChartValuesList.add(pieChartData);
+        }
+        pieChart.setData(pieChartValuesList);
     }
 
     private void initDashboard() {
@@ -139,6 +172,8 @@ public class SpDashboardController implements Initializable {
                 int totalOrders = jsonResponse.isNull("total_orders") ? 0 : jsonResponse.getInt("total_orders");
                 int totalMedicines = jsonResponse.isNull("total_medicines") ? 0 : jsonResponse.getInt("total_medicines");
                 int totalCategories = jsonResponse.isNull("total_categories") ? 0 : jsonResponse.getInt("total_categories");
+                JSONArray medicinesQuantity = jsonResponse.getJSONArray("medicines_quantity");
+                getPieChart(medicinesQuantity);
                 getBarChart(totalOrders, totalMedicines, totalCategories);
                 bindEmployeeLabels(employee);
                 lastActionsLabels(customerName, orderMedicine, orderQuantity, orderPrice, medicineName, medicineCategory, medicineQuantity, medicinePrice);

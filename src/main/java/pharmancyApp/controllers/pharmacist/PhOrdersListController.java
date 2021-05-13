@@ -56,7 +56,7 @@ public class PhOrdersListController implements Initializable {
     private TableColumn<Order, String> orderOptionsCol;
 
     private Order order;
-    private ObservableList<Order> orders = FXCollections.observableArrayList();
+    private final ObservableList<Order> orders = FXCollections.observableArrayList();
 
 
 

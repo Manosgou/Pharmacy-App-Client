@@ -21,8 +21,6 @@ import org.json.JSONObject;
 import pharmancyApp.Settings;
 import pharmancyApp.controllers.UpdateLocationDetailsController;
 import pharmancyApp.controllers.UpdateUserDetailsController;
-import pharmancyApp.controllers.pharmacist.PhMakeOrderController;
-
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
@@ -46,6 +44,12 @@ public class CuDashboardController implements Initializable {
     private Label cityLbl;
     @FXML
     private Label postalCodeLbl;
+    @FXML
+    private Label orderMedicineLbl;
+    @FXML
+    private Label orderQuantityLbl;
+    @FXML
+    private Label orderTotalPriceLbl;
 
 
     Employee employee;
@@ -53,16 +57,40 @@ public class CuDashboardController implements Initializable {
 
     private void bindLabels(Employee employee, Location location) {
         usernameLbl.textProperty().bind(employee.usernameProperty());
+        if (employee.emailProperty().get().isEmpty()) {
+            employee.emailProperty().set("(κενό)");
+        }
         emailLbl.textProperty().bind(employee.emailProperty());
+
+        if (employee.firstnameProperty().get().isEmpty()) {
+            employee.firstnameProperty().set("(κενό)");
+        }
         firstnameLbl.textProperty().bind(employee.firstnameProperty());
+
+        if (employee.lastnameProperty().get().isEmpty()) {
+            employee.lastnameProperty().set("(κενό)");
+        }
         lastnameLbl.textProperty().bind(employee.lastnameProperty());
+
+        if (location.streetProperty().get().isEmpty()) {
+            location.streetProperty().set("(κενό)");
+        }
         streetLbl.textProperty().bind(location.streetProperty());
         streetNumLbl.textProperty().bind(location.streetNumProperty().asString());
+
+        if (location.cityProperty().get().isEmpty()) {
+            location.cityProperty().set("(κενό)");
+        }
         cityLbl.textProperty().bind(location.cityProperty());
         postalCodeLbl.textProperty().bind(location.postalCodeProperty().asString());
     }
 
 
+    private void setLastOrderLabels(String orderMedicine, int orderQuantity, float orderPrice){
+        orderMedicineLbl.setText(orderMedicine==null ?"(κενό)":orderMedicine);
+        orderQuantityLbl.setText(Integer.toString(orderQuantity));
+        orderTotalPriceLbl.setText(Float.toString(orderPrice));
+    }
     private void initDashboard() {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/dashboard";
         try {
@@ -85,6 +113,13 @@ public class CuDashboardController implements Initializable {
                 String city = pharmancyJson.getString("city");
                 int postalCode = pharmancyJson.getInt("postal_code");
                 location = new Location(pId, street, streetNum, city, postalCode);
+                if (!(jsonResponse.isNull("last_order"))) {
+                    JSONObject lastOrder = jsonResponse.getJSONObject("last_order");
+                    String orderMedicine = lastOrder.getString("medicine");
+                    int orderQuantity = lastOrder.getInt("quantity");
+                    float orderPrice = lastOrder.getFloat("total_price");
+                    setLastOrderLabels(orderMedicine,orderQuantity,orderPrice);
+                }
                 bindLabels(employee, location);
             } else {
                 StringBuilder errorMessage = new StringBuilder();
@@ -136,7 +171,7 @@ public class CuDashboardController implements Initializable {
 
 
     @FXML
-    private void updateUser() {
+    private void updateUserDetails() {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/UpdateUserScene.fxml")));
             Parent root = loader.load();
@@ -155,8 +190,9 @@ public class CuDashboardController implements Initializable {
 
         }
     }
+
     @FXML
-    private void showOrders(){
+    private void showOrders() {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuOrdersListScene.fxml")));
             Parent root = loader.load();
@@ -172,8 +208,9 @@ public class CuDashboardController implements Initializable {
 
         }
     }
+
     @FXML
-    private void showMedicinesList(){
+    private void showMedicinesList() {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuMedicinesListScene.fxml")));
             Parent root = loader.load();
@@ -191,7 +228,7 @@ public class CuDashboardController implements Initializable {
     }
 
     private boolean checkIfPharmacistDetailsAreEmpty() {
-        return employee.usernameProperty().get().isEmpty() && employee.lastnameProperty().get().isEmpty() && employee.firstnameProperty().get().isEmpty() && employee.emailProperty().get().isEmpty();
+        return employee.usernameProperty().get().trim().isEmpty() && employee.lastnameProperty().get().trim().isEmpty() && employee.firstnameProperty().get().trim().isEmpty() && employee.emailProperty().get().trim().isEmpty();
     }
 
 
@@ -202,36 +239,27 @@ public class CuDashboardController implements Initializable {
     @FXML
     private void makeOrder() {
 
-        if(checkIfPharmacistDetailsAreEmpty() && checkIfLocationDetailsAreEmpty()) {
-            try {
-                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuMakeOrderScene.fxml")));
-                Parent root = loader.load();
-                CuMakeOrderController cuMakeOrderController = loader.getController();
-                cuMakeOrderController.setEmployee(employee);
-                cuMakeOrderController.setPharmancy(location);
-                cuMakeOrderController.fetchMedicines();
-                Stage stage = new Stage();
-                stage.setTitle("Δημιουργία παραγγελίας");
-                Scene scene = new Scene(root);
-                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
-                stage.setScene(scene);
-                stage.setResizable(false);
-                stage.show();
-            } catch (Exception e) {
-                e.printStackTrace();
 
-            }
-        }else{
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-            alert.setTitle("Σφάλμα");
-            alert.setHeaderText("Αδυναμια δημιουργία παραγγελίας");
-            alert.setContentText("Βεβαιωθείτε ότι έχετε συμπληρώσει όλα τα στοιχεία χρήστη και όλα τα στοιχεία τοποθεσίας.");
-            alert.showAndWait();
-            if (alert.getResult().equals(okBtn)) {
-                alert.close();
-            }
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuMakeOrderScene.fxml")));
+            Parent root = loader.load();
+            CuMakeOrderController cuMakeOrderController = loader.getController();
+            cuMakeOrderController.setEmployee(employee);
+            cuMakeOrderController.setPharmancy(location);
+            cuMakeOrderController.fetchMedicines();
+            Stage stage = new Stage();
+            stage.setTitle("Δημιουργία παραγγελίας");
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
+
+
     }
 
     @FXML

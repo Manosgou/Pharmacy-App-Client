@@ -21,7 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
-
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
