@@ -36,7 +36,7 @@ public class SpDashboardController implements Initializable {
     @FXML
     private Label usernameLbl;
     @FXML
-    private Label passwordLbl;
+    private Label domainLbl;
     @FXML
     private Label idLbl;
     @FXML
@@ -87,13 +87,7 @@ public class SpDashboardController implements Initializable {
             employee.lastnameProperty().set("(κενό)");
         }
         lastnameLbl.textProperty().bind(employee.lastnameProperty());
-
-        passwordLbl.textProperty().bind(switch (employee.domainProperty().get()) {
-            case "PH" -> new SimpleStringProperty("Φαρμακοποιός");
-            case "SP" -> new SimpleStringProperty("Προμηθευτής");
-            case "CU" -> new SimpleStringProperty("Πελάτης");
-            default -> new SimpleStringProperty("(κενό)");
-        });
+        domainLbl.setText("Προμηθευτής"+" "+"("+employee.domainProperty().get()+")");
     }
 
 
@@ -321,6 +315,7 @@ public class SpDashboardController implements Initializable {
             int responseCode = response.getRespondCode();
             if (responseCode == 200) {
                 Authentication.clearToken();
+                Authentication.setLogin(false);
                 try {
                     FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/LoginScene.fxml")));
                     Parent root = loader.load();

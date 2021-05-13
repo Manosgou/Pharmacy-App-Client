@@ -283,6 +283,7 @@ public class CuDashboardController implements Initializable {
             int respondCode = response.getRespondCode();
             if (respondCode >= 200 && respondCode <= 299) {
                 Authentication.clearToken();
+                Authentication.setLogin(false);
                 try {
                     FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/LoginScene.fxml")));
                     Parent root = loader.load();

@@ -83,11 +83,7 @@ public class PhDashboardController implements Initializable {
             employee.lastnameProperty().set("(κενό)");
         }
         lastnameLbl.textProperty().bind(employee.lastnameProperty());
-        domainLbl.textProperty().bind(switch (employee.domainProperty().get()) {
-            case "PH" -> new SimpleStringProperty("Φαρμακοποιός");
-            case "SP" -> new SimpleStringProperty("Προμηθευτής");
-            default -> new SimpleStringProperty("(κενό)");
-        });
+        domainLbl.setText("Φαρμακοποιός"+" "+"("+employee.domainProperty().get()+")");
         if (location.streetProperty().get().isEmpty()) {
             location.streetProperty().set("(κενό)");
         }
@@ -345,6 +341,7 @@ public class PhDashboardController implements Initializable {
             int respondCode = response.getRespondCode();
             if (respondCode >= 200 && respondCode <= 299) {
                 Authentication.clearToken();
+                Authentication.setLogin(false);
                 try {
                     FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/LoginScene.fxml")));
                     Parent root = loader.load();

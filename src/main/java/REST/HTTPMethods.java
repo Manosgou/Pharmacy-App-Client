@@ -19,8 +19,8 @@ public class HTTPMethods {
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setRequestProperty("Accept", "application/json");
-            if (Authentication.token != null) {
-                conn.setRequestProperty("Authorization", "Token " + Authentication.token);
+            if (Authentication.getToken() != null) {
+                conn.setRequestProperty("Authorization", "Token " + Authentication.getToken());
             }
             int responseCode = conn.getResponseCode();
             BufferedReader in = new BufferedReader(
@@ -63,8 +63,8 @@ public class HTTPMethods {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setRequestProperty("Accept", "application/json");
-            if (Authentication.token != null) {
-                conn.setRequestProperty("Authorization", "Token " + Authentication.token);
+            if (Authentication.getToken() != null) {
+                conn.setRequestProperty("Authorization", "Token " + Authentication.getToken());
             }
             conn.setDoOutput(true);
 
@@ -113,8 +113,8 @@ public class HTTPMethods {
             conn.setRequestMethod("PUT");
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setRequestProperty("Accept", "application/json");
-            if (Authentication.token != null) {
-                conn.setRequestProperty("Authorization", "Token " + Authentication.token);
+            if (Authentication.getToken() != null) {
+                conn.setRequestProperty("Authorization", "Token " + Authentication.getToken());
             }
             conn.setDoOutput(true);
 
@@ -164,8 +164,8 @@ public class HTTPMethods {
                 conn.setRequestMethod("DELETE");
                 conn.setRequestProperty("Content-Type", "application/json; utf-8");
                 conn.setRequestProperty("Accept", "application/json");
-                if (Authentication.token != null) {
-                    conn.setRequestProperty("Authorization", "Token " + Authentication.token);
+                if (Authentication.getToken() != null) {
+                    conn.setRequestProperty("Authorization", "Token " + Authentication.getToken());
                 }
                 conn.setDoOutput(true);
                 conn.connect();

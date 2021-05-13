@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import models.EmployeeDomain;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
 
@@ -34,8 +35,8 @@ public class LoginController implements Initializable {
 
     @FXML
     private void showDashboard(String domain, ActionEvent event) {
-        switch (domain) {
-            case "PH":
+        switch (Objects.requireNonNull(EmployeeDomain.getDomainFromString(domain))) {
+            case PHARMACIST:
                 try {
                     FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhDashboardScene.fxml")));
                     Parent root = loader.load();
@@ -49,7 +50,7 @@ public class LoginController implements Initializable {
 
                 }
                 break;
-            case "SP":
+            case SUPPLIER:
                 try {
                     FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpDashboardScene.fxml")));
                     Parent root = loader.load();
@@ -63,7 +64,7 @@ public class LoginController implements Initializable {
 
                 }
                 break;
-            case "CU":
+            case CUSTOMER:
                 try {
                     FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuDashboardScene.fxml")));
                     Parent root = loader.load();
@@ -109,7 +110,8 @@ public class LoginController implements Initializable {
                 int respondCode = response.getRespondCode();
                 JSONObject jsonResponse = new JSONObject(response.getResponse());
                 if (respondCode >= 200 && respondCode <= 299) {
-                    Authentication.token = jsonResponse.getString("token");
+                    Authentication.setToken(jsonResponse.getString("token"));
+                    Authentication.setLogin(true);
                     String domain = jsonResponse.getString("domain");
                     showDashboard(domain, event);
 
