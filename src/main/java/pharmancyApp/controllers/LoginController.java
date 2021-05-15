@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 import models.EmployeeDomain;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
-
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
@@ -42,7 +41,9 @@ public class LoginController implements Initializable {
                     Parent root = loader.load();
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     stage.setTitle("Πίνακας ελέγχου - Ιδιότητα:Φαρμακοποιός");
-                    stage.setScene(new Scene(root));
+                    Scene scene = new Scene(root);
+                    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+                    stage.setScene(scene);
                     stage.setResizable(false);
                     stage.show();
                 } catch (Exception e) {
@@ -56,7 +57,9 @@ public class LoginController implements Initializable {
                     Parent root = loader.load();
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     stage.setTitle("Πίνακας ελέγχου - Ιδιότητα:Προμηθευτής");
-                    stage.setScene(new Scene(root));
+                    Scene scene = new Scene(root);
+                    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+                    stage.setScene(scene);
                     stage.setResizable(false);
                     stage.show();
                 } catch (Exception e) {
@@ -71,7 +74,7 @@ public class LoginController implements Initializable {
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     stage.setTitle("Καλώς ήρθατε!");
                     Scene scene = new Scene(root);
-                    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/CuDashboard.css")).toExternalForm());
+                    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
                     stage.setScene(scene);
                     stage.setResizable(false);
                     stage.show();

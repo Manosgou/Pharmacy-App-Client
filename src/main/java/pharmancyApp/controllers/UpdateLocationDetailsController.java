@@ -5,19 +5,25 @@ import REST.Response;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 import models.Employee;
 import models.Location;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.TextFieldFilters;
 
+import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 
-public class UpdateLocationDetailsController {
+public class UpdateLocationDetailsController implements Initializable {
 
     @FXML
     private JFXTextField streetFld;
@@ -102,5 +108,10 @@ public class UpdateLocationDetailsController {
         }
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        streetNumFld.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
+        postalCodeFld.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
+    }
 }
 

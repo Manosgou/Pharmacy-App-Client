@@ -5,18 +5,23 @@ import REST.Response;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 import models.Medicine;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.TextFieldFilters;
 
+import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 
-public class PhMedicinePriceFormController {
+public class PhMedicinePriceFormController implements Initializable {
     @FXML
     private Label headerTitle;
     @FXML
@@ -134,4 +139,8 @@ public class PhMedicinePriceFormController {
     }
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        medicinePriceFld.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
+    }
 }

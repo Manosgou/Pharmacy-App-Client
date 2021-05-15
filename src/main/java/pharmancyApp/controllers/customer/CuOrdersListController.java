@@ -43,8 +43,7 @@ public class CuOrdersListController implements Initializable {
     @FXML
     private TableColumn<Order, String> orderOptionsCol;
 
-    Order order;
-    private ObservableList<Order> orders = FXCollections.observableArrayList();
+    private final ObservableList<Order> orders = FXCollections.observableArrayList();
 
 
     @FXML

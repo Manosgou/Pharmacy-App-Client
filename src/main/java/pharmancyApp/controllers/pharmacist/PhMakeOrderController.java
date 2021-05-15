@@ -18,11 +18,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.converter.IntegerStringConverter;
 import models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.TextFieldFilters;
 
 import java.net.URL;
 import java.util.*;
@@ -87,7 +89,7 @@ public class PhMakeOrderController implements Initializable {
 
                     TextField quantityFld = new TextField();
                     quantityFld.setMaxWidth(50);
-                    quantityFld.setText("1");
+                    quantityFld.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
 
 
                     addToCart.setOnMouseClicked((MouseEvent event) -> {

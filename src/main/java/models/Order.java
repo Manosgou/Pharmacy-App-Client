@@ -17,7 +17,6 @@ public class Order {
     private OrderStatus orderStatus;
     private Location location;
     private StringProperty orderDateTime;
-    Date date;
 
     public Order(int id, @Nullable Employee employee, Medicine medicine, int quantity, float totalPrice, OrderStatus orderStatus, @Nullable Location location,String orderDateTime) {
         this.id = new SimpleIntegerProperty(id);
@@ -114,7 +113,7 @@ public class Order {
     public StringProperty getOrderDateFormatedProperty(){
         String dateTime = null;
         try {
-            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(this.orderDateTime.get());
+            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(this.orderDateTime.get());
             dateTime = new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(date);
         } catch (ParseException e) {
             e.printStackTrace();

@@ -206,8 +206,10 @@ public class SpDashboardController implements Initializable {
             spMedicineFormController.fetchCategories();
             spMedicineFormController.init();
             Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
             stage.setTitle("Εισαγωγή νέου φαρμάκου");
-            stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
@@ -224,8 +226,10 @@ public class SpDashboardController implements Initializable {
             SpCategoryFormController spCategoryFormController = loader.getController();
             spCategoryFormController.init();
             Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
             stage.setTitle("Εισαγωγή νέου φαρμάκου");
-            stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
@@ -242,8 +246,10 @@ public class SpDashboardController implements Initializable {
             SpCategoriesListController spCategoriesListController = loader.getController();
             spCategoriesListController.fetchCategories();
             Stage stage = new Stage();
-            stage.setTitle("Εισαγωγή νέου φαρμάκου");
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
+            stage.setTitle("Προβολή όλων των κατηγοριών");
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
@@ -260,8 +266,10 @@ public class SpDashboardController implements Initializable {
             SpMediciniesListController spMediciniesListController = loader.getController();
             spMediciniesListController.fetchMedicines();
             Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
             stage.setTitle("Λίστα φαρμάκων");
-            stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
@@ -280,8 +288,10 @@ public class SpDashboardController implements Initializable {
             updateUserDetailsController.setEmployee(employee);
             updateUserDetailsController.setFields();
             Stage stage = new Stage();
-            stage.setTitle("Σύνδεση στο σύστημα");
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
+            stage.setTitle("Ενημέρωση στοιχείων χρήστη");
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
@@ -297,8 +307,10 @@ public class SpDashboardController implements Initializable {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpOrdersListScene.fxml")));
             Parent root = loader.load();
             Stage stage = new Stage();
-            stage.setTitle("Σύνδεση στο σύστημα");
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
+            stage.setTitle("Προβολή όλων των κατηγοριών");
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {

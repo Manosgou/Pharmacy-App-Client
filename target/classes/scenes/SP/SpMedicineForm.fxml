@@ -15,6 +15,20 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.supplier.SpMedicineFormController">
    <children>
+      <AnchorPane prefHeight="86.0" prefWidth="600.0" style="-fx-background-color: #FF4233;">
+         <children>
+            <HBox alignment="CENTER" layoutX="91.0" layoutY="11.0" prefHeight="71.0" prefWidth="418.0" spacing="20.0">
+               <children>
+                  <ImageView fx:id="medHeaderImage" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label fx:id="medHeaderLbl" textFill="WHITE">
+                     <font>
+                        <Font name="FreeSans Bold" size="26.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
       <GridPane layoutX="89.0" layoutY="87.0" prefHeight="226.0" prefWidth="423.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -42,20 +56,6 @@
             </VBox>
          </children>
       </GridPane>
-      <JFXButton fx:id="sumbitMedBtn" layoutX="195.0" layoutY="336.0" prefHeight="50.0" prefWidth="211.0" style="-fx-background-color: #FF4233;" text="Αποθηκευση" textFill="WHITE" />
-      <AnchorPane prefHeight="86.0" prefWidth="600.0" style="-fx-background-color: #FF4233;">
-         <children>
-            <HBox alignment="CENTER" layoutX="91.0" layoutY="11.0" prefHeight="71.0" prefWidth="418.0" spacing="20.0">
-               <children>
-                  <ImageView fx:id="medHeaderImage" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="medHeaderLbl" textFill="WHITE">
-                     <font>
-                        <Font name="FreeSans Bold" size="26.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-         </children>
-      </AnchorPane>
+      <JFXButton fx:id="sumbitMedBtn" layoutX="212.0" layoutY="344.0" prefHeight="42.0" prefWidth="177.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20;" text="Αποθηκευση" textFill="WHITE" />
    </children>
 </AnchorPane>

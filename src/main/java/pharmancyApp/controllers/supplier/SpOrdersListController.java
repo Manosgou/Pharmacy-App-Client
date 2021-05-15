@@ -188,6 +188,7 @@ public class SpOrdersListController implements Initializable {
                 MedicineCategory medicineCategory;
                 Location location;
                 OrderStatus orderStatus;
+                Order order;
                 for (int i = 0; i < jsonArray.length(); i++) {
 
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -234,7 +235,7 @@ public class SpOrdersListController implements Initializable {
                     String orderDateTime = jsonObject.getString("date_ordered");
                     orderStatus = new OrderStatus(orderStatusId, ordStatus);
                     medicine = new Medicine(medicineId, medicineName, medicineQuantity, medicinePrice, medicineCategory);
-                    Order order = new Order(id, employee, medicine, quantity, price, orderStatus, location, orderDateTime);
+                    order = new Order(id, employee, medicine, quantity, price, orderStatus, location, orderDateTime);
                     orders.add(order);
 
 

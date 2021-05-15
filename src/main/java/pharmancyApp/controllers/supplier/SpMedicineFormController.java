@@ -6,18 +6,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.converter.FloatStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 import models.Medicine;
 import models.MedicineCategory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.TextFieldFilters;
+
+import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 
-public class SpMedicineFormController{
+public class SpMedicineFormController implements Initializable {
 
     @FXML
     private Label medHeaderLbl;
@@ -207,4 +214,9 @@ public class SpMedicineFormController{
     }
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        medicineQuaFld.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
+        medicinePriFld.setTextFormatter(new TextFormatter<Float>(new FloatStringConverter(),1.00f,TextFieldFilters.floatFilter));
+    }
 }

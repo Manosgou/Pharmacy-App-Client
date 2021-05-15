@@ -120,8 +120,10 @@ public class SpCategoriesListController {
                             spCategoryFormController.setMedicineCategory(medicineCategory);
                             spCategoryFormController.init();
                             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            stage.setTitle("Hello World");
-                            stage.setScene(new Scene(root));
+                            Scene scene = new Scene(root);
+                            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+                            stage.setScene(scene);
+                            stage.setTitle("Επεξεργασία κατηγορίας.");
                             stage.setResizable(false);
                             stage.show();
                         } catch (Exception e) {
