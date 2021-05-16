@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Employee {
+public class User {
     private IntegerProperty id;
     private StringProperty username;
     private StringProperty email;
@@ -13,7 +13,7 @@ public class Employee {
     private StringProperty lastname;
     private StringProperty domain;
 
-    public Employee(int id,String username,String email,String firstname,String lastname,String domain){
+    public User(int id, String username, String email, String firstname, String lastname, String domain){
         this.id = new SimpleIntegerProperty(id);
         this.username = new SimpleStringProperty(username);
         this.firstname = new SimpleStringProperty(firstname);

@@ -23,9 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
-
+import pharmancyApp.Utils.AlertDialogs;
 import java.net.URL;
-import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -51,7 +50,7 @@ public class PhOrdersListController implements Initializable {
     private TableColumn<Order, String> orderStatusCol;
 
     @FXML
-    private TableColumn<Order,String> orderDateTimeCol;
+    private TableColumn<Order, String> orderDateTimeCol;
     @FXML
     private TableColumn<Order, String> orderOptionsCol;
 
@@ -59,10 +58,8 @@ public class PhOrdersListController implements Initializable {
     private final ObservableList<Order> orders = FXCollections.observableArrayList();
 
 
-
-
     @FXML
-    private void getOrdersTable(){
+    private void getOrdersTable() {
         medicineNameCol.setCellValueFactory(item -> item.getValue().getMedicine().nameProperty());
         medCategoryCol.setCellValueFactory(item -> item.getValue().getMedicine().getMedicineCategory().nameProperty());
         orderQuantityCol.setCellValueFactory(item -> item.getValue().quantityProperty().asObject());
@@ -79,46 +76,36 @@ public class PhOrdersListController implements Initializable {
                 } else {
 
                     JFXButton makeItAvailable = new JFXButton("Προσθήκη στο κατάστημα");
-                    makeItAvailable.setStyle("-fx-background-color:" + Colors.VIEW);
+                    makeItAvailable.setStyle("-fx-background-color:" + Colors.BLUE);
                     makeItAvailable.setTextFill(Paint.valueOf(Colors.WHITE));
 
 
                     makeItAvailable.setOnMouseClicked((MouseEvent event) -> {
-                    order =  getTableView().getItems().get(getIndex());
-                    if(order.getOrderStatus().getStatudId().equals("DE")){
-                        try {
-                            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMedicinePriceForm.fxml")));
-                            Parent root = loader.load();
-                            PhMedicinePriceFormController phMedicinePriceFormController =loader.getController();
-                            phMedicinePriceFormController.setOrderId(order.getId());
-                            phMedicinePriceFormController.init();
-                            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            stage.setTitle("Hello World");
-                            stage.setScene(new Scene(root));
-                            stage.setResizable(false);
-                            stage.show();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        order = getTableView().getItems().get(getIndex());
+                        if (order.getOrderStatus().getStatudId().equals("DE")) {
+                            try {
+                                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMedicinePriceForm.fxml")));
+                                Parent root = loader.load();
+                                PhMedicinePriceFormController phMedicinePriceFormController = loader.getController();
+                                phMedicinePriceFormController.setOrderId(order.getId());
+                                phMedicinePriceFormController.init();
+                                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                                stage.setTitle("Hello World");
+                                stage.setScene(new Scene(root));
+                                stage.setResizable(false);
+                                stage.show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
 
+                            }
+                        } else {
+                            String headerText = "Αδυναμια συνδεσης";
+                            String contentText = "Για να διαθέσετε το φάρμακο " + order.getMedicine().getName() + " προς πωληση,πρεπει η κατασταση παραγγελιιας να ειναι η τελικη";
+                            AlertDialogs.error(headerText, null, contentText);
                         }
-                    }else{
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                        alert.setResizable(false);
-                        alert.setWidth(200);
-                        alert.setHeight(300);
-                        alert.setTitle("Σφάλμα");
-                        alert.setHeaderText("Αδυναμια συνδεσης");
-                        alert.setContentText("Για να διαθέσετε το φάρμακο "+order.getMedicine().getName()+" προς πωληση,πρεπει η κατασταση παραγγελιιας να ειναι η τελικη");
-                        alert.showAndWait();
-                        if (alert.getResult().equals(okBtn)) {
-                            alert.close();
-                        }
-                    }
 
 
                     });
-
 
 
                     HBox actionsBtns = new HBox(makeItAvailable);
@@ -136,71 +123,60 @@ public class PhOrdersListController implements Initializable {
         ordersTable.setItems(orders);
     }
 
-    public void fetchOrders(){
+    public void fetchOrders() {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/pharmacist/get/orders";
 
         try {
             Response response = HTTPMethods.get(url);
-            int respondCode = response.getRespondCode();
-            JSONArray jsonArray = new JSONArray(response.getResponse());
-            if (respondCode >= 200 && respondCode <= 299) {
-                Medicine medicine;
-                MedicineCategory medicineCategory;
-                OrderStatus orderStatus;
-                for (int i = 0; i < jsonArray.length(); i++) {
+            if (response != null) {
+                int respondCode = response.getRespondCode();
+                JSONArray jsonArray = new JSONArray(response.getResponse());
+                if (respondCode >= 200 && respondCode <= 299) {
+                    Medicine medicine;
+                    MedicineCategory medicineCategory;
+                    OrderStatus orderStatus;
+                    for (int i = 0; i < jsonArray.length(); i++) {
 
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    System.out.println(jsonObject);
-                    int id = jsonObject.getInt("id");
-                    String medicineJson = jsonObject.getJSONObject("medicine").toString();
-                    JSONObject medicineObj =  new JSONObject(medicineJson);
-                    int medicineId = medicineObj.getInt("id");
-                    String medicineName = medicineObj.getString("name");
-                    int medicineQuantity = medicineObj.getInt("quantity");
-                    float medicinePrice = medicineObj.getFloat("price");
-                    JSONObject medicineCategoryObj = medicineObj.getJSONObject("category");
-                    int medicineCategoryId = medicineCategoryObj.getInt("id");
-                    String medicineCategoryName = medicineCategoryObj.getString("name");
-                    medicineCategory = new MedicineCategory(medicineCategoryId,medicineCategoryName);
-                    int quantity = jsonObject.getInt("quantity");
-                    float price = jsonObject.getFloat("total_price");
-                    String orderStatusId  = jsonObject.getString("order_status");
-                    String ordStatus = switch (jsonObject.getString("order_status")){
-                        case "OP" -> "Σε επεξεργασία";
-                        case "OD" -> "Σε παράδοση";
-                        case "DE" -> "Παραδόθηκε";
-                        default -> "Καμία ενέργεια";
-                    };
-                    String orderTimeDate  = jsonObject.getString("date_ordered");
-                    orderStatus = new OrderStatus(orderStatusId,ordStatus);
-                    medicine = new Medicine(medicineId,medicineName,medicineQuantity,medicinePrice,medicineCategory);
-                    Order order = new Order(id,null ,medicine, quantity, price,orderStatus,null,orderTimeDate);
-                    orders.add(order);
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        System.out.println(jsonObject);
+                        int id = jsonObject.getInt("id");
+                        String medicineJson = jsonObject.getJSONObject("medicine").toString();
+                        JSONObject medicineObj = new JSONObject(medicineJson);
+                        int medicineId = medicineObj.getInt("id");
+                        String medicineName = medicineObj.getString("name");
+                        int medicineQuantity = medicineObj.getInt("quantity");
+                        float medicinePrice = medicineObj.getFloat("price");
+                        JSONObject medicineCategoryObj = medicineObj.getJSONObject("category");
+                        int medicineCategoryId = medicineCategoryObj.getInt("id");
+                        String medicineCategoryName = medicineCategoryObj.getString("name");
+                        medicineCategory = new MedicineCategory(medicineCategoryId, medicineCategoryName);
+                        int quantity = jsonObject.getInt("quantity");
+                        float price = jsonObject.getFloat("total_price");
+                        String orderStatusId = jsonObject.getString("order_status");
+                        String ordStatus = switch (jsonObject.getString("order_status")) {
+                            case "OP" -> "Σε επεξεργασία";
+                            case "OD" -> "Σε παράδοση";
+                            case "DE" -> "Παραδόθηκε";
+                            default -> "Καμία ενέργεια";
+                        };
+                        String orderTimeDate = jsonObject.getString("date_ordered");
+                        orderStatus = new OrderStatus(orderStatusId, ordStatus);
+                        medicine = new Medicine(medicineId, medicineName, medicineQuantity, medicinePrice, medicineCategory);
+                        Order order = new Order(id, null, medicine, quantity, price, orderStatus, null, orderTimeDate);
+                        orders.add(order);
 
 
+                    }
+                    getOrdersTable();
+                } else {
+                    String headerText = "Αδυναμια συνδεσης";
+                    JSONObject responseObj = new JSONObject(response);
+                    AlertDialogs.error(headerText, responseObj, null);
                 }
-                getOrdersTable();
             } else {
-                StringBuilder errorMessage = new StringBuilder();
-                JSONObject responseObj = new JSONObject(response);
-                Map<String, Object> i = responseObj.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμια συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
 
         } catch (Exception e) {
@@ -208,6 +184,11 @@ public class PhOrdersListController implements Initializable {
         }
     }
 
+    @FXML
+    private void refreshTable() {
+        orders.clear();
+        fetchOrders();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

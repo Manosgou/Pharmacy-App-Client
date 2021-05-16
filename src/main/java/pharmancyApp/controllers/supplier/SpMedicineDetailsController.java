@@ -19,16 +19,16 @@ public class SpMedicineDetailsController {
 
     private Medicine medicine;
 
-    public void setMedicine(Medicine medicine){
-        this.medicine =medicine;
+    public void setMedicine(Medicine medicine) {
+        this.medicine = medicine;
 
     }
 
 
-    public void init(){
+    public void init() {
         medicineNameLbl.setText(medicine.getName());
         medicineQuaLbl.setText(Integer.toString(medicine.getQuantity()));
-        medicinePriceLbl.setText(medicine.getPrice() +" €");
+        medicinePriceLbl.setText(medicine.getPrice() + " €");
         medicineCatLbl.setText(medicine.getMedicineCategory().getName());
     }
 

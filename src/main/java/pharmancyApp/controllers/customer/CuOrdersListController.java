@@ -21,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.AlertDialogs;
+
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -64,7 +66,7 @@ public class CuOrdersListController implements Initializable {
                 } else {
 
                     JFXButton showReceipt = new JFXButton("Προβολή απόδειξης");
-                    showReceipt.setStyle("-fx-background-color:" + Colors.VIEW);
+                    showReceipt.setStyle("-fx-background-color:" + Colors.BLUE);
                     showReceipt.setTextFill(Paint.valueOf(Colors.WHITE));
 
 
@@ -93,71 +95,67 @@ public class CuOrdersListController implements Initializable {
 
         try {
             Response response = HTTPMethods.get(url);
-            int respondCode = response.getRespondCode();
-            JSONArray jsonArray = new JSONArray(response.getResponse());
-            if (respondCode >= 200 && respondCode <= 299) {
-                Medicine medicine;
-                MedicineCategory medicineCategory;
-                OrderStatus orderStatus;
-                for (int i = 0; i < jsonArray.length(); i++) {
+            if (response != null) {
+                int respondCode = response.getRespondCode();
+                JSONArray jsonArray = new JSONArray(response.getResponse());
+                if (respondCode >= 200 && respondCode <= 299) {
+                    Medicine medicine;
+                    MedicineCategory medicineCategory;
+                    OrderStatus orderStatus;
+                    for (int i = 0; i < jsonArray.length(); i++) {
 
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    System.out.println(jsonObject);
-                    int id = jsonObject.getInt("id");
-                    String medicineJson = jsonObject.getJSONObject("medicine").toString();
-                    JSONObject medicineObj = new JSONObject(medicineJson);
-                    int medicineId = medicineObj.getInt("id");
-                    String medicineName = medicineObj.getString("name");
-                    int medicineQuantity = medicineObj.getInt("quantity");
-                    float medicinePrice = medicineObj.getFloat("price");
-                    JSONObject medicineCategoryObj = medicineObj.getJSONObject("category");
-                    int medicineCategoryId = medicineCategoryObj.getInt("id");
-                    String medicineCategoryName = medicineCategoryObj.getString("name");
-                    medicineCategory = new MedicineCategory(medicineCategoryId, medicineCategoryName);
-                    int quantity = jsonObject.getInt("quantity");
-                    float price = jsonObject.getFloat("total_price");
-                    String orderStatusId = jsonObject.getString("order_status");
-                    String ordStatus = switch (jsonObject.getString("order_status")) {
-                        case "OP" -> "Σε επεξεργασία";
-                        case "OD" -> "Σε παράδοση";
-                        case "DE" -> "Παραδόθηκε";
-                        default -> "Καμία ενέργεια";
-                    };
-                    String orderTimeDate = jsonObject.getString("date_ordered");
-                    orderStatus = new OrderStatus(orderStatusId, ordStatus);
-                    medicine = new Medicine(medicineId, medicineName, medicineQuantity, medicinePrice, medicineCategory);
-                    Order order = new Order(id, null, medicine, quantity, price, orderStatus, null, orderTimeDate);
-                    orders.add(order);
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        System.out.println(jsonObject);
+                        int id = jsonObject.getInt("id");
+                        String medicineJson = jsonObject.getJSONObject("medicine").toString();
+                        JSONObject medicineObj = new JSONObject(medicineJson);
+                        int medicineId = medicineObj.getInt("id");
+                        String medicineName = medicineObj.getString("name");
+                        int medicineQuantity = medicineObj.getInt("quantity");
+                        float medicinePrice = medicineObj.getFloat("price");
+                        JSONObject medicineCategoryObj = medicineObj.getJSONObject("category");
+                        int medicineCategoryId = medicineCategoryObj.getInt("id");
+                        String medicineCategoryName = medicineCategoryObj.getString("name");
+                        medicineCategory = new MedicineCategory(medicineCategoryId, medicineCategoryName);
+                        int quantity = jsonObject.getInt("quantity");
+                        float price = jsonObject.getFloat("total_price");
+                        String orderStatusId = jsonObject.getString("order_status");
+                        String ordStatus = switch (jsonObject.getString("order_status")) {
+                            case "OP" -> "Σε επεξεργασία";
+                            case "OD" -> "Σε παράδοση";
+                            case "DE" -> "Παραδόθηκε";
+                            default -> "Καμία ενέργεια";
+                        };
+                        String orderTimeDate = jsonObject.getString("date_ordered");
+                        orderStatus = new OrderStatus(orderStatusId, ordStatus);
+                        medicine = new Medicine(medicineId, medicineName, medicineQuantity, medicinePrice, medicineCategory);
+                        Order order = new Order(id, null, medicine, quantity, price, orderStatus, null, orderTimeDate);
+                        orders.add(order);
 
+
+                    }
+                    getOrdersTable();
+                } else {
+                    JSONObject responseObj = new JSONObject(response);
+                    String headerText = "Αδυναμια συνδεσης";
+                    AlertDialogs.error(headerText, responseObj, null);
 
                 }
-                getOrdersTable();
             } else {
-                StringBuilder errorMessage = new StringBuilder();
-                JSONObject responseObj = new JSONObject(response);
-                Map<String, Object> i = responseObj.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμια συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void refreshTable() {
+        orders.clear();
+        fetchOrders();
     }
 
     @Override

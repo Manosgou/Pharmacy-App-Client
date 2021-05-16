@@ -22,11 +22,12 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import models.Employee;
+import models.User;
 import models.Location;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.AlertDialogs;
 import pharmancyApp.controllers.UpdateLocationDetailsController;
 import pharmancyApp.controllers.UpdateUserDetailsController;
 
@@ -62,28 +63,28 @@ public class PhDashboardController implements Initializable {
     @FXML
     private JFXListView<String> deficitMedicinesLst;
     @FXML
-    private BarChart<Integer,String> ordersBarChart;
+    private BarChart<Integer, String> ordersBarChart;
 
-    Employee employee;
+    User user;
     Location location;
 
 
-    private void bindLabels(Employee employee, Location location) {
-        idLbl.textProperty().bind(employee.idProperty().asString());
-        usernameLbl.textProperty().bind(employee.usernameProperty());
-        if (employee.emailProperty().get().isEmpty()) {
-            employee.emailProperty().set("(κενό)");
+    private void bindLabels(User user, Location location) {
+        idLbl.textProperty().bind(user.idProperty().asString());
+        usernameLbl.textProperty().bind(user.usernameProperty());
+        if (user.emailProperty().get().isEmpty()) {
+            user.emailProperty().set("(κενό)");
         }
-        emailLbl.textProperty().bind(employee.emailProperty());
-        if (employee.firstnameProperty().get().isEmpty()) {
-            employee.firstnameProperty().set("(κενό)");
+        emailLbl.textProperty().bind(user.emailProperty());
+        if (user.firstnameProperty().get().isEmpty()) {
+            user.firstnameProperty().set("(κενό)");
         }
-        firstnameLbl.textProperty().bind(employee.firstnameProperty());
-        if (employee.lastnameProperty().get().isEmpty()) {
-            employee.lastnameProperty().set("(κενό)");
+        firstnameLbl.textProperty().bind(user.firstnameProperty());
+        if (user.lastnameProperty().get().isEmpty()) {
+            user.lastnameProperty().set("(κενό)");
         }
-        lastnameLbl.textProperty().bind(employee.lastnameProperty());
-        domainLbl.setText("Φαρμακοποιός"+" "+"("+employee.domainProperty().get()+")");
+        lastnameLbl.textProperty().bind(user.lastnameProperty());
+        domainLbl.setText("Φαρμακοποιός" + " " + "(" + user.domainProperty().get() + ")");
         if (location.streetProperty().get().isEmpty()) {
             location.streetProperty().set("(κενό)");
         }
@@ -96,14 +97,14 @@ public class PhDashboardController implements Initializable {
         postalCodeLbl.textProperty().bind(location.postalCodeProperty().asString().get().isEmpty() ? new SimpleStringProperty("(κενό)") : location.postalCodeProperty().asString());
     }
 
-    private void getOrdersBarChart(JSONObject object){
+    private void getOrdersBarChart(JSONObject object) {
         int ordersOnProcess = object.getInt("orders_on_process");
         int ordersOnDeliver = object.getInt("orders_on_deliver");
         int deliveredOrders = object.getInt("orders_delivered");
         XYChart.Series data = new XYChart.Series();
-        data.getData().add(new XYChart.Data("Παραγγελίες σε επεξεργασία",ordersOnProcess));
-        data.getData().add(new XYChart.Data("Παραγγελίες σε παράδοση",ordersOnDeliver));
-        data.getData().add(new XYChart.Data("Παραγγελίες",deliveredOrders));
+        data.getData().add(new XYChart.Data("Παραγγελίες σε επεξεργασία", ordersOnProcess));
+        data.getData().add(new XYChart.Data("Παραγγελίες σε παράδοση", ordersOnDeliver));
+        data.getData().add(new XYChart.Data("Παραγγελίες", deliveredOrders));
         ordersBarChart.getData().add(data);
     }
 
@@ -123,10 +124,10 @@ public class PhDashboardController implements Initializable {
         medicinesPieChart.setData(pieChartValuesList);
     }
 
-    private void getDeficitMedicines(JSONArray jsonArray){
+    private void getDeficitMedicines(JSONArray jsonArray) {
         ObservableList<String> deficitMedicines = FXCollections.observableArrayList();
         for (int i = 0; i < jsonArray.length(); i++) {
-            String deficitMedicine =  jsonArray.getString(i);
+            String deficitMedicine = jsonArray.getString(i);
             deficitMedicines.add(deficitMedicine);
         }
         deficitMedicinesLst.setItems(deficitMedicines);
@@ -136,51 +137,43 @@ public class PhDashboardController implements Initializable {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/dashboard";
         try {
             Response response = HTTPMethods.get(url);
-            int respondCode = response.getRespondCode();
-            JSONObject jsonResponse = new JSONObject(response.getResponse());
-            if (respondCode >= 200 && respondCode <= 299) {
-                JSONObject userJson = jsonResponse.getJSONObject("user");
-                int uId = userJson.getInt("id");
-                String username = userJson.getString("username");
-                String email = userJson.getString("email");
-                String domain = userJson.getJSONObject("employee").getString("domain");
-                String firstname = userJson.getString("first_name");
-                String lastname = userJson.getString("last_name");
-                employee = new Employee(uId, username, email, firstname, lastname, domain);
-                JSONArray deficitMedicines= jsonResponse.getJSONArray("deficit_medicines");
-                getDeficitMedicines(deficitMedicines);
-                JSONArray medicinesQuantity = jsonResponse.getJSONArray("medicines_quantity");
-                getPieChart(medicinesQuantity);
-                JSONObject orders  = jsonResponse.getJSONObject("orders");
-                getOrdersBarChart(orders);
-                JSONObject locationJson = jsonResponse.getJSONObject("location");
-                int pId = locationJson.getInt("id");
-                String street = locationJson.getString("street");
-                int streetNum = locationJson.getInt("street_num");
-                String city = locationJson.getString("city");
-                int postalCode = locationJson.getInt("postal_code");
-                location = new Location(pId, street, streetNum, city, postalCode);
-                bindLabels(employee, location);
-            } else {
-                StringBuilder errorMessage = new StringBuilder();
-                Map<String, Object> i = jsonResponse.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
+            if (response != null) {
+
+
+                int respondCode = response.getRespondCode();
+                JSONObject jsonResponse = new JSONObject(response.getResponse());
+                if (respondCode >= 200 && respondCode <= 299) {
+                    JSONObject userJson = jsonResponse.getJSONObject("user");
+                    int uId = userJson.getInt("id");
+                    String username = userJson.getString("username");
+                    String email = userJson.getString("email");
+                    String domain = userJson.getJSONObject("employee").getString("domain");
+                    String firstname = userJson.getString("first_name");
+                    String lastname = userJson.getString("last_name");
+                    user = new User(uId, username, email, firstname, lastname, domain);
+                    JSONArray deficitMedicines = jsonResponse.getJSONArray("deficit_medicines");
+                    getDeficitMedicines(deficitMedicines);
+                    JSONArray medicinesQuantity = jsonResponse.getJSONArray("medicines_quantity");
+                    getPieChart(medicinesQuantity);
+                    JSONObject orders = jsonResponse.getJSONObject("orders");
+                    getOrdersBarChart(orders);
+                    JSONObject locationJson = jsonResponse.getJSONObject("location");
+                    int pId = locationJson.getInt("id");
+                    String street = locationJson.getString("street");
+                    int streetNum = locationJson.getInt("street_num");
+                    String city = locationJson.getString("city");
+                    int postalCode = locationJson.getInt("postal_code");
+                    location = new Location(pId, street, streetNum, city, postalCode);
+                    bindLabels(user, location);
+                } else {
+                    String headerText = "Αδυναμια συνδεσης";
+                    AlertDialogs.error(headerText, jsonResponse, null);
 
                 }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμια συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+            } else {
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -193,7 +186,7 @@ public class PhDashboardController implements Initializable {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/UpdateUserScene.fxml")));
             Parent root = loader.load();
             UpdateUserDetailsController updateUserDetailsController = loader.getController();
-            updateUserDetailsController.setEmployee(employee);
+            updateUserDetailsController.setEmployee(user);
             updateUserDetailsController.setFields();
             Stage stage = new Stage();
             stage.setTitle("Σύνδεση στο σύστημα");
@@ -214,7 +207,7 @@ public class PhDashboardController implements Initializable {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhUpdatePharmancyScene.fxml")));
             Parent root = loader.load();
             UpdateLocationDetailsController updateLocationDetailsController = loader.getController();
-            updateLocationDetailsController.setEmployee(employee);
+            updateLocationDetailsController.setEmployee(user);
             updateLocationDetailsController.setPharmancy(location);
             updateLocationDetailsController.setFields();
             Stage stage = new Stage();
@@ -230,23 +223,75 @@ public class PhDashboardController implements Initializable {
         }
     }
 
-    private boolean checkIfPharmacistDetailsAreEmpty() {
-        return employee.usernameProperty().get().isEmpty() && employee.lastnameProperty().get().isEmpty() && employee.firstnameProperty().get().isEmpty() && employee.emailProperty().get().isEmpty();
+    private boolean checkIfUserDetailsAreEmpty() {
+        String username = user.usernameProperty().get().trim();
+        String lastname = user.lastnameProperty().get().trim();
+        String firstname = user.firstnameProperty().get().trim();
+        String email = user.emailProperty().get().trim();
+
+        String errorMessage = null;
+        boolean isValid = true;
+
+        if (username.isEmpty() || username.equals("(κενό)")) {
+            errorMessage = "Παρακαλώ συμπληρώστε το username";
+            isValid = false;
+        }
+        if (lastname.isEmpty() || lastname.equals("(κενό)")) {
+            errorMessage = "Παρακαλώ συμπληρώστε το επίθετο";
+            isValid = false;
+        }
+        if (firstname.isEmpty() || firstname.equals("(κενό)")) {
+            errorMessage = "Παρακαλώ συμπληρώστε το όνομα";
+            isValid = false;
+        }
+        if (email.isEmpty() || email.equals("(κενό)")) {
+            errorMessage = "Παρακαλώ συμπληρώστε το email";
+            isValid = false;
+        }
+
+        if (!isValid) {
+            String headerText = "Ελλιπή στοιχεία";
+            AlertDialogs.error(headerText, null, errorMessage);
+        }
+
+
+        return isValid;
     }
 
 
     private boolean checkIfLocationDetailsAreEmpty() {
-        return location.streetProperty().get().isEmpty() && location.streetNumProperty().get() == 0 && location.cityProperty().get().isEmpty() && location.postalCodeProperty().get() == 0;
+        String street = location.streetProperty().get().trim();
+        String city = location.cityProperty().get().trim();
+
+        String errorMessage = null;
+        boolean isValid = true;
+
+        if (street.isEmpty() || street.equals("(κενό)")) {
+            errorMessage = "Παρακαλώ συμπληρώστε το όδο";
+            isValid = false;
+        }
+
+        if (city.isEmpty() || city.equals("(κενό)")) {
+            errorMessage = "Παρακαλώ συμπληρώστε την πόλη";
+            isValid = false;
+        }
+
+        if (!isValid) {
+            String headerText = "Ελλιπή στοιχεία";
+            AlertDialogs.error(headerText, null, errorMessage);
+        }
+
+        return isValid;
     }
 
     @FXML
     private void makeOrder() {
-
+        if (checkIfUserDetailsAreEmpty() && checkIfLocationDetailsAreEmpty()) {
             try {
                 FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMakeOrderScene.fxml")));
                 Parent root = loader.load();
                 PhMakeOrderController phMakeOrderController = loader.getController();
-                phMakeOrderController.setEmployee(employee);
+                phMakeOrderController.setEmployee(user);
                 phMakeOrderController.setPharmancy(location);
                 Stage stage = new Stage();
                 stage.setTitle("Δημιουργία παραγγελίας");
@@ -259,6 +304,7 @@ public class PhDashboardController implements Initializable {
                 e.printStackTrace();
 
             }
+        }
     }
 
     @FXML
@@ -338,24 +384,30 @@ public class PhDashboardController implements Initializable {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/logout";
         try {
             Response response = HTTPMethods.get(url);
-            int respondCode = response.getRespondCode();
-            if (respondCode >= 200 && respondCode <= 299) {
-                Authentication.clearToken();
-                Authentication.setLogin(false);
-                try {
-                    FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/LoginScene.fxml")));
-                    Parent root = loader.load();
-                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    stage.setTitle("Σύνδεση στο σύστημα");
-                    Scene scene = new Scene(root);
-                    scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
-                    stage.setScene(scene);
-                    stage.setResizable(false);
-                    stage.show();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (response != null) {
+                int respondCode = response.getRespondCode();
+                if (respondCode >= 200 && respondCode <= 299) {
+                    Authentication.clearToken();
+                    Authentication.setLogin(false);
+                    try {
+                        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/LoginScene.fxml")));
+                        Parent root = loader.load();
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        stage.setTitle("Σύνδεση στο σύστημα");
+                        Scene scene = new Scene(root);
+                        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+                        stage.setScene(scene);
+                        stage.setResizable(false);
+                        stage.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
 
+                    }
                 }
+            } else {
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();

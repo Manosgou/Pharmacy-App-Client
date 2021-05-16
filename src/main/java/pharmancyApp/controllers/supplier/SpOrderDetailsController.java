@@ -14,8 +14,8 @@ import models.Order;
 import models.OrderStatus;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.AlertDialogs;
 import java.net.URL;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class SpOrderDetailsController implements Initializable {
@@ -69,7 +69,6 @@ public class SpOrderDetailsController implements Initializable {
     ObservableList<OrderStatus> orderStatuses = FXCollections.observableArrayList(new OrderStatus("OP", "Σε επεξεργασία"), new OrderStatus("OD", "Σε παράδοση"), new OrderStatus("DE", "Παραδόθηκε"));
 
 
-
     public void setOrder(Order order) {
         this.order = order;
     }
@@ -100,39 +99,28 @@ public class SpOrderDetailsController implements Initializable {
     }
 
     @FXML
-    private void updateOrderStatus(ActionEvent event){
+    private void updateOrderStatus(ActionEvent event) {
         OrderStatus orderStatus = orderStatusComboBox.getValue();
-        String jsonString = "{\"order_status\":\""+orderStatus.getStatudId()+"\"}";
-        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/update/order-status/"+order.getId();
+        String jsonString = "{\"order_status\":\"" + orderStatus.getStatudId() + "\"}";
+        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/update/order-status/" + order.getId();
         try {
             Response response = HTTPMethods.put(jsonString, url);
-            int respondCode = response.getRespondCode();
-            if (respondCode >= 200 && respondCode <= 299) {
-                order.getOrderStatus().statusProperty().bind(orderStatus.statusProperty());
-                final Node source = (Node) event.getSource();
-                final Stage stage = (Stage) source.getScene().getWindow();
-                stage.close();
+            if (response != null) {
+                JSONObject jsonResponse = new JSONObject(response.getResponse());
+                int respondCode = response.getRespondCode();
+                if (respondCode >= 200 && respondCode <= 299) {
+                    order.getOrderStatus().statusProperty().bind(orderStatus.statusProperty());
+                    final Node source = (Node) event.getSource();
+                    final Stage stage = (Stage) source.getScene().getWindow();
+                    stage.close();
+                } else {
+                    String headerText = "Αδυναμία συνδεσης";
+                    AlertDialogs.error(headerText, jsonResponse, null);
+                }
             } else {
-                StringBuilder errorMessage = new StringBuilder();
-                JSONObject jsonResponse = new JSONObject(response.toString());
-                Map<String, Object> i = jsonResponse.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμια συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.AlertDialogs;
 import pharmancyApp.Utils.TextFieldFilters;
 
 import java.net.URL;
@@ -52,7 +53,7 @@ public class CuMakeOrderController implements Initializable {
     @FXML
     private TableColumn<CartItem, Float> cartTotalCol;
 
-    private Employee employee;
+    private User user;
     private Medicine medicine;
     private CartItem cartItem;
     private Location location;
@@ -63,8 +64,8 @@ public class CuMakeOrderController implements Initializable {
         this.location = location;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployee(User user) {
+        this.user = user;
     }
 
     @FXML
@@ -82,7 +83,7 @@ public class CuMakeOrderController implements Initializable {
                 } else {
 
                     JFXButton addToCart = new JFXButton("Προσθήκη στο καλάθι");
-                    addToCart.setStyle("-fx-background-color:" + Colors.ADD);
+                    addToCart.setStyle("-fx-background-color:" + Colors.GREEN);
                     addToCart.setTextFill(Paint.valueOf(Colors.WHITE));
 
                     TextField quantityFld = new TextField();
@@ -100,47 +101,21 @@ public class CuMakeOrderController implements Initializable {
                                     cart.add(cartItem);
                                     quantityFld.setText("1");
                                 } else {
-                                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                                    ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                                    alert.setResizable(false);
-                                    alert.setWidth(200);
-                                    alert.setHeight(300);
-                                    alert.setTitle("Σφάλμα");
-                                    alert.setHeaderText("Είσαι καθυστερημένος");
-                                    alert.setContentText("Το προιόν έχει ήδη προστεθεί στο καλάθι");
-                                    alert.showAndWait();
-                                    if (alert.getResult().equals(okBtn)) {
-                                        alert.close();
-                                    }
+                                    String headerText = "";
+                                    String contentText = "Το προιόν έχει ήδη προστεθεί στο καλάθι.";
+                                    AlertDialogs.error(headerText, null, contentText);
                                 }
                             } else {
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                                alert.setResizable(false);
-                                alert.setWidth(200);
-                                alert.setHeight(300);
-                                alert.setTitle("Σφάλμα");
-                                alert.setHeaderText("Είσαι καθυστερημένος");
-                                alert.setContentText("Η ποσότητα που επιλέξατε είναι μεγαλύτερη από αύτη που σας παρέχει ο προμηθευτής");
-                                alert.showAndWait();
-                                if (alert.getResult().equals(okBtn)) {
-                                    alert.close();
-                                }
+                                String headerText = "Λανθασμενη ποσοτητα";
+                                String contentText = "Η ποσότητα που επιλέξατε είναι μεγαλύτερη από αύτη που σας παρέχει ο προμηθευτής";
+                                AlertDialogs.error(headerText, null, contentText);
                             }
 
                         } else {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                            alert.setResizable(false);
-                            alert.setWidth(200);
-                            alert.setHeight(300);
-                            alert.setTitle("Σφάλμα");
-                            alert.setHeaderText("Είσαι καθυστερημένος");
-                            alert.setContentText("Το πεδίο της ποσότητας δεν μπορεί να είναι αρνητικό ή μηδέν.");
-                            alert.showAndWait();
-                            if (alert.getResult().equals(okBtn)) {
-                                alert.close();
-                            }
+                            String headerText = "Λανθασμενη ποσοτητα";
+                            String contentText = "Το πεδίο της ποσότητας δεν μπορεί να είναι αρνητικό ή μηδέν.";
+                            AlertDialogs.error(headerText, null, contentText);
+
                         }
 
                     });
@@ -179,7 +154,7 @@ public class CuMakeOrderController implements Initializable {
                 } else {
 
                     JFXButton deleteItem = new JFXButton("Διαγραφή");
-                    deleteItem.setStyle("-fx-background-color:" + Colors.DELETE);
+                    deleteItem.setStyle("-fx-background-color:" + Colors.RED);
                     deleteItem.setTextFill(Paint.valueOf(Colors.WHITE));
 
 
@@ -207,52 +182,43 @@ public class CuMakeOrderController implements Initializable {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/customer/make/order";
         try {
             Response response = HTTPMethods.get(url);
-            int respondCode = response.getRespondCode();
-            JSONArray jsonArray = new JSONArray(response.getResponse());
-            if (respondCode >= 200 && respondCode <= 299) {
+            if (response != null) {
 
-                MedicineCategory medicineCategory;
-                for (int i = 0; i < jsonArray.length(); i++) {
 
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    int id = jsonObject.getInt("id");
-                    String name = jsonObject.getString("name");
-                    int quantity = jsonObject.getInt("quantity");
-                    float price = jsonObject.getFloat("price");
-                    JSONObject categoryObj = jsonObject.getJSONObject("category");
-                    int categoryId = categoryObj.getInt("id");
-                    String categoryName = categoryObj.getString("name");
-                    medicineCategory = new MedicineCategory(categoryId, categoryName);
-                    this.medicine = new Medicine(id, name, quantity, price, medicineCategory);
-                    this.medicines.addAll(this.medicine);
+                int respondCode = response.getRespondCode();
+                JSONArray jsonArray = new JSONArray(response.getResponse());
+                if (respondCode >= 200 && respondCode <= 299) {
 
+                    MedicineCategory medicineCategory;
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        int id = jsonObject.getInt("id");
+                        String name = jsonObject.getString("name");
+                        int quantity = jsonObject.getInt("quantity");
+                        float price = jsonObject.getFloat("price");
+                        JSONObject categoryObj = jsonObject.getJSONObject("category");
+                        int categoryId = categoryObj.getInt("id");
+                        String categoryName = categoryObj.getString("name");
+                        medicineCategory = new MedicineCategory(categoryId, categoryName);
+                        this.medicine = new Medicine(id, name, quantity, price, medicineCategory);
+                        this.medicines.addAll(this.medicine);
+
+                    }
+
+                    getMedicinesTable();
+                    getCartTable();
+
+
+                } else {
+                    JSONObject responseObj = new JSONObject(response.getResponse());
+                    String headerText = "Αδυναμια συνδεσης";
+                    AlertDialogs.error(headerText, responseObj, null);
                 }
-
-                getMedicinesTable();
-                getCartTable();
-
-
             } else {
-                StringBuilder errorMessage = new StringBuilder();
-                JSONObject responseObj = new JSONObject(response);
-                Map<String, Object> i = responseObj.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμια συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -263,7 +229,7 @@ public class CuMakeOrderController implements Initializable {
         StringBuilder jsonString = new StringBuilder();
 
         for (int i = 0; i < cart.size(); i++) {
-            jsonString.append("{\"employee\":\"").append(employee.getId()).append("\",\"medicine\":\"").append(cart.get(i).getMedicine().getId()).append("\",\"quantity\":\"").append(cart.get(i).getQuantity()).append("\",\"total_price\":\"").append(cart.get(i).getPrice()).append(cart.get(i).getQuantity()).append("\",\"location\":\"").append(location.getId()).append("\"}");
+            jsonString.append("{\"employee\":\"").append(user.getId()).append("\",\"medicine\":\"").append(cart.get(i).getMedicine().getId()).append("\",\"quantity\":\"").append(cart.get(i).getQuantity()).append("\",\"total_price\":\"").append(cart.get(i).getPrice()).append(cart.get(i).getQuantity()).append("\",\"location\":\"").append(location.getId()).append("\"}");
             if (!(i == cart.size() - 1)) {
                 jsonString.append(",");
             }
@@ -274,22 +240,13 @@ public class CuMakeOrderController implements Initializable {
         return String.format("[%s]", jsonString);
     }
 
-    private String checkCart(){
-        if(!cart.isEmpty()){
+    private String checkCart() {
+        if (!cart.isEmpty()) {
             return cartToJson();
         }
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-        alert.setResizable(false);
-        alert.setWidth(200);
-        alert.setHeight(300);
-        alert.setTitle("Σφάλμα");
-        alert.setHeaderText("H παραγγελία δεν μπορεί να πραγματοποιηθεί.");
-        alert.setContentText("Το καλάθι δεν μπορεί να είναι κενό.");
-        alert.showAndWait();
-        if (alert.getResult().equals(okBtn)) {
-            alert.close();
-        }
+        String headerText = "H παραγγελία δεν μπορεί να πραγματοποιηθεί.";
+        String contentText = "Το καλάθι δεν μπορεί να είναι κενό.";
+        AlertDialogs.error(headerText, null, contentText);
         return null;
     }
 
@@ -297,38 +254,27 @@ public class CuMakeOrderController implements Initializable {
     @FXML
     void submitOrder(ActionEvent event) {
         String jsonString = checkCart();
-        if(jsonString !=null) {
+        if (jsonString != null) {
             String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/customer/make/order";
             try {
                 Response response = HTTPMethods.post(jsonString, url);
-                int respondCode = response.getRespondCode();
-                if (respondCode >= 200 && respondCode <= 299) {
+                if (response != null) {
+                    int respondCode = response.getRespondCode();
+                    JSONObject jsonResponse = new JSONObject(response.getResponse());
+                    if (respondCode >= 200 && respondCode <= 299) {
 
-                    final Node source = (Node) event.getSource();
-                    final Stage stage = (Stage) source.getScene().getWindow();
-                    stage.close();
+                        final Node source = (Node) event.getSource();
+                        final Stage stage = (Stage) source.getScene().getWindow();
+                        stage.close();
 
+                    } else {
+                        String headerText = "Αδυναμια συνδεσης";
+                        AlertDialogs.error(headerText, jsonResponse, null);
+                    }
                 } else {
-                    StringBuilder errorMessage = new StringBuilder();
-                    JSONObject responseObj = new JSONObject(response);
-                    Map<String, Object> i = responseObj.toMap();
-                    for (Map.Entry<String, Object> entry : i.entrySet()) {
-                        errorMessage.append(entry.getValue().toString()).append("\n");
-                        System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                    }
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                    alert.setResizable(false);
-                    alert.setWidth(200);
-                    alert.setHeight(300);
-                    alert.setTitle("Σφάλμα");
-                    alert.setHeaderText("Αδυναμια συνδεσης");
-                    alert.setContentText(errorMessage.toString());
-                    alert.showAndWait();
-                    if (alert.getResult().equals(okBtn)) {
-                        alert.close();
-                    }
+                    String headerText = "Αδυναμία συνδεσης";
+                    String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                    AlertDialogs.error(headerText, null, contentText);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

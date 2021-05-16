@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,8 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.AlertDialogs;
 import java.net.URL;
-import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -44,8 +43,9 @@ public class PhMedicinesListController implements Initializable {
     private TableColumn<Medicine, String> medicineOptionsCol;
 
     private Medicine medicine;
-    private ObservableList<Medicine> medicines = FXCollections.observableArrayList();
-    private void getMedicinesTable(){
+    private final ObservableList<Medicine> medicines = FXCollections.observableArrayList();
+
+    private void getMedicinesTable() {
         medicineNameCol.setCellValueFactory(item -> item.getValue().nameProperty());
         medCategoryCol.setCellValueFactory(item -> item.getValue().getMedicineCategory().nameProperty());
         medQuantityCol.setCellValueFactory(item -> item.getValue().quantityProperty().asObject());
@@ -69,7 +69,7 @@ public class PhMedicinesListController implements Initializable {
                         try {
                             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMedicinePriceForm.fxml")));
                             Parent root = loader.load();
-                            PhMedicinePriceFormController phMedicinePriceFormController =loader.getController();
+                            PhMedicinePriceFormController phMedicinePriceFormController = loader.getController();
                             phMedicinePriceFormController.setUpdate(true);
                             phMedicinePriceFormController.setMedicine(medicine);
                             phMedicinePriceFormController.init();
@@ -86,9 +86,7 @@ public class PhMedicinesListController implements Initializable {
                         }
 
 
-
                     });
-
 
 
                     HBox actionsBtns = new HBox(updateMedicinePrice);
@@ -107,52 +105,41 @@ public class PhMedicinesListController implements Initializable {
     }
 
 
-    private void fetchMedicines(){
+    private void fetchMedicines() {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/pharmacist/get/medicines";
         try {
             Response response = HTTPMethods.get(url);
-            int respondCode = response.getRespondCode();
-            JSONArray jsonArray = new JSONArray(response.getResponse());
-            if (respondCode >= 200 && respondCode <= 299) {
-                MedicineCategory medicineCategory;
-                for (int i = 0; i < jsonArray.length(); i++) {
+            if (response != null) {
+                int respondCode = response.getRespondCode();
+                JSONArray jsonArray = new JSONArray(response.getResponse());
+                if (respondCode >= 200 && respondCode <= 299) {
+                    MedicineCategory medicineCategory;
+                    for (int i = 0; i < jsonArray.length(); i++) {
 
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    int id = jsonObject.getInt("id");
-                    String name = jsonObject.getString("name");
-                    int quantity = jsonObject.getInt("quantity");
-                    float price = jsonObject.getFloat("price");
-                    JSONObject categoryObj = jsonObject.getJSONObject("category");
-                    int  categoryId = categoryObj.getInt("id");
-                    String categoryName = categoryObj.getString("name");
-                    medicineCategory =  new MedicineCategory(categoryId,categoryName);
-                    medicine = new Medicine(id, name, quantity, price,medicineCategory);
-                    medicines.add(medicine);
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        int id = jsonObject.getInt("id");
+                        String name = jsonObject.getString("name");
+                        int quantity = jsonObject.getInt("quantity");
+                        float price = jsonObject.getFloat("price");
+                        JSONObject categoryObj = jsonObject.getJSONObject("category");
+                        int categoryId = categoryObj.getInt("id");
+                        String categoryName = categoryObj.getString("name");
+                        medicineCategory = new MedicineCategory(categoryId, categoryName);
+                        medicine = new Medicine(id, name, quantity, price, medicineCategory);
+                        medicines.add(medicine);
 
 
+                    }
+                    getMedicinesTable();
+                } else {
+                    String headerText = "Αδυναμια συνδεσης";
+                    JSONObject responseObj = new JSONObject(response);
+                    AlertDialogs.error(headerText, responseObj, null);
                 }
-                getMedicinesTable();
             } else {
-                StringBuilder errorMessage = new StringBuilder();
-                JSONObject responseObj = new JSONObject(response);
-                Map<String, Object> i = responseObj.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμια συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
 
         } catch (Exception e) {
@@ -160,6 +147,12 @@ public class PhMedicinesListController implements Initializable {
         }
     }
 
+
+    @FXML
+    private void refreshTable() {
+        medicines.clear();
+        fetchMedicines();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -22,14 +23,17 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.AlertDialogs;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 
-public class SpCategoriesListController {
+public class SpCategoriesListController implements Initializable {
     @FXML
     private TableView<MedicineCategory> categoriesTable;
 
@@ -40,27 +44,27 @@ public class SpCategoriesListController {
     private TableColumn<MedicineCategory, String> categoryOptionsCol;
 
     private MedicineCategory medicineCategory;
-    private ObservableList<MedicineCategory> categories = FXCollections.observableArrayList();
+    private final ObservableList<MedicineCategory> categories = FXCollections.observableArrayList();
 
 
-    public void fetchCategories(){
+    public void fetchCategories() {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/get/categories";
-        try{
+        try {
             Response response = HTTPMethods.get(url);
             int respondCode = response.getRespondCode();
             JSONArray jsonArray = new JSONArray(response.getResponse());
-            if(respondCode >=200 && respondCode<=299){
+            if (respondCode >= 200 && respondCode <= 299) {
                 for (int i = 0; i < jsonArray.length(); i++) {
 
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     int id = jsonObject.getInt("id");
                     String name = jsonObject.getString("name");
-                    this.medicineCategory = new MedicineCategory(id,name);
+                    this.medicineCategory = new MedicineCategory(id, name);
                     this.categories.addAll(this.medicineCategory);
 
                 }
                 getCategoriesTable();
-            }else{
+            } else {
                 StringBuilder errorMessage = new StringBuilder();
                 JSONObject responseObj = new JSONObject(response);
                 Map<String, Object> i = responseObj.toMap();
@@ -83,14 +87,14 @@ public class SpCategoriesListController {
                 }
             }
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
     @FXML
-    private void getCategoriesTable(){
+    private void getCategoriesTable() {
         categoryNameCol.setCellValueFactory(item -> item.getValue().nameProperty());
         Callback<TableColumn<MedicineCategory, String>, TableCell<MedicineCategory, String>> cellFoctory = (TableColumn<MedicineCategory, String> param) -> new TableCell<>() {
             @Override
@@ -106,7 +110,7 @@ public class SpCategoriesListController {
                     editCategory.setTextFill(Paint.valueOf(Colors.WHITE));
 
                     JFXButton deleteCategory = new JFXButton("Διαγραφη");
-                    deleteCategory.setStyle("-fx-background-color:" + Colors.DELETE);
+                    deleteCategory.setStyle("-fx-background-color:" + Colors.RED);
                     deleteCategory.setTextFill(Paint.valueOf(Colors.WHITE));
 
 
@@ -115,7 +119,7 @@ public class SpCategoriesListController {
                         try {
                             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpCategoryFormScene.fxml")));
                             Parent root = loader.load();
-                            SpCategoryFormController spCategoryFormController =loader.getController();
+                            SpCategoryFormController spCategoryFormController = loader.getController();
                             spCategoryFormController.setUpdate(true);
                             spCategoryFormController.setMedicineCategory(medicineCategory);
                             spCategoryFormController.init();
@@ -134,57 +138,46 @@ public class SpCategoriesListController {
 
                     deleteCategory.setOnMouseClicked((MouseEvent event) -> {
                         medicineCategory = getTableView().getItems().get(getIndex());
-                        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/delete/category/"+medicineCategory.getId();
+                        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/delete/category/" + medicineCategory.getId();
                         try {
-                            Response response= HTTPMethods.delete(url);
-                            int respondCode = response.getRespondCode();
-                            if(respondCode >200 && respondCode<299){
-                                ButtonType delete = new ButtonType("Διαγραφή", ButtonBar.ButtonData.OK_DONE);
-                                ButtonType cancel = new ButtonType("Ακύρωση", ButtonBar.ButtonData.CANCEL_CLOSE);
-                                Alert alert = new Alert(Alert.AlertType.WARNING,
-                                        "Είστε σίγουροι ότι θέλετε να διαγαψετε την κατηγορία με όνομα " + medicineCategory.getName() + ".\n(Η ενέργεια αυτή είναι μη αναστρέψιμη)",
+                            Response response = HTTPMethods.delete(url);
+                            if (response != null) {
+                                JSONObject jsonResponse = new JSONObject(response.getResponse());
+                                int respondCode = response.getRespondCode();
+                                if (respondCode > 200 && respondCode < 299) {
+                                    ButtonType delete = new ButtonType("Διαγραφή", ButtonBar.ButtonData.OK_DONE);
+                                    ButtonType cancel = new ButtonType("Ακύρωση", ButtonBar.ButtonData.CANCEL_CLOSE);
+                                    Alert alert = new Alert(Alert.AlertType.WARNING,
+                                            "Είστε σίγουροι ότι θέλετε να διαγαψετε την κατηγορία με όνομα " + medicineCategory.getName() + ".\n(Η ενέργεια αυτή είναι μη αναστρέψιμη)",
 
-                                        delete,
-                                        cancel);
+                                            delete,
+                                            cancel);
 
-                                alert.setTitle("Διαγραφή πελάτη");
-                                alert.setHeaderText("Προειδοποίηση!");
-                                alert.getDialogPane().setMinHeight(200);
-                                alert.getDialogPane().setMinWidth(500);
-                                alert.setResizable(false);
-                                Optional<ButtonType> result = alert.showAndWait();
-                                if (result.orElse(cancel) == delete) {
-                                    categories.removeIf(c->c.getId()==medicineCategory.getId());
+                                    alert.setTitle("Διαγραφή πελάτη");
+                                    alert.setHeaderText("Προειδοποίηση!");
+                                    alert.getDialogPane().setMinHeight(200);
+                                    alert.getDialogPane().setMinWidth(500);
+                                    alert.setResizable(false);
+                                    Optional<ButtonType> result = alert.showAndWait();
+                                    if (result.orElse(cancel) == delete) {
+                                        categories.removeIf(c -> c.getId() == medicineCategory.getId());
+                                    }
+
+                                } else {
+                                    String headerText = "Αδυναμία συνδεσης";
+                                    AlertDialogs.error(headerText, jsonResponse, null);
                                 }
-
-                            }else {
-                                StringBuilder errorMessage = new StringBuilder();
-                                JSONObject responseObj = new JSONObject(response);
-                                Map<String, Object> i = responseObj.toMap();
-                                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                                    errorMessage.append(entry.getValue().toString()).append("\n");
-                                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                                }
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                                alert.setResizable(false);
-                                alert.setWidth(200);
-                                alert.setHeight(300);
-                                alert.setTitle("Σφάλμα");
-                                alert.setHeaderText("Αδυναμια συνδεσης");
-                                alert.setContentText(errorMessage.toString());
-                                alert.showAndWait();
-                                if (alert.getResult().equals(okBtn)) {
-                                    alert.close();
-                                }
+                            } else {
+                                String headerText = "Αδυναμία συνδεσης";
+                                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                                AlertDialogs.error(headerText, null, contentText);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     });
 
-                    HBox actionsBtns = new HBox(editCategory,deleteCategory);
+                    HBox actionsBtns = new HBox(editCategory, deleteCategory);
                     actionsBtns.setAlignment(Pos.CENTER);
                     actionsBtns.setSpacing(5);
 
@@ -199,4 +192,15 @@ public class SpCategoriesListController {
         categoriesTable.setItems(this.categories);
     }
 
+    @FXML
+    private void refreshTable() {
+        categories.clear();
+        fetchCategories();
+    }
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        fetchCategories();
+    }
 }

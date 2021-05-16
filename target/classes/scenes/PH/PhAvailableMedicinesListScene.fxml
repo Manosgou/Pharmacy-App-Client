@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -27,6 +28,7 @@
                   </Label>
                </children>
             </HBox>
+            <JFXButton layoutX="701.0" layoutY="44.0" onAction="#refreshTable" style="-fx-background-color: white;" text="Ανανεωση" textFill="#ff4233" />
          </children>
       </AnchorPane>
       <TableView fx:id="medicinesTable" layoutY="86.0" prefHeight="314.0" prefWidth="800.0">

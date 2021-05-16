@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -23,14 +24,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
-
+import pharmancyApp.Utils.AlertDialogs;
 import java.io.IOException;
-import java.util.Map;
+import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 
-public class SpMediciniesListController {
+public class SpMediciniesListController implements Initializable {
     @FXML
     private TableView<Medicine> medicinesTable;
 
@@ -44,7 +46,7 @@ public class SpMediciniesListController {
     private TableColumn<Medicine, String> medicineOptionsCol;
 
     private Medicine medicine;
-    private ObservableList<Medicine> medicines = FXCollections.observableArrayList();
+    private final ObservableList<Medicine> medicines = FXCollections.observableArrayList();
 
 
     @FXML
@@ -61,7 +63,7 @@ public class SpMediciniesListController {
                 } else {
 
                     JFXButton viewMedicine = new JFXButton("Προβολη");
-                    viewMedicine.setStyle("-fx-background-color:" + Colors.VIEW);
+                    viewMedicine.setStyle("-fx-background-color:" + Colors.BLUE);
                     viewMedicine.setTextFill(Paint.valueOf(Colors.WHITE));
 
                     JFXButton editMedicine = new JFXButton("Επεξεργασια");
@@ -70,7 +72,7 @@ public class SpMediciniesListController {
 
 
                     JFXButton deleteMedicine = new JFXButton("Διαγραφη");
-                    deleteMedicine.setStyle("-fx-background-color:" + Colors.DELETE);
+                    deleteMedicine.setStyle("-fx-background-color:" + Colors.RED);
                     deleteMedicine.setTextFill(Paint.valueOf(Colors.WHITE));
 
                     viewMedicine.setOnMouseClicked((MouseEvent event) -> {
@@ -139,30 +141,20 @@ public class SpMediciniesListController {
                         if (result.orElse(cancel) == delete) {
                             try {
                                 Response response = HTTPMethods.delete(url);
-                                int respondCode = response.getRespondCode();
-                                if (respondCode > 200 && respondCode < 299) {
-                                    medicines.removeIf(m -> m.getId() == medicine.getId());
+                                if (response != null) {
+                                    JSONObject jsonResponse = new JSONObject(response.getResponse());
+                                    int respondCode = response.getRespondCode();
+                                    if (respondCode > 200 && respondCode < 299) {
+                                        medicines.removeIf(m -> m.getId() == medicine.getId());
+                                    } else {
+                                        String headerText = "Αδυναμία συνδεσης";
+                                        AlertDialogs.error(headerText, jsonResponse, null);
+                                    }
                                 } else {
-                                    StringBuilder errorMessage = new StringBuilder();
-                                    JSONObject responseObj = new JSONObject(response);
-                                    Map<String, Object> i = responseObj.toMap();
-                                    for (Map.Entry<String, Object> entry : i.entrySet()) {
-                                        errorMessage.append(entry.getValue().toString()).append("\n");
-                                        System.out.println(entry.getKey() + "/" + entry.getValue());
 
-                                    }
-                                    alert = new Alert(Alert.AlertType.ERROR);
-                                    ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                                    alert.setResizable(false);
-                                    alert.setWidth(200);
-                                    alert.setHeight(300);
-                                    alert.setTitle("Σφάλμα");
-                                    alert.setHeaderText("Αδυναμια συνδεσης");
-                                    alert.setContentText(errorMessage.toString());
-                                    alert.showAndWait();
-                                    if (alert.getResult().equals(okBtn)) {
-                                        alert.close();
-                                    }
+                                    String headerText = "Αδυναμία συνδεσης";
+                                    String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                                    AlertDialogs.error(headerText, null, contentText);
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -171,11 +163,9 @@ public class SpMediciniesListController {
 
 
                     });
-
                     HBox actionsBtns = new HBox(viewMedicine, editMedicine, deleteMedicine);
                     actionsBtns.setAlignment(Pos.CENTER);
                     actionsBtns.setSpacing(5);
-
                     setGraphic(actionsBtns);
 
                 }
@@ -191,48 +181,37 @@ public class SpMediciniesListController {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/get/medicines";
         try {
             Response response = HTTPMethods.get(url);
-            int respondCode = response.getRespondCode();
-            JSONArray jsonArray = new JSONArray(response.getResponse());
-            if (respondCode >= 200 && respondCode <= 299) {
-                MedicineCategory medicineCategory;
-                for (int i = 0; i < jsonArray.length(); i++) {
+            if (response != null) {
+                int respondCode = response.getRespondCode();
+                JSONArray jsonArray = new JSONArray(response.getResponse());
+                if (respondCode >= 200 && respondCode <= 299) {
+                    MedicineCategory medicineCategory;
+                    for (int i = 0; i < jsonArray.length(); i++) {
 
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    int id = jsonObject.getInt("id");
-                    String name = jsonObject.getString("name");
-                    int quantity = jsonObject.getInt("quantity");
-                    float price = jsonObject.getFloat("price");
-                    JSONObject categoryObj = jsonObject.getJSONObject("category");
-                    int categoryId = categoryObj.getInt("id");
-                    String categoryName = categoryObj.getString("name");
-                    medicineCategory = new MedicineCategory(categoryId, categoryName);
-                    medicine = new Medicine(id, name, quantity, price, medicineCategory);
-                    medicines.add(medicine);
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        int id = jsonObject.getInt("id");
+                        String name = jsonObject.getString("name");
+                        int quantity = jsonObject.getInt("quantity");
+                        float price = jsonObject.getFloat("price");
+                        JSONObject categoryObj = jsonObject.getJSONObject("category");
+                        int categoryId = categoryObj.getInt("id");
+                        String categoryName = categoryObj.getString("name");
+                        medicineCategory = new MedicineCategory(categoryId, categoryName);
+                        medicine = new Medicine(id, name, quantity, price, medicineCategory);
+                        medicines.add(medicine);
 
 
+                    }
+                    getMedicinesTable();
+                } else {
+                    String headerText = "Αδυναμία συνδεσης";
+                    JSONObject responseObj = new JSONObject(response.getResponse());
+                    AlertDialogs.error(headerText, responseObj, null);
                 }
-                getMedicinesTable();
             } else {
-                StringBuilder errorMessage = new StringBuilder();
-                JSONObject responseObj = new JSONObject(response);
-                Map<String, Object> i = responseObj.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμια συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
 
         } catch (Exception e) {
@@ -240,8 +219,14 @@ public class SpMediciniesListController {
         }
     }
 
-    public void init() {
-
+    @FXML
+    private void refreshTable() {
+        medicines.clear();
+        fetchMedicines();
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        fetchMedicines();
+    }
 }

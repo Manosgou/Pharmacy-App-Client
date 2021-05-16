@@ -3,14 +3,13 @@ package models;
 import javafx.beans.property.*;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.constant.Constable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Order {
     private IntegerProperty id;
-    private Employee employee;
+    private User user;
     private Medicine medicine;
     private IntegerProperty quantity;
     private FloatProperty totalPrice;
@@ -18,9 +17,9 @@ public class Order {
     private Location location;
     private StringProperty orderDateTime;
 
-    public Order(int id, @Nullable Employee employee, Medicine medicine, int quantity, float totalPrice, OrderStatus orderStatus, @Nullable Location location,String orderDateTime) {
+    public Order(int id, @Nullable User user, Medicine medicine, int quantity, float totalPrice, OrderStatus orderStatus, @Nullable Location location, String orderDateTime) {
         this.id = new SimpleIntegerProperty(id);
-        this.employee = employee;
+        this.user = user;
         this.medicine = medicine;
         this.quantity = new SimpleIntegerProperty(quantity);
         this.totalPrice = new SimpleFloatProperty(totalPrice);
@@ -82,12 +81,12 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public User getEmployee() {
+        return user;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setEmployee(User user) {
+        this.user = user;
     }
 
     public Location getLocation() {

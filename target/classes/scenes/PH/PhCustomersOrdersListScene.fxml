@@ -10,12 +10,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="600.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.pharmacist.PhCustomersOrdersListController">
    <children>
       <AnchorPane prefHeight="86.0" prefWidth="1300.0" style="-fx-background-color: #FF4233;">
          <children>
-            <JFXButton layoutX="1201.0" layoutY="45.0" style="-fx-background-color: white;" text="Ανανεωση" textFill="#ff4233" />
+            <JFXButton layoutX="1201.0" layoutY="45.0" onAction="#refreshTable" style="-fx-background-color: white;" text="Ανανεωση" textFill="#ff4233" />
             <HBox alignment="CENTER" layoutX="441.0" layoutY="10.0" prefHeight="71.0" prefWidth="418.0" spacing="20.0">
                <children>
                   <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">

@@ -1,6 +1,5 @@
 package REST;
 
-import org.jetbrains.annotations.Nullable;
 import pharmancyApp.Settings;
 
 import java.io.*;
@@ -26,7 +25,7 @@ public class HTTPMethods {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(conn.getInputStream()));
             String inputLine;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
@@ -35,10 +34,13 @@ public class HTTPMethods {
                 System.out.println("Response:" + response.toString());
             }
             return new Response(response.toString(), responseCode);
-        } catch (Exception e) {
+        } catch (IOException e) {
+            if(conn.getErrorStream()==null){
+                return null;
+            }
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
             String inputLine;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
             try {
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
@@ -56,8 +58,6 @@ public class HTTPMethods {
 
     public static Response post(String jsonString, String url) throws Exception {
         try {
-
-
             obj = new URL(url);
             conn = (HttpURLConnection) obj.openConnection();
             conn.setRequestMethod("POST");
@@ -87,20 +87,20 @@ public class HTTPMethods {
                 System.out.println("Response:" + response.toString());
             }
             return new Response(response.toString(), responseCode);
-        } catch (Exception e) {
+        } catch (IOException e) {
+            if(conn.getErrorStream()==null){
+                return null;
+            }
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
             String inputLine;
-            StringBuffer response = new StringBuffer();
-            try {
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-            } catch (IOException exception) {
-                exception.printStackTrace();
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
             }
-            if(Settings.DEBUG) {
-            System.out.println("Response:" + response);
+            in.close();
+
+            if (Settings.DEBUG) {
+                System.out.println("Response:" + response);
             }
             return new Response(response.toString(), conn.getResponseCode());
         }
@@ -136,14 +136,61 @@ public class HTTPMethods {
                 }
 
             }
-            if(Settings.DEBUG) {
+            if (Settings.DEBUG) {
+                System.out.println("Response:" + response);
+            }
+            return new Response(response.toString(), responseCode);
+        } catch (IOException e) {
+            if(conn.getErrorStream()==null){
+                return null;
+            }
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            System.out.println("Response:" + response);
+            return new Response(response.toString(), conn.getResponseCode());
+        }
+    }
+
+    public static Response delete(String url) throws IOException {
+        try {
+            obj = new URL(url);
+            conn = (HttpURLConnection) obj.openConnection();
+            conn.setRequestMethod("DELETE");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Accept", "application/json");
+            if (Authentication.getToken() != null) {
+                conn.setRequestProperty("Authorization", "Token " + Authentication.getToken());
+            }
+            conn.setDoOutput(true);
+            conn.connect();
+            int responseCode = conn.getResponseCode();
+            System.out.println(responseCode);
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                    System.out.println(responseLine);
+                }
+
+            }
+            if (Settings.DEBUG) {
                 System.out.println("Response:" + response);
             }
             return new Response(response.toString(), responseCode);
         } catch (Exception e) {
+            if(conn.getErrorStream()==null){
+                return null;
+            }
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
             String inputLine;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
             try {
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
@@ -155,51 +202,6 @@ public class HTTPMethods {
             System.out.println("Response:" + response);
             return new Response(response.toString(), conn.getResponseCode());
         }
-    }
-
-    public static Response delete(String url) throws IOException {
-            try{
-                obj = new URL(url);
-                conn = (HttpURLConnection) obj.openConnection();
-                conn.setRequestMethod("DELETE");
-                conn.setRequestProperty("Content-Type", "application/json; utf-8");
-                conn.setRequestProperty("Accept", "application/json");
-                if (Authentication.getToken() != null) {
-                    conn.setRequestProperty("Authorization", "Token " + Authentication.getToken());
-                }
-                conn.setDoOutput(true);
-                conn.connect();
-                int responseCode = conn.getResponseCode();
-                System.out.println(responseCode);
-                StringBuilder response = new StringBuilder();
-                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
-
-                    String responseLine = null;
-                    while ((responseLine = br.readLine()) != null) {
-                        response.append(responseLine.trim());
-                        System.out.println(responseLine);
-                    }
-
-                }
-                if(Settings.DEBUG) {
-                    System.out.println("Response:" + response);
-                }
-                return new Response(response.toString(), responseCode);
-            }catch (Exception e){
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-                try {
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                    in.close();
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
-                System.out.println("Response:" + response);
-                return new Response(response.toString(), conn.getResponseCode());
-            }
     }
 
 

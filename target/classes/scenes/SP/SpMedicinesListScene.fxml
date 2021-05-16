@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -13,6 +14,7 @@
    <children>
       <AnchorPane prefHeight="86.0" prefWidth="1024.0" style="-fx-background-color: #FF4233;">
          <children>
+            <JFXButton layoutX="925.0" layoutY="44.0" onAction="#refreshTable" style="-fx-background-color: white;" text="Ανανεωση" textFill="#ff4233" />
             <HBox alignment="CENTER" layoutX="303.0" layoutY="8.0" prefHeight="71.0" prefWidth="418.0" spacing="20.0">
                <children>
                   <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">

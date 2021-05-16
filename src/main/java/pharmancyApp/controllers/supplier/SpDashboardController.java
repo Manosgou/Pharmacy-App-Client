@@ -3,7 +3,6 @@ package pharmancyApp.controllers.supplier;
 import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,10 +20,11 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import models.Employee;
+import models.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.AlertDialogs;
 import pharmancyApp.controllers.UpdateUserDetailsController;
 
 import java.net.URL;
@@ -67,27 +67,27 @@ public class SpDashboardController implements Initializable {
     private PieChart pieChart;
 
 
-    Employee employee;
+    User user;
 
 
-    private void bindEmployeeLabels(Employee employee) {
-        idLbl.textProperty().bind(employee.idProperty().asString());
-        usernameLbl.textProperty().bind(employee.usernameProperty());
-        if(employee.emailProperty().get().isEmpty()){
-            employee.emailProperty().set("(κενό)");
+    private void bindEmployeeLabels(User user) {
+        idLbl.textProperty().bind(user.idProperty().asString());
+        usernameLbl.textProperty().bind(user.usernameProperty());
+        if (user.emailProperty().get().isEmpty()) {
+            user.emailProperty().set("(κενό)");
         }
-        emailLbl.textProperty().bind(employee.emailProperty());
+        emailLbl.textProperty().bind(user.emailProperty());
 
-        if(employee.firstnameProperty().get().isEmpty()){
-            employee.firstnameProperty().set("(κενό)");
+        if (user.firstnameProperty().get().isEmpty()) {
+            user.firstnameProperty().set("(κενό)");
         }
-        firstnameLbl.textProperty().bind(employee.firstnameProperty());
+        firstnameLbl.textProperty().bind(user.firstnameProperty());
 
-        if(employee.lastnameProperty().get().isEmpty()){
-            employee.lastnameProperty().set("(κενό)");
+        if (user.lastnameProperty().get().isEmpty()) {
+            user.lastnameProperty().set("(κενό)");
         }
-        lastnameLbl.textProperty().bind(employee.lastnameProperty());
-        domainLbl.setText("Προμηθευτής"+" "+"("+employee.domainProperty().get()+")");
+        lastnameLbl.textProperty().bind(user.lastnameProperty());
+        domainLbl.setText("Προμηθευτής" + " " + "(" + user.domainProperty().get() + ")");
     }
 
 
@@ -101,12 +101,12 @@ public class SpDashboardController implements Initializable {
     }
 
     private void lastActionsLabels(String customerName, String orderMedicine, int orderQuantity, float orderPrice, String medicineName, String medicineCategory, int medicineQuantity, float medicinePrice) {
-        orderFullNameLbl.setText(customerName ==null ?"(κενό)":customerName);
-        orderMedicineLbl.setText(orderMedicine==null ?"(κενό)":orderMedicine);
+        orderFullNameLbl.setText(customerName == null ? "(κενό)" : customerName);
+        orderMedicineLbl.setText(orderMedicine == null ? "(κενό)" : orderMedicine);
         orderQuantityLbl.setText(Integer.toString(orderQuantity));
         orderTotalPriceLbl.setText(Float.toString(orderPrice));
-        medicineNameLbl.setText(medicineName==null ?"(κενό)":medicineName);
-        medicineCategoryLbl.setText(medicineCategory==null ?"(κενό)":medicineCategory);
+        medicineNameLbl.setText(medicineName == null ? "(κενό)" : medicineName);
+        medicineCategoryLbl.setText(medicineCategory == null ? "(κενό)" : medicineCategory);
         medicineQuantityLbl.setText(Integer.toString(medicineQuantity));
         medicinePriceLbl.setText(Float.toString(medicinePrice));
     }
@@ -130,67 +130,56 @@ public class SpDashboardController implements Initializable {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/dashboard";
         try {
             Response response = HTTPMethods.get(url);
-            int respondCode = response.getRespondCode();
-            JSONObject jsonResponse = new JSONObject(response.getResponse());
-            if (respondCode >= 200 && respondCode <= 299) {
-                JSONObject user = jsonResponse.getJSONObject("user");
-                int id = user.getInt("id");
-                String username = user.getString("username");
-                String email = user.getString("email");
-                String domain = user.getJSONObject("employee").getString("domain");
-                String firstname = user.getString("first_name");
-                String lastname = user.getString("last_name");
-                employee = new Employee(id, username, email, firstname, lastname, domain);
-                String customerName = null;
-                String orderMedicine = null;
-                int orderQuantity =0;
-                float orderPrice = 0.0f;
-                if (!(jsonResponse.isNull("last_order"))) {
-                    JSONObject lastOrder = jsonResponse.getJSONObject("last_order");
-                    customerName = lastOrder.getString("full_name");
-                    orderMedicine = lastOrder.getString("medicine");
-                    orderQuantity = lastOrder.getInt("quantity");
-                    orderPrice = lastOrder.getFloat("total_price");
+            if (response != null) {
+                int respondCode = response.getRespondCode();
+                JSONObject jsonResponse = new JSONObject(response.getResponse());
+                if (respondCode >= 200 && respondCode <= 299) {
+                    JSONObject user = jsonResponse.getJSONObject("user");
+                    int id = user.getInt("id");
+                    String username = user.getString("username");
+                    String email = user.getString("email");
+                    String domain = user.getJSONObject("employee").getString("domain");
+                    String firstname = user.getString("first_name");
+                    String lastname = user.getString("last_name");
+                    this.user = new User(id, username, email, firstname, lastname, domain);
+                    String customerName = null;
+                    String orderMedicine = null;
+                    int orderQuantity = 0;
+                    float orderPrice = 0.0f;
+                    if (!(jsonResponse.isNull("last_order"))) {
+                        JSONObject lastOrder = jsonResponse.getJSONObject("last_order");
+                        customerName = lastOrder.getString("full_name");
+                        orderMedicine = lastOrder.getString("medicine");
+                        orderQuantity = lastOrder.getInt("quantity");
+                        orderPrice = lastOrder.getFloat("total_price");
+                    }
+                    String medicineName = null;
+                    String medicineCategory = null;
+                    int medicineQuantity = 0;
+                    float medicinePrice = 0.0f;
+                    if (!(jsonResponse.isNull("last_medicine"))) {
+                        JSONObject lastMedicine = jsonResponse.getJSONObject("last_medicine");
+                        medicineName = lastMedicine.getString("name");
+                        medicineCategory = lastMedicine.getString("category");
+                        medicineQuantity = lastMedicine.getInt("quantity");
+                        medicinePrice = lastMedicine.getFloat("price");
+                    }
+                    int totalOrders = jsonResponse.isNull("total_orders") ? 0 : jsonResponse.getInt("total_orders");
+                    int totalMedicines = jsonResponse.isNull("total_medicines") ? 0 : jsonResponse.getInt("total_medicines");
+                    int totalCategories = jsonResponse.isNull("total_categories") ? 0 : jsonResponse.getInt("total_categories");
+                    JSONArray medicinesQuantity = jsonResponse.getJSONArray("medicines_quantity");
+                    getPieChart(medicinesQuantity);
+                    getBarChart(totalOrders, totalMedicines, totalCategories);
+                    bindEmployeeLabels(this.user);
+                    lastActionsLabels(customerName, orderMedicine, orderQuantity, orderPrice, medicineName, medicineCategory, medicineQuantity, medicinePrice);
+                } else {
+                    String headerText = "Αδυναμια συνδεσης";
+                    AlertDialogs.error(headerText, jsonResponse, null);
                 }
-                String medicineName = null;
-                String medicineCategory =null;
-                int medicineQuantity =0;
-                float medicinePrice =0.0f;
-                if (!(jsonResponse.isNull("last_medicine"))) {
-                    JSONObject lastMedicine = jsonResponse.getJSONObject("last_medicine");
-                    medicineName = lastMedicine.getString("name");
-                    medicineCategory = lastMedicine.getString("category");
-                    medicineQuantity = lastMedicine.getInt("quantity");
-                    medicinePrice = lastMedicine.getFloat("price");
-                }
-                int totalOrders = jsonResponse.isNull("total_orders") ? 0 : jsonResponse.getInt("total_orders");
-                int totalMedicines = jsonResponse.isNull("total_medicines") ? 0 : jsonResponse.getInt("total_medicines");
-                int totalCategories = jsonResponse.isNull("total_categories") ? 0 : jsonResponse.getInt("total_categories");
-                JSONArray medicinesQuantity = jsonResponse.getJSONArray("medicines_quantity");
-                getPieChart(medicinesQuantity);
-                getBarChart(totalOrders, totalMedicines, totalCategories);
-                bindEmployeeLabels(employee);
-                lastActionsLabels(customerName, orderMedicine, orderQuantity, orderPrice, medicineName, medicineCategory, medicineQuantity, medicinePrice);
             } else {
-                StringBuilder errorMessage = new StringBuilder();
-                Map<String, Object> i = jsonResponse.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμια συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,8 +232,6 @@ public class SpDashboardController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpCategoriesListScene.fxml")));
             Parent root = loader.load();
-            SpCategoriesListController spCategoriesListController = loader.getController();
-            spCategoriesListController.fetchCategories();
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
@@ -285,7 +272,7 @@ public class SpDashboardController implements Initializable {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/UpdateUserScene.fxml")));
             Parent root = loader.load();
             UpdateUserDetailsController updateUserDetailsController = loader.getController();
-            updateUserDetailsController.setEmployee(employee);
+            updateUserDetailsController.setEmployee(user);
             updateUserDetailsController.setFields();
             Stage stage = new Stage();
             Scene scene = new Scene(root);
@@ -324,22 +311,28 @@ public class SpDashboardController implements Initializable {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/logout";
         try {
             Response response = HTTPMethods.get(url);
-            int responseCode = response.getRespondCode();
-            if (responseCode == 200) {
-                Authentication.clearToken();
-                Authentication.setLogin(false);
-                try {
-                    FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/LoginScene.fxml")));
-                    Parent root = loader.load();
-                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    stage.setTitle("Σύνδεση στο σύστημα");
-                    stage.setScene(new Scene(root));
-                    stage.setResizable(false);
-                    stage.show();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (response != null) {
+                int responseCode = response.getRespondCode();
+                if (responseCode == 200) {
+                    Authentication.clearToken();
+                    Authentication.setLogin(false);
+                    try {
+                        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/LoginScene.fxml")));
+                        Parent root = loader.load();
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        stage.setTitle("Σύνδεση στο σύστημα");
+                        stage.setScene(new Scene(root));
+                        stage.setResizable(false);
+                        stage.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
 
+                    }
                 }
+            } else {
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();

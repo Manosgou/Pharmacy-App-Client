@@ -12,8 +12,8 @@ import models.MedicineCategory;
 import org.json.JSONObject;
 import javafx.event.ActionEvent;
 import pharmancyApp.Settings;
+import pharmancyApp.Utils.AlertDialogs;
 
-import java.util.Map;
 
 public class SpCategoryFormController {
     @FXML
@@ -24,6 +24,7 @@ public class SpCategoryFormController {
     private Button submitCatBtn;
     @FXML
     private ImageView catHeaderImage;
+
     private MedicineCategory medicineCategory;
     private boolean isUpdate = false;
 
@@ -42,32 +43,21 @@ public class SpCategoryFormController {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/update/category/" + medicineCategory.getId();
         try {
             Response response = HTTPMethods.put(jsonString, url);
-            int respondCode = response.getRespondCode();
-            JSONObject jsonResponse = new JSONObject(response.getResponse());
-            if (respondCode >=200 && respondCode<=299) {
-                final Node source = (Node) event.getSource();
-                final Stage stage = (Stage) source.getScene().getWindow();
-                stage.close();
+            if (response != null) {
+                int respondCode = response.getRespondCode();
+                JSONObject jsonResponse = new JSONObject(response.getResponse());
+                if (respondCode >= 200 && respondCode <= 299) {
+                    final Node source = (Node) event.getSource();
+                    final Stage stage = (Stage) source.getScene().getWindow();
+                    stage.close();
+                } else {
+                    String headerText = "Αδυναμία συνδεσης";
+                    AlertDialogs.error(headerText, jsonResponse, null);
+                }
             } else {
-                StringBuilder errorMessage = new StringBuilder();
-                Map<String, Object> i = jsonResponse.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμία συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,32 +71,21 @@ public class SpCategoryFormController {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/create/category";
         try {
             Response response = HTTPMethods.post(jsonString, url);
-            int respondCode = response.getRespondCode();
-            JSONObject jsonResponse = new JSONObject(response.getResponse());
-            if (respondCode >=200 && respondCode<=299) {
-                final Node source = (Node) event.getSource();
-                final Stage stage = (Stage) source.getScene().getWindow();
-                stage.close();
+            if (response != null) {
+                int respondCode = response.getRespondCode();
+                JSONObject jsonResponse = new JSONObject(response.getResponse());
+                if (respondCode >= 200 && respondCode <= 299) {
+                    final Node source = (Node) event.getSource();
+                    final Stage stage = (Stage) source.getScene().getWindow();
+                    stage.close();
+                } else {
+                    String headerText = "Αδυναμία συνδεσης";
+                    AlertDialogs.error(headerText, jsonResponse, null);
+                }
             } else {
-                StringBuilder errorMessage = new StringBuilder();
-                Map<String, Object> i = jsonResponse.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμία συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,7 +99,7 @@ public class SpCategoryFormController {
             submitCatBtn.setOnAction(this::updateCategory);
             catHeaderLbl.setText("Ενημέρωση κατηγορίας");
             submitCatBtn.setText("Ενημέρωση κατηγορίας");
-            catHeaderImage.setImage(new Image("assets/icons/udpate.png"));
+            catHeaderImage.setImage(new Image("assets/icons/update.png"));
 
 
         } else {
