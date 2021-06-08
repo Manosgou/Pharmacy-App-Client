@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.supplier.SpCategoryFormController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.supplier.SpCategoryFormController">
    <children>
       <AnchorPane prefHeight="86.0" prefWidth="605.0" style="-fx-background-color: #FF4233;">
          <children>
@@ -30,7 +27,7 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                <children>
                   <Label text="Ονομα κατηγοριας:" />
-                  <TextField fx:id="categoryNameFld" />
+                  <TextField fx:id="categoryNameFld" prefWidth="220.0" promptText="Εισάγετε όνομα κατηγοριίας" />
                </children>
             </HBox>
             <JFXButton fx:id="submitCatBtn" prefHeight="47.0" prefWidth="200.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20;" text="Αποθηκευση" textFill="WHITE" />

@@ -1,8 +1,6 @@
 package models;
 
 import javafx.beans.property.*;
-import org.jetbrains.annotations.Nullable;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,7 +15,7 @@ public class Order {
     private Location location;
     private StringProperty orderDateTime;
 
-    public Order(int id, @Nullable User user, Medicine medicine, int quantity, float totalPrice, OrderStatus orderStatus, @Nullable Location location, String orderDateTime) {
+    public Order(int id, User user, Medicine medicine, int quantity, float totalPrice, OrderStatus orderStatus,Location location, String orderDateTime) {
         this.id = new SimpleIntegerProperty(id);
         this.user = user;
         this.medicine = medicine;
@@ -81,11 +79,11 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    public User getEmployee() {
+    public User getUser() {
         return user;
     }
 
-    public void setEmployee(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

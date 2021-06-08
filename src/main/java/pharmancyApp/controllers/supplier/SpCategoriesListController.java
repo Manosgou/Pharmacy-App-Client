@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.supplier;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import com.jfoenix.controls.JFXButton;
@@ -24,10 +25,8 @@ import org.json.JSONObject;
 import pharmancyApp.Colors;
 import pharmancyApp.Settings;
 import pharmancyApp.Utils.AlertDialogs;
-
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -51,40 +50,35 @@ public class SpCategoriesListController implements Initializable {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/get/categories";
         try {
             Response response = HTTPMethods.get(url);
-            int respondCode = response.getRespondCode();
-            JSONArray jsonArray = new JSONArray(response.getResponse());
-            if (respondCode >= 200 && respondCode <= 299) {
-                for (int i = 0; i < jsonArray.length(); i++) {
 
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    int id = jsonObject.getInt("id");
-                    String name = jsonObject.getString("name");
-                    this.medicineCategory = new MedicineCategory(id, name);
-                    this.categories.addAll(this.medicineCategory);
+            if (response != null) {
+                int respondCode = response.getRespondCode();
 
+                if (respondCode >= 200 && respondCode <= 299) {
+                    JSONArray jsonArray = new JSONArray(response.getResponse());
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        int id = jsonObject.getInt("id");
+                        String name = jsonObject.getString("name");
+                        this.medicineCategory = new MedicineCategory(id, name);
+                        this.categories.addAll(this.medicineCategory);
+
+                    }
+                    getCategoriesTable();
+                } else {
+
+                    JSONObject responseObj = new JSONObject(response.getResponse());
+                    String headerText = "Αδυναμια συνδεσης";
+                    AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
-                getCategoriesTable();
             } else {
-                StringBuilder errorMessage = new StringBuilder();
-                JSONObject responseObj = new JSONObject(response);
-                Map<String, Object> i = responseObj.toMap();
-                for (Map.Entry<String, Object> entry : i.entrySet()) {
-                    errorMessage.append(entry.getValue().toString()).append("\n");
-                    System.out.println(entry.getKey() + "/" + entry.getValue());
-
-                }
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                ButtonType okBtn = new ButtonType("Εντάξει", ButtonBar.ButtonData.OK_DONE);
-                alert.setResizable(false);
-                alert.setWidth(200);
-                alert.setHeight(300);
-                alert.setTitle("Σφάλμα");
-                alert.setHeaderText("Αδυναμια συνδεσης");
-                alert.setContentText(errorMessage.toString());
-                alert.showAndWait();
-                if (alert.getResult().equals(okBtn)) {
-                    alert.close();
-                }
+                String headerText = "Αδυναμία συνδεσης";
+                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                AlertDialogs.error(headerText, null, contentText);
             }
 
         } catch (Exception e) {
@@ -142,7 +136,6 @@ public class SpCategoriesListController implements Initializable {
                         try {
                             Response response = HTTPMethods.delete(url);
                             if (response != null) {
-                                JSONObject jsonResponse = new JSONObject(response.getResponse());
                                 int respondCode = response.getRespondCode();
                                 if (respondCode > 200 && respondCode < 299) {
                                     ButtonType delete = new ButtonType("Διαγραφή", ButtonBar.ButtonData.OK_DONE);
@@ -164,8 +157,13 @@ public class SpCategoriesListController implements Initializable {
                                     }
 
                                 } else {
-                                    String headerText = "Αδυναμία συνδεσης";
-                                    AlertDialogs.error(headerText, jsonResponse, null);
+
+                                    JSONObject responseObj = new JSONObject(response.getResponse());
+                                    String headerText = "Αδυναμια συνδεσης";
+                                    AlertDialogs.error(headerText, responseObj, null);
+                                    if (respondCode == 401) {
+                                        Authentication.setLogin(false);
+                                    }
                                 }
                             } else {
                                 String headerText = "Αδυναμία συνδεσης";

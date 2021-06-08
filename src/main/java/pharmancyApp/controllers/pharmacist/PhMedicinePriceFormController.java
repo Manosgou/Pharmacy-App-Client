@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.pharmacist;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import com.jfoenix.controls.JFXButton;
@@ -55,14 +56,18 @@ public class PhMedicinePriceFormController implements Initializable {
             Response response = HTTPMethods.post(jsonString, url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONObject jsonResponse = new JSONObject(response.getResponse());
                 if (respondCode >= 200 && respondCode <= 299) {
                     final Node source = (Node) event.getSource();
                     final Stage stage = (Stage) source.getScene().getWindow();
                     stage.close();
                 } else {
+
+                    JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, jsonResponse, null);
+                    AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
             } else {
                 String headerText = "Αδυναμία συνδεσης";
@@ -82,15 +87,19 @@ public class PhMedicinePriceFormController implements Initializable {
             Response response = HTTPMethods.put(jsonString, url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONObject jsonResponse = new JSONObject(response.getResponse());
                 if (respondCode >= 200 && respondCode <= 299) {
                     medicine.priceProperty().setValue(Float.valueOf(price));
                     final Node source = (Node) event.getSource();
                     final Stage stage = (Stage) source.getScene().getWindow();
                     stage.close();
                 } else {
+
+                    JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, jsonResponse, null);
+                    AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
             } else {
                 String headerText = "Αδυναμία συνδεσης";

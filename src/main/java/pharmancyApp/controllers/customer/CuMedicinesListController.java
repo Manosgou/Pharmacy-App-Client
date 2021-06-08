@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.customer;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import javafx.collections.FXCollections;
@@ -13,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
 import pharmancyApp.Utils.AlertDialogs;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -67,9 +69,12 @@ public class CuMedicinesListController implements Initializable {
                     }
                     getMedicinesTable();
                 } else {
-                    JSONObject responseObj = new JSONObject(response);
+                    JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
                     AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
             } else {
                 String headerText = "Αδυναμία συνδεσης";

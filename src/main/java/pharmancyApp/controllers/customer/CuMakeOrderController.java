@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.customer;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import com.jfoenix.controls.JFXButton;
@@ -27,7 +28,6 @@ import pharmancyApp.Utils.AlertDialogs;
 import pharmancyApp.Utils.TextFieldFilters;
 
 import java.net.URL;
-import java.util.Map;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -214,7 +214,11 @@ public class CuMakeOrderController implements Initializable {
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
                     AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
+
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
@@ -229,7 +233,7 @@ public class CuMakeOrderController implements Initializable {
         StringBuilder jsonString = new StringBuilder();
 
         for (int i = 0; i < cart.size(); i++) {
-            jsonString.append("{\"employee\":\"").append(user.getId()).append("\",\"medicine\":\"").append(cart.get(i).getMedicine().getId()).append("\",\"quantity\":\"").append(cart.get(i).getQuantity()).append("\",\"total_price\":\"").append(cart.get(i).getPrice()).append(cart.get(i).getQuantity()).append("\",\"location\":\"").append(location.getId()).append("\"}");
+            jsonString.append("{\"user_profile\":\"").append(user.getId()).append("\",\"medicine\":\"").append(cart.get(i).getMedicine().getId()).append("\",\"quantity\":\"").append(cart.get(i).getQuantity()).append("\",\"total_price\":\"").append(cart.get(i).getPrice()).append(cart.get(i).getQuantity()).append("\",\"location\":\"").append(location.getId()).append("\"}");
             if (!(i == cart.size() - 1)) {
                 jsonString.append(",");
             }
@@ -260,16 +264,17 @@ public class CuMakeOrderController implements Initializable {
                 Response response = HTTPMethods.post(jsonString, url);
                 if (response != null) {
                     int respondCode = response.getRespondCode();
-                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                     if (respondCode >= 200 && respondCode <= 299) {
-
                         final Node source = (Node) event.getSource();
                         final Stage stage = (Stage) source.getScene().getWindow();
                         stage.close();
-
                     } else {
+                        JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, jsonResponse, null);
+                        AlertDialogs.error(headerText, responseObj, null);
+                        if (respondCode == 401) {
+                            Authentication.setLogin(false);
+                        }
                     }
                 } else {
                     String headerText = "Αδυναμία συνδεσης";

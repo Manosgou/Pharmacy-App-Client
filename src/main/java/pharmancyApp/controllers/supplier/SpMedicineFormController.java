@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.supplier;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import javafx.collections.FXCollections;
@@ -55,38 +56,64 @@ public class SpMedicineFormController implements Initializable {
         this.medicine = medicine;
     }
 
+    private boolean medicineFormValidation(String medicineName, MedicineCategory category) {
+        String validationError = null;
+        boolean inputIsValid = true;
+        if (category == null) {
+            validationError = "Παρακαλώ επιλέξτε κατηγορία φαρμάκου";
+            inputIsValid = false;
+        }
+
+        if (medicineName.isEmpty()) {
+            validationError = "Παρακαλώ συμπληρώστε το όνομα φαρμάκου";
+            inputIsValid = false;
+        }
+
+        if (!inputIsValid) {
+            String headerText = "Ελλιπή στοιχεία";
+            AlertDialogs.error(headerText, null, validationError);
+        }
+
+        return inputIsValid;
+    }
+
     @FXML
     private void saveMedicine(ActionEvent ev) {
         String medicineName = medicineNamFld.getText();
         int medicineQuantity = Integer.parseInt(medicineQuaFld.getText());
         float medicinePrice = Float.parseFloat(medicinePriFld.getText());
         MedicineCategory category = medCatComboBox.getValue();
+        if (medicineFormValidation(medicineName, category)) {
+            String jsonString = "{\"name\":\"" + medicineName + "\",\"quantity\":\"" + medicineQuantity + "\",\"price\":\"" + medicinePrice + "\",\"category\":{\"id\":\"" + category.getId() + "\",\"name\":\"" + category.getName() + "\"}}";
+            System.out.println(jsonString);
+            String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/create/medicine";
+            try {
+                Response response = HTTPMethods.post(jsonString, url);
+                if (response != null) {
+                    int respondCode = response.getRespondCode();
+                    if (respondCode >= 200 && respondCode <= 299) {
+                        final Node source = (Node) ev.getSource();
+                        final Stage stage = (Stage) source.getScene().getWindow();
+                        stage.close();
+                    } else {
 
-        String jsonString = "{\"name\":\"" + medicineName + "\",\"quantity\":\"" + medicineQuantity + "\",\"price\":\"" + medicinePrice + "\",\"category\":{\"id\":\"" + category.getId() + "\",\"name\":\"" + category.getName() + "\"}}";
-        System.out.println(jsonString);
-        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/create/medicine";
-        try {
-            Response response = HTTPMethods.post(jsonString, url);
-            if (response != null) {
-                JSONObject jsonResponse = new JSONObject(response.toString());
-                int respondCode = response.getRespondCode();
-                if (respondCode >= 200 && respondCode <= 299) {
-                    final Node source = (Node) ev.getSource();
-                    final Stage stage = (Stage) source.getScene().getWindow();
-                    stage.close();
+                        JSONObject responseObj = new JSONObject(response.getResponse());
+                        String headerText = "Αδυναμια συνδεσης";
+                        AlertDialogs.error(headerText, responseObj, null);
+                        if (respondCode == 401) {
+                            Authentication.setLogin(false);
+                        }
+                    }
                 } else {
-                    String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, jsonResponse, null);
+                    String headerText = "Αδυναμία συνδεσης";
+                    String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                    AlertDialogs.error(headerText, null, contentText);
                 }
-            } else {
-                String headerText = "Αδυναμία συνδεσης";
-                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void fetchCategories() {
@@ -95,9 +122,10 @@ public class SpMedicineFormController implements Initializable {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONArray jsonArray = new JSONArray(response.getResponse());
+
                 if (respondCode >= 200 && respondCode <= 299) {
                     MedicineCategory medicineCategory;
+                    JSONArray jsonArray = new JSONArray(response.getResponse());
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -110,9 +138,13 @@ public class SpMedicineFormController implements Initializable {
                     }
                     medCatComboBox.setItems(categories);
                 } else {
+
+                    JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    JSONObject responseObj = new JSONObject(response);
                     AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
             } else {
                 String headerText = "Αδυναμία συνδεσης";
@@ -131,32 +163,35 @@ public class SpMedicineFormController implements Initializable {
         int medicineQuantity = Integer.parseInt(medicineQuaFld.getText());
         float medicinePrice = Float.parseFloat(medicinePriFld.getText());
         MedicineCategory category = medCatComboBox.getValue();
-
-        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/update/medicine/" + medicine.getId();
-        String jsonString = "{\"name\":\"" + medicineName + "\",\"quantity\":\"" + medicineQuantity + "\",\"price\":\"" + medicinePrice + "\",\"category\":{\"id\":\"" + category.getId() + "\",\"name\":\"" + category.getName() + "\"}}";
-        try {
-            Response response = HTTPMethods.put(jsonString, url);
-            if (response != null) {
-                int respondCode = response.getRespondCode();
-                JSONObject jsonResponse = new JSONObject(response.getResponse());
-                if (respondCode >= 200 && respondCode <= 299) {
-                    final Node source = (Node) event.getSource();
-                    final Stage stage = (Stage) source.getScene().getWindow();
-                    stage.close();
+        if (medicineFormValidation(medicineName, category)) {
+            String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/update/medicine/" + medicine.getId();
+            String jsonString = "{\"name\":\"" + medicineName + "\",\"quantity\":\"" + medicineQuantity + "\",\"price\":\"" + medicinePrice + "\",\"category\":{\"id\":\"" + category.getId() + "\",\"name\":\"" + category.getName() + "\"}}";
+            try {
+                Response response = HTTPMethods.put(jsonString, url);
+                if (response != null) {
+                    int respondCode = response.getRespondCode();
+                    if (respondCode >= 200 && respondCode <= 299) {
+                        final Node source = (Node) event.getSource();
+                        final Stage stage = (Stage) source.getScene().getWindow();
+                        stage.close();
+                    } else {
+                        JSONObject responseObj = new JSONObject(response.getResponse());
+                        String headerText = "Αδυναμια συνδεσης";
+                        AlertDialogs.error(headerText, responseObj, null);
+                        if (respondCode == 401) {
+                            Authentication.setLogin(false);
+                        }
+                    }
                 } else {
-                    String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, jsonResponse, null);
+                    String headerText = "Αδυναμία συνδεσης";
+                    String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                    AlertDialogs.error(headerText, null, contentText);
                 }
-            } else {
-                String headerText = "Αδυναμία συνδεσης";
-                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
         }
-
-
     }
 
     public void init() {
@@ -185,6 +220,7 @@ public class SpMedicineFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        medicineNamFld.setTextFormatter(new TextFormatter<String>(TextFieldFilters.stringFilter));
         medicineQuaFld.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
         medicinePriFld.setTextFormatter(new TextFormatter<Float>(new FloatStringConverter(), 1.00f, TextFieldFilters.floatFilter));
     }

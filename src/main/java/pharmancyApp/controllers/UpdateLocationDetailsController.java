@@ -1,5 +1,6 @@
 package pharmancyApp.controllers;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import com.jfoenix.controls.JFXTextField;
@@ -110,8 +111,13 @@ public class UpdateLocationDetailsController implements Initializable {
                         final Stage stage = (Stage) source.getScene().getWindow();
                         stage.close();
                     } else {
-                        String headerText = "Ελλιπή στοιχεία";
-                        AlertDialogs.error(headerText, jsonResponse, null);
+
+                        JSONObject responseObj = new JSONObject(response.getResponse());
+                        String headerText = "Αδυναμια συνδεσης";
+                        AlertDialogs.error(headerText, responseObj, null);
+                        if (respondCode == 401) {
+                            Authentication.setLogin(false);
+                        }
                     }
                 }else{
                     String headerText = "Αδυναμία συνδεσης";

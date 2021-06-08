@@ -113,8 +113,9 @@ public class LoginController implements Initializable {
                         showDashboard(domain, event);
 
                     } else {
-                        String headerText = "Αδυναμία συνδεσης";
-                        AlertDialogs.error(headerText, jsonResponse, null);
+                        JSONObject responseObj = new JSONObject(response.getResponse());
+                        String headerText = "Αδυναμια συνδεσης";
+                        AlertDialogs.error(headerText, responseObj, null);
                     }
                 }else{
                     String headerText = "Αδυναμία συνδεσης";

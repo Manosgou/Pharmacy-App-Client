@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.pharmacist;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import com.jfoenix.controls.JFXButton;
@@ -184,9 +185,8 @@ public class PhMakeOrderController implements Initializable {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONArray jsonArray = new JSONArray(response.getResponse());
                 if (respondCode >= 200 && respondCode <= 299) {
-
+                    JSONArray jsonArray = new JSONArray(response.getResponse());
                     MedicineCategory medicineCategory;
                     for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -209,9 +209,13 @@ public class PhMakeOrderController implements Initializable {
 
 
                 } else {
+
+                    JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    JSONObject responseObj = new JSONObject(response);
                     AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
             } else {
                 String headerText = "Αδυναμία συνδεσης";
@@ -227,7 +231,7 @@ public class PhMakeOrderController implements Initializable {
         StringBuilder jsonString = new StringBuilder();
 
         for (int i = 0; i < cart.size(); i++) {
-            jsonString.append("{\"employee\":\"").append(user.getId()).append("\",\"medicine\":\"").append(cart.get(i).getMedicine().getId()).append("\",\"quantity\":\"").append(cart.get(i).getQuantity()).append("\",\"total_price\":\"").append(cart.get(i).getPrice()).append(cart.get(i).getQuantity()).append("\",\"location\":\"").append(location.getId()).append("\"}");
+            jsonString.append("{\"user_profile\":\"").append(user.getId()).append("\",\"medicine\":\"").append(cart.get(i).getMedicine().getId()).append("\",\"quantity\":\"").append(cart.get(i).getQuantity()).append("\",\"total_price\":\"").append(cart.get(i).getPrice()).append(cart.get(i).getQuantity()).append("\",\"location\":\"").append(location.getId()).append("\"}");
             if (!(i == cart.size() - 1)) {
                 jsonString.append(",");
             }
@@ -256,10 +260,7 @@ public class PhMakeOrderController implements Initializable {
             try {
                 Response response = HTTPMethods.post(jsonString, url);
                 if (response != null) {
-
-
                     int respondCode = response.getRespondCode();
-                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                     if (respondCode >= 200 && respondCode <= 299) {
 
                         final Node source = (Node) event.getSource();
@@ -267,8 +268,13 @@ public class PhMakeOrderController implements Initializable {
                         stage.close();
 
                     } else {
-                        String headerText = "Αδυναμια σύνδεσης.";
-                        AlertDialogs.error(headerText, jsonResponse, null);
+
+                        JSONObject responseObj = new JSONObject(response.getResponse());
+                        String headerText = "Αδυναμια συνδεσης";
+                        AlertDialogs.error(headerText, responseObj, null);
+                        if (respondCode == 401) {
+                            Authentication.setLogin(false);
+                        }
                     }
                 } else {
                     String headerText = "Αδυναμία συνδεσης";

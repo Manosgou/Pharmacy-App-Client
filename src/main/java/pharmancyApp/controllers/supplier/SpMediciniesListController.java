@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.supplier;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import com.jfoenix.controls.JFXButton;
@@ -142,13 +143,17 @@ public class SpMediciniesListController implements Initializable {
                             try {
                                 Response response = HTTPMethods.delete(url);
                                 if (response != null) {
-                                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                                     int respondCode = response.getRespondCode();
                                     if (respondCode > 200 && respondCode < 299) {
                                         medicines.removeIf(m -> m.getId() == medicine.getId());
                                     } else {
-                                        String headerText = "Αδυναμία συνδεσης";
-                                        AlertDialogs.error(headerText, jsonResponse, null);
+
+                                        JSONObject responseObj = new JSONObject(response.getResponse());
+                                        String headerText = "Αδυναμια συνδεσης";
+                                        AlertDialogs.error(headerText, responseObj, null);
+                                        if (respondCode == 401) {
+                                            Authentication.setLogin(false);
+                                        }
                                     }
                                 } else {
 
@@ -177,14 +182,14 @@ public class SpMediciniesListController implements Initializable {
         medicinesTable.setItems(medicines);
     }
 
-    public void fetchMedicines() {
+    private void fetchMedicines() {
         String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/get/medicines";
         try {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONArray jsonArray = new JSONArray(response.getResponse());
                 if (respondCode >= 200 && respondCode <= 299) {
+                    JSONArray jsonArray = new JSONArray(response.getResponse());
                     MedicineCategory medicineCategory;
                     for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -204,9 +209,13 @@ public class SpMediciniesListController implements Initializable {
                     }
                     getMedicinesTable();
                 } else {
-                    String headerText = "Αδυναμία συνδεσης";
+
                     JSONObject responseObj = new JSONObject(response.getResponse());
+                    String headerText = "Αδυναμια συνδεσης";
                     AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
             } else {
                 String headerText = "Αδυναμία συνδεσης";

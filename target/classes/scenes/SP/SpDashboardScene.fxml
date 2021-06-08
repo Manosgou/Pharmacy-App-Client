@@ -111,7 +111,7 @@
                      <children>
                         <JFXButton onAction="#addNewMedicine" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νεο φαρμακο" />
                         <JFXButton onAction="#showAllMedicines" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λιστα φαρμακων" />
-                        <JFXButton onAction="#addNewCategory" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νεο κατηγορια φαρμακου" />
+                        <JFXButton onAction="#addNewCategory" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νέα κατηγορια φαρμακου" />
                         <JFXButton onAction="#showAllCategories" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λιστα κατηγοριων φαρμακων" />
                         <JFXButton onAction="#showOrders" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Παρραγελιες" />
                      </children>

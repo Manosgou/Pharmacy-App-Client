@@ -73,7 +73,7 @@
                   </VBox>
                </children>
             </HBox>
-            <JFXButton onAction="#submitOrder" prefHeight="34.0" prefWidth="249.0" style="-fx-background-color: #FF4233;" text="Ολοκληρωση παραγγελας" textFill="WHITE" />
+            <JFXButton onAction="#submitOrder" prefHeight="34.0" prefWidth="249.0" style="-fx-background-color: #FF4233;" text="Ολοκλήρωση Παραγγελίας" textFill="WHITE" />
          </children>
       </VBox>
    </children>

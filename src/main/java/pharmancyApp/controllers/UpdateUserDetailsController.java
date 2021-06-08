@@ -1,5 +1,6 @@
 package pharmancyApp.controllers;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import javafx.event.ActionEvent;
@@ -94,18 +95,20 @@ public class UpdateUserDetailsController implements Initializable {
             try {
                 Response response = HTTPMethods.put(jsonString, url);
                 if (response != null) {
-
-
                     int respondCode = response.getRespondCode();
-                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                     if (respondCode >= 200 && respondCode <= 299) {
                         updateEmployee(username, email, lastname, firstname);
                         final Node source = (Node) event.getSource();
                         final Stage stage = (Stage) source.getScene().getWindow();
                         stage.close();
                     } else {
-                        String headerText = "Ελλιπή στοιχεία";
-                        AlertDialogs.error(headerText, jsonResponse, null);
+
+                        JSONObject responseObj = new JSONObject(response.getResponse());
+                        String headerText = "Αδυναμια συνδεσης";
+                        AlertDialogs.error(headerText, responseObj, null);
+                        if (respondCode == 401) {
+                            Authentication.setLogin(false);
+                        }
                     }
                 } else {
                     String headerText = "Αδυναμία συνδεσης";

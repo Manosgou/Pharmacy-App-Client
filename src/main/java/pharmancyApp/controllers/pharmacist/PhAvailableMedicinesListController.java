@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.pharmacist;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import javafx.collections.FXCollections;
@@ -47,14 +48,14 @@ public class PhAvailableMedicinesListController implements Initializable {
     }
 
     private void fetchMedicines() {
-        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/get/medicines";
+        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/pharmacist/get/medicines";
         try {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONArray jsonArray = new JSONArray(response.getResponse());
-                if (respondCode >= 200 && respondCode <= 299) {
 
+                if (respondCode >= 200 && respondCode <= 299) {
+                    JSONArray jsonArray = new JSONArray(response.getResponse());
                     Medicine medicine;
                     MedicineCategory medicineCategory;
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -77,9 +78,13 @@ public class PhAvailableMedicinesListController implements Initializable {
 
 
                 } else {
+
+                    JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    JSONObject responseObj = new JSONObject(response);
                     AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
             } else {
                 String headerText = "Αδυναμία συνδεσης";

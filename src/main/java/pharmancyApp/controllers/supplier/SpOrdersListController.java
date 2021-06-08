@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.supplier;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import com.jfoenix.controls.JFXButton;
@@ -55,9 +56,9 @@ public class SpOrdersListController implements Initializable {
 
     @FXML
     private void getOrdersTable() {
-        buyersFirstNameCol.setCellValueFactory(item -> item.getValue().getEmployee().firstnameProperty());
-        buyersLastNameCol.setCellValueFactory(item -> item.getValue().getEmployee().lastnameProperty());
-        buyersDomainCol.setCellValueFactory(item -> item.getValue().getEmployee().domainProperty());
+        buyersFirstNameCol.setCellValueFactory(item -> item.getValue().getUser().firstnameProperty());
+        buyersLastNameCol.setCellValueFactory(item -> item.getValue().getUser().lastnameProperty());
+        buyersDomainCol.setCellValueFactory(item -> item.getValue().getUser().domainProperty());
         medicineNameCol.setCellValueFactory(item -> item.getValue().getMedicine().nameProperty());
         orderQuantityCol.setCellValueFactory(item -> item.getValue().getMedicine().quantityProperty().asObject());
         orderTotalPriceCol.setCellValueFactory(item -> item.getValue().totalPriceProperty().asObject());
@@ -108,7 +109,7 @@ public class SpOrdersListController implements Initializable {
                         ButtonType delete = new ButtonType("Διαγραφή", ButtonBar.ButtonData.OK_DONE);
                         ButtonType cancel = new ButtonType("Ακύρωση", ButtonBar.ButtonData.CANCEL_CLOSE);
                         alert = new Alert(Alert.AlertType.WARNING,
-                                "Είστε σίγουροι ότι θέλετε να διαγαψετε την παραγγελία του πελάτη " + order.getEmployee().getLastname() + " " + order.getEmployee().getFirstname() + ".\n(Η ενέργεια αυτή είναι μη αναστρέψιμη)",
+                                "Είστε σίγουροι ότι θέλετε να διαγαψετε την παραγγελία του πελάτη " + order.getUser().getLastname() + " " + order.getUser().getFirstname() + ".\n(Η ενέργεια αυτή είναι μη αναστρέψιμη)",
 
                                 delete,
                                 cancel);
@@ -128,8 +129,13 @@ public class SpOrdersListController implements Initializable {
                                     if (respondCode > 200 && respondCode < 299) {
                                         orders.removeIf(m -> m.getId() == order.getId());
                                     } else {
-                                        String headerText = "Αδυναμία συνδεσης";
-                                        AlertDialogs.error(headerText, jsonResponse, null);
+
+                                        JSONObject responseObj = new JSONObject(response.getResponse());
+                                        String headerText = "Αδυναμια συνδεσης";
+                                        AlertDialogs.error(headerText, responseObj, null);
+                                        if (respondCode == 401) {
+                                            Authentication.setLogin(false);
+                                        }
                                     }
                                 } else {
                                     String headerText = "Αδυναμία συνδεσης";
@@ -180,15 +186,16 @@ public class SpOrdersListController implements Initializable {
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
+
                         int id = jsonObject.getInt("id");
-                        JSONObject employeeObj = new JSONObject(jsonObject.getJSONObject("employee").toString());
-                        JSONObject userObj = new JSONObject(employeeObj.getJSONObject("user").toString());
-                        int employeeId = userObj.getInt("id");
-                        String employeeUsername = userObj.getString("username");
-                        String employeeEmail = userObj.getString("email");
-                        String employeeLastName = userObj.getString("last_name");
-                        String employeeFirstName = userObj.getString("first_name");
-                        String employeeDomain = switch (employeeObj.getString("domain")) {
+                        JSONObject userProfileJson = jsonObject.getJSONObject("user_profile");
+                        JSONObject userDetails = userProfileJson.getJSONObject("user");
+                        int employeeId = userDetails.getInt("id");
+                        String employeeUsername = userDetails.getString("username");
+                        String employeeEmail = userDetails.getString("email");
+                        String employeeLastName = userDetails.getString("last_name");
+                        String employeeFirstName = userDetails.getString("first_name");
+                        String employeeDomain = switch (userProfileJson.getString("domain")) {
                             case "PH" -> "Φαρμακοποιός";
                             case "SP" -> "Προμηθευτής";
                             case "CU" -> "Πελάτης";
@@ -230,10 +237,13 @@ public class SpOrdersListController implements Initializable {
                     }
                     getOrdersTable();
                 } else {
-                    String headerText = "Αδυναμία συνδεσης";
-                    JSONObject responseObj = new JSONObject(response.getResponse());
-                    AlertDialogs.error(headerText, responseObj, null);
 
+                    JSONObject responseObj = new JSONObject(response.getResponse());
+                    String headerText = "Αδυναμια συνδεσης";
+                    AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
             } else {
                 String headerText = "Αδυναμία συνδεσης";

@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.pharmacist;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import javafx.collections.FXCollections;
@@ -73,11 +74,11 @@ public class PhCustomerOrderDetailsController implements Initializable {
     }
 
     public void setFields() {
-        userNameLbl.setText(order.getEmployee().getUsername());
-        firstNameLbl.setText(order.getEmployee().getFirstname());
-        lastNameLbl.setText(order.getEmployee().getLastname());
-        emailLbl.setText(order.getEmployee().getEmail());
-        domainLbl.setText(order.getEmployee().getDomain());
+        userNameLbl.setText(order.getUser().getUsername());
+        firstNameLbl.setText(order.getUser().getFirstname());
+        lastNameLbl.setText(order.getUser().getLastname());
+        emailLbl.setText(order.getUser().getEmail());
+        domainLbl.setText(order.getUser().getDomain());
         medNameLbl.setText(order.getMedicine().getName());
         medCatLbl.setText(order.getMedicine().getMedicineCategory().toString());
         streetLbl.setText(order.getLocation().getStreet());
@@ -106,21 +107,25 @@ public class PhCustomerOrderDetailsController implements Initializable {
             Response response = HTTPMethods.put(jsonString, url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONObject jsonResponse = new JSONObject(response.toString());
                 if (respondCode >= 200 && respondCode <= 299) {
                     order.getOrderStatus().statusProperty().bind(orderStatus.statusProperty());
                     final Node source = (Node) event.getSource();
                     final Stage stage = (Stage) source.getScene().getWindow();
                     stage.close();
                 } else {
+                    JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, jsonResponse, null);
+                    AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
-            } else {
-                String headerText = "Αδυναμία συνδεσης";
-                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+
             }
+            String headerText = "Αδυναμία συνδεσης";
+            String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+            AlertDialogs.error(headerText, null, contentText);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -40,8 +40,15 @@
             <artifactId>jfoenix</artifactId>
             <version>9.0.10</version>
         </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>html2pdf</artifactId>
+            <version>3.0.4</version>
+        </dependency>
     </dependencies>
+    <repositories>
 
+    </repositories>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

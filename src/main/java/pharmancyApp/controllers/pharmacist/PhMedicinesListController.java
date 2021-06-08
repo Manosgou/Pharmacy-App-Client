@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.pharmacist;
 
+import REST.Authentication;
 import REST.HTTPMethods;
 import REST.Response;
 import com.jfoenix.controls.JFXButton;
@@ -111,8 +112,8 @@ public class PhMedicinesListController implements Initializable {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONArray jsonArray = new JSONArray(response.getResponse());
                 if (respondCode >= 200 && respondCode <= 299) {
+                    JSONArray jsonArray = new JSONArray(response.getResponse());
                     MedicineCategory medicineCategory;
                     for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -132,9 +133,13 @@ public class PhMedicinesListController implements Initializable {
                     }
                     getMedicinesTable();
                 } else {
+
+                    JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    JSONObject responseObj = new JSONObject(response);
                     AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
             } else {
                 String headerText = "Αδυναμία συνδεσης";

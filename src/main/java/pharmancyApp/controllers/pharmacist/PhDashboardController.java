@@ -17,9 +17,6 @@ import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import models.User;
@@ -30,9 +27,7 @@ import pharmancyApp.Settings;
 import pharmancyApp.Utils.AlertDialogs;
 import pharmancyApp.controllers.UpdateLocationDetailsController;
 import pharmancyApp.controllers.UpdateUserDetailsController;
-
 import java.net.URL;
-import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -138,18 +133,17 @@ public class PhDashboardController implements Initializable {
         try {
             Response response = HTTPMethods.get(url);
             if (response != null) {
-
-
                 int respondCode = response.getRespondCode();
-                JSONObject jsonResponse = new JSONObject(response.getResponse());
                 if (respondCode >= 200 && respondCode <= 299) {
-                    JSONObject userJson = jsonResponse.getJSONObject("user");
-                    int uId = userJson.getInt("id");
-                    String username = userJson.getString("username");
-                    String email = userJson.getString("email");
-                    String domain = userJson.getJSONObject("employee").getString("domain");
-                    String firstname = userJson.getString("first_name");
-                    String lastname = userJson.getString("last_name");
+                    JSONObject jsonResponse = new JSONObject(response.getResponse());
+                    JSONObject userProfileJson = jsonResponse.getJSONObject("user_profile");
+                    JSONObject userDetails = userProfileJson.getJSONObject("user");
+                    int uId = userDetails.getInt("id");
+                    String username = userDetails.getString("username");
+                    String email = userDetails.getString("email");
+                    String domain = userProfileJson.getString("domain");
+                    String firstname = userDetails.getString("first_name");
+                    String lastname = userDetails.getString("last_name");
                     user = new User(uId, username, email, firstname, lastname, domain);
                     JSONArray deficitMedicines = jsonResponse.getJSONArray("deficit_medicines");
                     getDeficitMedicines(deficitMedicines);
@@ -166,9 +160,13 @@ public class PhDashboardController implements Initializable {
                     location = new Location(pId, street, streetNum, city, postalCode);
                     bindLabels(user, location);
                 } else {
-                    String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, jsonResponse, null);
 
+                    JSONObject responseObj = new JSONObject(response.getResponse());
+                    String headerText = "Αδυναμια συνδεσης";
+                    AlertDialogs.error(headerText, responseObj, null);
+                    if (respondCode == 401) {
+                        Authentication.setLogin(false);
+                    }
                 }
             } else {
                 String headerText = "Αδυναμία συνδεσης";
@@ -312,6 +310,10 @@ public class PhDashboardController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhOrdersListScene.fxml")));
             Parent root = loader.load();
+            PhOrdersListController phOrdersListController = loader.getController();
+            phOrdersListController.setUser(user);
+            phOrdersListController.setLocation(location);
+            phOrdersListController.fetchOrders();
             Stage stage = new Stage();
             stage.setTitle("Δημιουργία παραγγελίας");
             Scene scene = new Scene(root);
@@ -380,37 +382,57 @@ public class PhDashboardController implements Initializable {
     }
 
     @FXML
-    private void logout(ActionEvent event) {
-        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/logout";
+    private void loginPage(ActionEvent event) {
         try {
-            Response response = HTTPMethods.get(url);
-            if (response != null) {
-                int respondCode = response.getRespondCode();
-                if (respondCode >= 200 && respondCode <= 299) {
-                    Authentication.clearToken();
-                    Authentication.setLogin(false);
-                    try {
-                        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/LoginScene.fxml")));
-                        Parent root = loader.load();
-                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        stage.setTitle("Σύνδεση στο σύστημα");
-                        Scene scene = new Scene(root);
-                        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
-                        stage.setScene(scene);
-                        stage.setResizable(false);
-                        stage.show();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-
-                    }
-                }
-            } else {
-                String headerText = "Αδυναμία συνδεσης";
-                String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
-            }
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/LoginScene.fxml")));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setTitle("Σύνδεση στο σύστημα");
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
         } catch (Exception e) {
             e.printStackTrace();
+
+        }
+    }
+
+    @FXML
+    private void logout(ActionEvent event) {
+        if (Authentication.isLoggedIn()) {
+            String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/logout";
+            try {
+                Response response = HTTPMethods.get(url);
+                if (response != null) {
+                    int respondCode = response.getRespondCode();
+                    if (respondCode >= 200 && respondCode <= 299) {
+                        Authentication.clearToken();
+                        Authentication.setLogin(false);
+                        loginPage(event);
+
+                    } else {
+                        JSONObject responseObj = new JSONObject(response.getResponse());
+                        String headerText = "Αδυναμια συνδεσης";
+                        AlertDialogs.error(headerText, responseObj, null);
+                        if (respondCode == 401) {
+                            Authentication.setLogin(false);
+                            logout(event);
+                        }
+                    }
+
+                } else {
+                    String headerText = "Αδυναμία συνδεσης";
+                    String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                    AlertDialogs.error(headerText, null, contentText);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Authentication.clearToken();
+            loginPage(event);
         }
     }
 
