@@ -1,5 +1,6 @@
 package pharmancyApp;
 
+import javafx.scene.image.Image;
 import pharmancyApp.rest.Authentication;
 import pharmancyApp.rest.HTTPMethods;
 import pharmancyApp.rest.Response;
@@ -38,6 +39,7 @@ public class Main extends Application {
         primaryStage.setTitle("Σύνδεση στο σύστημα");
         Scene scene = new Scene(root);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+        primaryStage.getIcons().add(new Image("assets/images/icon.png"));
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
