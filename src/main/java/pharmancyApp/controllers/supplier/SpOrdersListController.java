@@ -124,7 +124,6 @@ public class SpOrdersListController implements Initializable {
                             try {
                                 Response response = HTTPMethods.delete(url);
                                 if (response != null) {
-                                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                                     int respondCode = response.getRespondCode();
                                     if (respondCode > 200 && respondCode < 299) {
                                         orders.removeIf(m -> m.getId() == order.getId());

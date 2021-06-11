@@ -47,8 +47,8 @@ public class CuMedicinesListController implements Initializable {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONArray jsonArray = new JSONArray(response.getResponse());
                 if (respondCode >= 200 && respondCode <= 299) {
+                    JSONArray jsonArray = new JSONArray(response.getResponse());
                     MedicineCategory medicineCategory;
                     Medicine medicine;
                     for (int i = 0; i < jsonArray.length(); i++) {

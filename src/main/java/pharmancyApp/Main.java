@@ -19,7 +19,7 @@ public class Main extends Application {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int responseCode = response.getRespondCode();
-                if (responseCode == 200) {
+                if (responseCode >= 200 && responseCode <= 299) {
                     Authentication.clearToken();
                     Authentication.setLogin(false);
                     if (Settings.DEBUG)

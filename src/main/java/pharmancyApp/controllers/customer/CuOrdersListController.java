@@ -26,6 +26,7 @@ import pharmancyApp.utils.AlertDialogs;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 public class CuOrdersListController {
@@ -89,11 +90,15 @@ public class CuOrdersListController {
                         fileChooser.setTitle("Αποθήκευση ως");
                         File dest = fileChooser.showSaveDialog(new Stage());
                         if (dest != null) {
-                            try {
-                                saveReceipt(order, dest);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
+                            String filePath = dest.getAbsolutePath();
+                            if (!filePath.endsWith(".pdf")) {
+                                try {
+                                    saveReceipt(order, new File(filePath + ".pdf"));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
+
                         }
                     });
 
@@ -185,7 +190,7 @@ public class CuOrdersListController {
     }
 
 
-    private void saveReceipt(Order order, File file) throws FileNotFoundException {
+    private void saveReceipt(Order order, File file) throws FileNotFoundException, IOException {
         String htmlReceipt = "<html lang=\"en\">\n" +
                 "  <head>\n" +
                 "    <style>\n" +
@@ -287,11 +292,11 @@ public class CuOrdersListController {
                 "            <table>\n" +
                 "              <tr>\n" +
                 "                <td class=\"title\">\n" +
-                "                <h4>Pharma[Co]</h4>"+
+                "                <h4>Pharma[Co]</h4>" +
                 "                </td>\n" +
                 "                <td>\n" +
-                "                  Αρ. απόδειξης #: "+order.getId()+"<br />\n" +
-                "                  Ημ. παραγγελίας: "+order.getOrderDateFormatedProperty().get()+"<br />\n" +
+                "                  Αρ. απόδειξης #: " + order.getId() + "<br />\n" +
+                "                  Ημ. παραγγελίας: " + order.getOrderDateFormatedProperty().get() + "<br />\n" +
                 "                </td>\n" +
                 "              </tr>\n" +
                 "            </table>\n" +
@@ -303,13 +308,13 @@ public class CuOrdersListController {
                 "              <tr>\n" +
                 "                <td>\n" +
                 "                  <b>Στοιχεία τοποθεσίας</b>.<br />\n" +
-                "                  "+order.getLocation().getStreet()+" "+order.getLocation().getStreetNum()+"<br />\n" +
-                "                  "+order.getLocation().getCity()+", Τ.Κ "+order.getLocation().getPostalCode()+"\n" +
+                "                  " + order.getLocation().getStreet() + " " + order.getLocation().getStreetNum() + "<br />\n" +
+                "                  " + order.getLocation().getCity() + ", Τ.Κ " + order.getLocation().getPostalCode() + "\n" +
                 "                </td>\n" +
                 "                <td>\n" +
                 "                  <b>Στοιχεία πελάτη</b>.<br />\n" +
-                "                  "+order.getUser().getLastname()+" "+order.getUser().getFirstname()+"<br />\n" +
-                "                  "+order.getUser().getEmail()+"\n" +
+                "                  " + order.getUser().getLastname() + " " + order.getUser().getFirstname() + "<br />\n" +
+                "                  " + order.getUser().getEmail() + "\n" +
                 "                </td>\n" +
                 "              </tr>\n" +
                 "            </table>\n" +
@@ -320,20 +325,20 @@ public class CuOrdersListController {
                 "          <td>Κωδικός κατάστασης</td>\n" +
                 "        </tr>\n" +
                 "        <tr class=\"details\">\n" +
-                "          <td>"+order.getOrderStatus().getStatus()+"</td>\n" +
-                "          <td><i>"+order.getOrderStatus().getStatudId()+"</i></td>\n" +
+                "          <td>" + order.getOrderStatus().getStatus() + "</td>\n" +
+                "          <td><i>" + order.getOrderStatus().getStatudId() + "</i></td>\n" +
                 "        </tr>\n" +
                 "        <tr class=\"heading\">\n" +
                 "          <td>Όνομα φαρμάκου</td>\n" +
                 "          <td>Τιμή φαρμάκου * Ποσότητα</td>\n" +
                 "        </tr>\n" +
                 "        <tr class=\"item\">\n" +
-                "          <td>"+order.getMedicine().getName()+" - "+order.getMedicine().getMedicineCategory().getName()+"</td>\n" +
-                "          <td>"+order.getMedicine().getPrice()+" € * "+order.getQuantity()+"</td>\n" +
+                "          <td>" + order.getMedicine().getName() + " - " + order.getMedicine().getMedicineCategory().getName() + "</td>\n" +
+                "          <td>" + order.getMedicine().getPrice() + " € * " + order.getQuantity() + "</td>\n" +
                 "        </tr>\n" +
                 "        <tr class=\"total\">\n" +
                 "          <td></td>\n" +
-                "          <td>Σύνολο: "+order.getTotalPrice()+" €</td>\n" +
+                "          <td>Σύνολο: " + order.getTotalPrice() + " €</td>\n" +
                 "        </tr>\n" +
                 "      </table>\n" +
                 "    </div>\n" +

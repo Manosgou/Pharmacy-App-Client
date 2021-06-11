@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import pharmancyApp.Settings;
 import pharmancyApp.utils.AlertDialogs;
 import pharmancyApp.utils.TextFieldFilters;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 

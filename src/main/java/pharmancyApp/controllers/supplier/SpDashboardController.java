@@ -128,8 +128,8 @@ public class SpDashboardController implements Initializable {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONObject jsonResponse = new JSONObject(response.getResponse());
                 if (respondCode >= 200 && respondCode <= 299) {
+                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                     JSONObject userProfileJson = jsonResponse.getJSONObject("user_profile");
                     JSONObject userDetails = userProfileJson.getJSONObject("user");
                     int id = userDetails.getInt("id");

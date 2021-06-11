@@ -108,8 +108,8 @@ public class CuDashboardController implements Initializable {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-                JSONObject jsonResponse = new JSONObject(response.getResponse());
                 if (respondCode >= 200 && respondCode <= 299) {
+                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                     JSONObject userProfileJson = jsonResponse.getJSONObject("user_profile");
                     JSONObject userDetails = userProfileJson.getJSONObject("user");
                     int uId = userDetails.getInt("id");
@@ -135,6 +135,7 @@ public class CuDashboardController implements Initializable {
                     }
                     bindLabels(user, location);
                 } else {
+                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
                     AlertDialogs.error(headerText, jsonResponse, null);
                     if (respondCode == 401) {

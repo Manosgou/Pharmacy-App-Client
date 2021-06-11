@@ -29,6 +29,7 @@ import pharmancyApp.utils.AlertDialogs;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 
 
@@ -134,11 +135,15 @@ public class PhOrdersListController{
                         fileChooser.setTitle("Αποθήκευση ως");
                         File dest = fileChooser.showSaveDialog(new Stage());
                         if (dest != null) {
-                            try {
-                                saveReceipt(order, dest);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
+                            String filePath = dest.getAbsolutePath();
+                            if(!filePath.endsWith(".pdf")) {
+                                try {
+                                    saveReceipt(order, new File(filePath + ".pdf"));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
+
                         }
                     });
 
@@ -224,7 +229,7 @@ public class PhOrdersListController{
     }
 
 
-    private void saveReceipt(Order order, File file) throws FileNotFoundException {
+    private void saveReceipt(Order order, File file) throws IOException {
         String htmlReceipt = "<html lang=\"en\">\n" +
                 "  <head>\n" +
                 "    <style>\n" +

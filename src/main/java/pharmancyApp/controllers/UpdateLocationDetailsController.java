@@ -100,8 +100,8 @@ public class UpdateLocationDetailsController implements Initializable {
                 Response response = HTTPMethods.put(jsonString, url);
                 if (response != null) {
                     int respondCode = response.getRespondCode();
-                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                     if (respondCode >= 200 && respondCode <= 299) {
+                        JSONObject jsonResponse = new JSONObject(response.getResponse());
                         updatePharmancy(street, streetNum, city, postalCode);
                         final Node source = (Node) event.getSource();
                         final Stage stage = (Stage) source.getScene().getWindow();

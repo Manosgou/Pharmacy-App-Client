@@ -105,8 +105,8 @@ public class LoginController implements Initializable {
                 Response response = HTTPMethods.post(jsonString, url);
                 if (response != null) {
                     int respondCode = response.getRespondCode();
-                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                     if (respondCode >= 200 && respondCode <= 299) {
+                        JSONObject jsonResponse = new JSONObject(response.getResponse());
                         Authentication.setToken(jsonResponse.getString("token"));
                         Authentication.setLogin(true);
                         String domain = jsonResponse.getString("domain");
