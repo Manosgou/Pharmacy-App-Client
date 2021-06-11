@@ -1,4 +1,4 @@
-package pharmancyApp;
+package pharmancyApp.utils;
 
 public class Colors {
     public static final String PRIMARY="#FF4233";

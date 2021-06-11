@@ -1,19 +1,19 @@
 package pharmancyApp.controllers.customer;
 
-import REST.Authentication;
-import REST.HTTPMethods;
-import REST.Response;
+import pharmancyApp.rest.Authentication;
+import pharmancyApp.rest.HTTPMethods;
+import pharmancyApp.rest.Response;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import models.Medicine;
-import models.MedicineCategory;
+import pharmancyApp.models.Medicine;
+import pharmancyApp.models.MedicineCategory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
-import pharmancyApp.Utils.AlertDialogs;
+import pharmancyApp.utils.AlertDialogs;
 
 import java.net.URL;
 import java.util.ResourceBundle;

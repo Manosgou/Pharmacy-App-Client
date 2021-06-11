@@ -1,4 +1,4 @@
-package pharmancyApp.Utils;
+package pharmancyApp.utils;
 
 import javafx.scene.control.TextFormatter;
 

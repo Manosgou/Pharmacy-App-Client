@@ -1,8 +1,8 @@
 package pharmancyApp.controllers.pharmacist;
 
-import REST.Authentication;
-import REST.HTTPMethods;
-import REST.Response;
+import pharmancyApp.rest.Authentication;
+import pharmancyApp.rest.HTTPMethods;
+import pharmancyApp.rest.Response;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,13 +19,13 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
-import models.*;
+import pharmancyApp.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import pharmancyApp.Colors;
+import pharmancyApp.utils.Colors;
 import pharmancyApp.Settings;
-import pharmancyApp.Utils.AlertDialogs;
-import pharmancyApp.Utils.TextFieldFilters;
+import pharmancyApp.utils.AlertDialogs;
+import pharmancyApp.utils.TextFieldFilters;
 
 import java.net.URL;
 import java.util.*;

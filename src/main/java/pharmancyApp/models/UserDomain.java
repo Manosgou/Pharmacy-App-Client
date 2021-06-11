@@ -1,4 +1,4 @@
-package models;
+package pharmancyApp.models;
 
 public enum UserDomain {
     PHARMACIST("PH"),SUPPLIER("SP"),CUSTOMER("CU");

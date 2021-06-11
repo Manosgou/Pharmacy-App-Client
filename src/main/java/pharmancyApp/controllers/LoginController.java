@@ -1,8 +1,8 @@
 package pharmancyApp.controllers;
 
-import REST.Authentication;
-import REST.HTTPMethods;
-import REST.Response;
+import pharmancyApp.rest.Authentication;
+import pharmancyApp.rest.HTTPMethods;
+import pharmancyApp.rest.Response;
 import animatefx.animation.FadeInRight;
 import animatefx.util.ParallelAnimationFX;
 import javafx.event.ActionEvent;
@@ -15,10 +15,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import models.UserDomain;
+import pharmancyApp.models.UserDomain;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
-import pharmancyApp.Utils.AlertDialogs;
+import pharmancyApp.utils.AlertDialogs;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;

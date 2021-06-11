@@ -1,8 +1,8 @@
 package pharmancyApp.controllers.customer;
 
-import REST.Authentication;
-import REST.HTTPMethods;
-import REST.Response;
+import pharmancyApp.rest.Authentication;
+import pharmancyApp.rest.HTTPMethods;
+import pharmancyApp.rest.Response;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
@@ -16,12 +16,12 @@ import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import models.*;
+import pharmancyApp.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import pharmancyApp.Colors;
+import pharmancyApp.utils.Colors;
 import pharmancyApp.Settings;
-import pharmancyApp.Utils.AlertDialogs;
+import pharmancyApp.utils.AlertDialogs;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,7 +1,5 @@
-package REST;
+package pharmancyApp.rest;
 
-
-import org.json.JSONObject;
 
 public class Response {
     private final String response;

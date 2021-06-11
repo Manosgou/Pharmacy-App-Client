@@ -1,4 +1,4 @@
-package models;
+package pharmancyApp.models;
 
 import javafx.beans.property.*;
 import java.text.ParseException;

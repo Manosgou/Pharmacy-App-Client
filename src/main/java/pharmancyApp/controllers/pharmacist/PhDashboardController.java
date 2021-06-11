@@ -1,8 +1,8 @@
 package pharmancyApp.controllers.pharmacist;
 
-import REST.Authentication;
-import REST.HTTPMethods;
-import REST.Response;
+import pharmancyApp.rest.Authentication;
+import pharmancyApp.rest.HTTPMethods;
+import pharmancyApp.rest.Response;
 import com.jfoenix.controls.JFXListView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -19,12 +19,12 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import models.User;
-import models.Location;
+import pharmancyApp.models.User;
+import pharmancyApp.models.Location;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
-import pharmancyApp.Utils.AlertDialogs;
+import pharmancyApp.utils.AlertDialogs;
 import pharmancyApp.controllers.UpdateLocationDetailsController;
 import pharmancyApp.controllers.UpdateUserDetailsController;
 import java.net.URL;

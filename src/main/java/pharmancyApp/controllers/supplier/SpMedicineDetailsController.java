@@ -2,7 +2,7 @@ package pharmancyApp.controllers.supplier;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import models.Medicine;
+import pharmancyApp.models.Medicine;
 
 public class SpMedicineDetailsController {
     @FXML

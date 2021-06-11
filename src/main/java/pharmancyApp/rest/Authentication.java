@@ -1,4 +1,4 @@
-package REST;
+package pharmancyApp.rest;
 
 public class Authentication {
     private static String token = null;

@@ -1,8 +1,8 @@
 package pharmancyApp.controllers.supplier;
 
-import REST.Authentication;
-import REST.HTTPMethods;
-import REST.Response;
+import pharmancyApp.rest.Authentication;
+import pharmancyApp.rest.HTTPMethods;
+import pharmancyApp.rest.Response;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,20 +15,16 @@ import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import models.User;
+import pharmancyApp.models.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
-import pharmancyApp.Utils.AlertDialogs;
+import pharmancyApp.utils.AlertDialogs;
 import pharmancyApp.controllers.UpdateUserDetailsController;
 
 import java.net.URL;
-import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 

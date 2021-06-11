@@ -1,28 +1,24 @@
 package pharmancyApp.controllers;
 
-import REST.Authentication;
-import REST.HTTPMethods;
-import REST.Response;
+import pharmancyApp.rest.Authentication;
+import pharmancyApp.rest.HTTPMethods;
+import pharmancyApp.rest.Response;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
-import models.User;
-import models.Location;
+import pharmancyApp.models.User;
+import pharmancyApp.models.Location;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
-import pharmancyApp.Utils.AlertDialogs;
-import pharmancyApp.Utils.TextFieldFilters;
+import pharmancyApp.utils.AlertDialogs;
+import pharmancyApp.utils.TextFieldFilters;
 
 import java.net.URL;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 

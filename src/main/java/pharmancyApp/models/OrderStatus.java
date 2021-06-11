@@ -1,4 +1,4 @@
-package models;
+package pharmancyApp.models;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

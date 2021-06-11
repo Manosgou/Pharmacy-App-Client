@@ -1,4 +1,4 @@
-package REST;
+package pharmancyApp.rest;
 
 import pharmancyApp.Settings;
 

@@ -1,8 +1,8 @@
 package pharmancyApp.controllers.customer;
 
-import REST.Authentication;
-import REST.HTTPMethods;
-import REST.Response;
+import pharmancyApp.rest.Authentication;
+import pharmancyApp.rest.HTTPMethods;
+import pharmancyApp.rest.Response;
 import animatefx.animation.*;
 import animatefx.util.ParallelAnimationFX;
 import javafx.event.ActionEvent;
@@ -16,16 +16,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import models.User;
-import models.Location;
+import pharmancyApp.models.User;
+import pharmancyApp.models.Location;
 import org.json.JSONObject;
 import pharmancyApp.Settings;
-import pharmancyApp.Utils.AlertDialogs;
+import pharmancyApp.utils.AlertDialogs;
 import pharmancyApp.controllers.UpdateLocationDetailsController;
 import pharmancyApp.controllers.UpdateUserDetailsController;
 
 import java.net.URL;
-import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 

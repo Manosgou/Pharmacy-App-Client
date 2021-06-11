@@ -14,11 +14,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1220.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.pharmacist.PhDashboardController">
+<AnchorPane prefHeight="700.0" prefWidth="1220.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.pharmacist.PhDashboardController">
    <children>
       <AnchorPane prefHeight="700.0" prefWidth="358.0" style="-fx-background-color: #FF4233;">
          <children>
-            <VBox alignment="CENTER" fillWidth="false" prefHeight="700.0" prefWidth="358.0" spacing="25.0">
+            <VBox alignment="CENTER" fillWidth="false" prefHeight="700.0" prefWidth="358.0" spacing="15.0">
                <children>
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="335.0" spacing="15.0">
                      <children>
