@@ -1,5 +1,7 @@
 package pharmancyApp.controllers.supplier;
 
+import javafx.scene.control.Alert;
+import javafx.stage.Window;
 import pharmancyApp.rest.Authentication;
 import pharmancyApp.rest.HTTPMethods;
 import pharmancyApp.rest.Response;
@@ -23,8 +25,8 @@ import org.json.JSONObject;
 import pharmancyApp.Settings;
 import pharmancyApp.utils.AlertDialogs;
 import pharmancyApp.controllers.UpdateUserDetailsController;
-
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -173,7 +175,7 @@ public class SpDashboardController implements Initializable {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -181,7 +183,7 @@ public class SpDashboardController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -324,6 +326,14 @@ public class SpDashboardController implements Initializable {
         }
     }
 
+    private void closeWindows(ActionEvent event){
+        Window currentWindow = ((Node) event.getSource()).getScene().getWindow();
+        ArrayList<Window> windows = new ArrayList<>(Window.getWindows());
+        windows.remove(currentWindow);
+        windows.forEach(w->((Stage)w).close());
+        loginPage(event);
+    }
+
     @FXML
     private void logout(ActionEvent event) {
         if (Authentication.isLoggedIn()) {
@@ -341,7 +351,7 @@ public class SpDashboardController implements Initializable {
 
                         JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, responseObj, null);
+                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);
                         }
@@ -350,7 +360,7 @@ public class SpDashboardController implements Initializable {
                 } else {
                     String headerText = "Αδυναμία συνδεσης";
                     String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                    AlertDialogs.error(headerText, null, contentText);
+                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

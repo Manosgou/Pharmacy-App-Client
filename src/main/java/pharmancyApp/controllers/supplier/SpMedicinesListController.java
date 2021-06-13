@@ -33,7 +33,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class SpMediciniesListController implements Initializable {
+public class SpMedicinesListController implements Initializable {
     @FXML
     private TableView<Medicine> medicinesTable;
 
@@ -54,7 +54,7 @@ public class SpMediciniesListController implements Initializable {
     private void getMedicinesTable() {
         medicineNameCol.setCellValueFactory(item -> item.getValue().nameProperty());
         medCategoryCol.setCellValueFactory(item -> item.getValue().getMedicineCategory().nameProperty());
-        Callback<TableColumn<Medicine, String>, TableCell<Medicine, String>> cellFoctory = (TableColumn<Medicine, String> param) -> new TableCell<>() {
+        Callback<TableColumn<Medicine, String>, TableCell<Medicine, String>> cellFactory = (TableColumn<Medicine, String> param) -> new TableCell<>() {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -150,7 +150,7 @@ public class SpMediciniesListController implements Initializable {
 
                                         JSONObject responseObj = new JSONObject(response.getResponse());
                                         String headerText = "Αδυναμια συνδεσης";
-                                        AlertDialogs.error(headerText, responseObj, null);
+                                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                                         if (respondCode == 401) {
                                             Authentication.setLogin(false);
                                         }
@@ -159,7 +159,7 @@ public class SpMediciniesListController implements Initializable {
 
                                     String headerText = "Αδυναμία συνδεσης";
                                     String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                                    AlertDialogs.error(headerText, null, contentText);
+                                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -178,7 +178,7 @@ public class SpMediciniesListController implements Initializable {
             }
 
         };
-        medicineOptionsCol.setCellFactory(cellFoctory);
+        medicineOptionsCol.setCellFactory(cellFactory);
         medicinesTable.setItems(medicines);
     }
 
@@ -212,7 +212,7 @@ public class SpMediciniesListController implements Initializable {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -220,7 +220,7 @@ public class SpMediciniesListController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
 
         } catch (Exception e) {
@@ -236,6 +236,8 @@ public class SpMediciniesListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        medicinesTable.setPlaceholder(new Label("Δεν υπάρχουν φάρμακα"));
         fetchMedicines();
     }
 }

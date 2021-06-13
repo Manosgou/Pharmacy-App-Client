@@ -90,14 +90,14 @@
                   </HBox>
                   <JFXButton onAction="#updateUserDetails" prefHeight="35.0" prefWidth="235.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Ενημερωση στοιχειων χρηστη" />
                   <Separator prefWidth="270.0" />
-                  <Label text="Στοιχεία τοποθεσιας " textFill="WHITE">
+                  <Label text="Στοιχεία τοποθεσίας " textFill="WHITE">
                      <font>
                         <Font name="FreeSans Bold" size="25.0" />
                      </font>
                   </Label>
                   <HBox prefHeight="26.0" prefWidth="213.0" spacing="5.0">
                      <children>
-                        <Label text="Οδος:" textFill="WHITE">
+                        <Label text="Οδός:" textFill="WHITE">
                            <font>
                               <Font size="17.0" />
                            </font>
@@ -111,7 +111,7 @@
                   </HBox>
                   <HBox prefHeight="26.0" prefWidth="213.0" spacing="5.0">
                      <children>
-                        <Label text="Αριθμος:" textFill="WHITE">
+                        <Label text="Αριθμός:" textFill="WHITE">
                            <font>
                               <Font size="17.0" />
                            </font>
@@ -125,7 +125,7 @@
                   </HBox>
                   <HBox prefHeight="26.0" prefWidth="213.0" spacing="5.0">
                      <children>
-                        <Label text="Πολη:" textFill="WHITE">
+                        <Label text="Πόλη:" textFill="WHITE">
                            <font>
                               <Font size="17.0" />
                            </font>
@@ -151,7 +151,7 @@
                         </Label>
                      </children>
                   </HBox>
-                  <JFXButton onAction="#updateLocationDetails" prefHeight="35.0" prefWidth="250.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Ενημερωση στοιχειων τοποθεσιας" />
+                  <JFXButton onAction="#updateLocationDetails" prefHeight="35.0" prefWidth="250.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Ενημέρωση στοιχείων τοποθεσίας" />
                </children>
             </VBox>
          </children>
@@ -161,7 +161,7 @@
       </AnchorPane>
       <AnchorPane fx:id="logOutContainer" layoutY="548.0" prefHeight="52.0" prefWidth="277.0" style="-fx-background-color: #FF4233; -fx-background-radius: 0 70 0 0;">
          <children>
-            <JFXButton layoutX="46.0" layoutY="11.0" onAction="#logout" prefHeight="30.0" prefWidth="185.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Αποσυνδεση" textFill="#dc2d18" />
+            <JFXButton layoutX="46.0" layoutY="11.0" onAction="#logout" prefHeight="30.0" prefWidth="185.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Αποσύνδεση" textFill="#dc2d18" />
          </children>
          <effect>
             <DropShadow />
@@ -180,7 +180,7 @@
                                     <Image url="@../../assets/icons/make_order.png" />
                                  </image>
                               </ImageView>
-                              <Label text="Νεα παραγγελια" textFill="WHITE">
+                              <Label text="Νέα παραγγελία" textFill="WHITE">
                                  <font>
                                     <Font name="FreeSans Bold" size="16.0" />
                                  </font>
@@ -198,7 +198,7 @@
                                     <Image url="@../../assets/icons/orders.png" />
                                  </image>
                               </ImageView>
-                              <Label text="Παραγγελιες" textFill="WHITE">
+                              <Label text="Παραγγελίες" textFill="WHITE">
                                  <font>
                                     <Font name="FreeSans Bold" size="16.0" />
                                  </font>
@@ -216,7 +216,7 @@
                                     <Image url="@../../assets/icons/pharmacy.png" />
                                  </image>
                               </ImageView>
-                              <Label text="Φαρμακα" textFill="WHITE">
+                              <Label text="Φάρμακα" textFill="WHITE">
                                  <font>
                                     <Font name="FreeSans Bold" size="16.0" />
                                  </font>
@@ -233,7 +233,7 @@
          <children>
             <VBox alignment="CENTER" fillWidth="false" prefHeight="77.0" prefWidth="534.0">
                <children>
-                  <Label text="Τελευταια παραγγελια" textFill="WHITE">
+                  <Label text="Τελευταία παραγγελία" textFill="WHITE">
                      <font>
                         <Font name="FreeSans Bold" size="19.0" />
                      </font>
@@ -242,7 +242,7 @@
                      <children>
                         <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
                            <children>
-                              <Label text="Φαρμακο" textFill="WHITE">
+                              <Label text="Φάρμακο" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
                                  </font>
@@ -253,7 +253,7 @@
                         <Separator opacity="0.15" orientation="VERTICAL" prefHeight="40.0" />
                         <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
                            <children>
-                              <Label text="Ποσοτητα" textFill="WHITE">
+                              <Label text="Ποσότητα" textFill="WHITE">
                                  <font>
                                     <Font name="FreeSans Bold" size="13.0" />
                                  </font>
@@ -264,7 +264,7 @@
                         <Separator opacity="0.15" orientation="VERTICAL" prefHeight="40.0" />
                         <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
                            <children>
-                              <Label text="Τελικη τιμη" textFill="WHITE">
+                              <Label text="Τελική τιμή" textFill="WHITE">
                                  <font>
                                     <Font name="FreeSans Bold" size="13.0" />
                                  </font>

@@ -115,7 +115,7 @@ public class PhCustomerOrderDetailsController implements Initializable {
                 } else {
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -124,7 +124,7 @@ public class PhCustomerOrderDetailsController implements Initializable {
             }
             String headerText = "Αδυναμία συνδεσης";
             String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-            AlertDialogs.error(headerText, null, contentText);
+            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -13,6 +13,6 @@
             <JFXTextField fx:id="firstnameFld" focusColor="#ff4233" labelFloat="true" promptText="Όνομα" />
          </children>
       </VBox>
-      <JFXButton defaultButton="true" layoutX="145.0" layoutY="340.0" onAction="#updateUserInformation" prefHeight="46.0" prefWidth="110.0" style="-fx-background-color: #FF4233;" text="Αποθηκευση" textFill="WHITE" />
+      <JFXButton defaultButton="true" layoutX="145.0" layoutY="340.0" onAction="#updateUserInformation" prefHeight="46.0" prefWidth="110.0" style="-fx-background-color: #FF4233;" text="Αποθήκευση" textFill="WHITE" />
    </children>
 </AnchorPane>

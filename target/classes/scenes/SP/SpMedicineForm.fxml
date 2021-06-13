@@ -50,6 +50,6 @@
             <ComboBox fx:id="medCatComboBox" prefHeight="25.0" prefWidth="259.0" promptText="Επιλέξτε κατηγορία φαρμάκου" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
-      <JFXButton fx:id="sumbitMedBtn" layoutX="212.0" layoutY="344.0" prefHeight="42.0" prefWidth="177.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20;" text="Αποθηκευση" textFill="WHITE" />
+      <JFXButton fx:id="sumbitMedBtn" layoutX="212.0" layoutY="344.0" prefHeight="42.0" prefWidth="177.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20;" text="Αποθήκευση" textFill="WHITE" />
    </children>
 </AnchorPane>

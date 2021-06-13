@@ -70,7 +70,7 @@ public class SpCategoriesListController implements Initializable {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -78,7 +78,7 @@ public class SpCategoriesListController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
 
         } catch (Exception e) {
@@ -90,7 +90,7 @@ public class SpCategoriesListController implements Initializable {
     @FXML
     private void getCategoriesTable() {
         categoryNameCol.setCellValueFactory(item -> item.getValue().nameProperty());
-        Callback<TableColumn<MedicineCategory, String>, TableCell<MedicineCategory, String>> cellFoctory = (TableColumn<MedicineCategory, String> param) -> new TableCell<>() {
+        Callback<TableColumn<MedicineCategory, String>, TableCell<MedicineCategory, String>> cellFactory = (TableColumn<MedicineCategory, String> param) -> new TableCell<>() {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -160,7 +160,7 @@ public class SpCategoriesListController implements Initializable {
 
                                     JSONObject responseObj = new JSONObject(response.getResponse());
                                     String headerText = "Αδυναμια συνδεσης";
-                                    AlertDialogs.error(headerText, responseObj, null);
+                                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                                     if (respondCode == 401) {
                                         Authentication.setLogin(false);
                                     }
@@ -168,7 +168,7 @@ public class SpCategoriesListController implements Initializable {
                             } else {
                                 String headerText = "Αδυναμία συνδεσης";
                                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                                AlertDialogs.error(headerText, null, contentText);
+                                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -186,7 +186,7 @@ public class SpCategoriesListController implements Initializable {
             }
 
         };
-        categoryOptionsCol.setCellFactory(cellFoctory);
+        categoryOptionsCol.setCellFactory(cellFactory);
         categoriesTable.setItems(this.categories);
     }
 
@@ -199,6 +199,7 @@ public class SpCategoriesListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        categoriesTable.setPlaceholder(new Label("Δεν υπάρχουν κατηγορίες"));
         fetchCategories();
     }
 }

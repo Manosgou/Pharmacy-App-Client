@@ -1,5 +1,7 @@
 package pharmancyApp.controllers.customer;
 
+import javafx.scene.control.Alert;
+import javafx.stage.Window;
 import pharmancyApp.rest.Authentication;
 import pharmancyApp.rest.HTTPMethods;
 import pharmancyApp.rest.Response;
@@ -23,8 +25,8 @@ import pharmancyApp.Settings;
 import pharmancyApp.utils.AlertDialogs;
 import pharmancyApp.controllers.UpdateLocationDetailsController;
 import pharmancyApp.controllers.UpdateUserDetailsController;
-
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -137,7 +139,7 @@ public class CuDashboardController implements Initializable {
                 } else {
                     JSONObject jsonResponse = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, jsonResponse, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText, jsonResponse);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -145,7 +147,7 @@ public class CuDashboardController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,7 +164,7 @@ public class CuDashboardController implements Initializable {
             updateLocationDetailsController.setPharmancy(location);
             updateLocationDetailsController.setFields();
             Stage stage = new Stage();
-            stage.setTitle("Σύνδεση στο σύστημα");
+            stage.setTitle("Ενημέρωση στοιχείων τοποθεσία");
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
             stage.setScene(scene);
@@ -184,7 +186,7 @@ public class CuDashboardController implements Initializable {
             updateUserDetailsController.setEmployee(user);
             updateUserDetailsController.setFields();
             Stage stage = new Stage();
-            stage.setTitle("Σύνδεση στο σύστημα");
+            stage.setTitle("Σύνδεση στοιχείων χρήστη");
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
             stage.setScene(scene);
@@ -245,26 +247,26 @@ public class CuDashboardController implements Initializable {
         String errorMessage = null;
         boolean isValid = true;
 
-        if (username.isEmpty() || username.equals("(κενό)")) {
+        if (username.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε το username";
             isValid = false;
         }
-        if (lastname.isEmpty() || lastname.equals("(κενό)")) {
+        if (lastname.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε το επίθετο";
             isValid = false;
         }
-        if (firstname.isEmpty() || firstname.equals("(κενό)")) {
+        if (firstname.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε το όνομα";
             isValid = false;
         }
-        if (email.isEmpty() || email.equals("(κενό)")) {
+        if (email.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε το email";
             isValid = false;
         }
 
         if (!isValid) {
             String headerText = "Ελλιπή στοιχεία";
-            AlertDialogs.error(headerText, null, errorMessage);
+            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,errorMessage);
         }
 
 
@@ -279,19 +281,19 @@ public class CuDashboardController implements Initializable {
         String errorMessage = null;
         boolean isValid = true;
 
-        if (street.isEmpty() || street.equals("(κενό)")) {
+        if (street.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε το όδο";
             isValid = false;
         }
 
-        if (city.isEmpty() || city.equals("(κενό)")) {
+        if (city.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε την πόλη";
             isValid = false;
         }
 
         if (!isValid) {
             String headerText = "Ελλιπή στοιχεία";
-            AlertDialogs.error(headerText, null, errorMessage);
+            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,errorMessage);
         }
 
         return isValid;
@@ -317,11 +319,7 @@ public class CuDashboardController implements Initializable {
                 e.printStackTrace();
 
             }
-        } else {
-            System.out.println("Noooo");
         }
-
-
     }
 
     @FXML
@@ -342,6 +340,14 @@ public class CuDashboardController implements Initializable {
         }
     }
 
+    private void closeWindows(ActionEvent event){
+        Window currentWindow = ((Node) event.getSource()).getScene().getWindow();
+        ArrayList<Window> windows = new ArrayList<>(Window.getWindows());
+        windows.remove(currentWindow);
+        windows.forEach(w->((Stage)w).close());
+        loginPage(event);
+    }
+
     @FXML
     private void logout(ActionEvent event) {
         if (Authentication.isLoggedIn()) {
@@ -353,12 +359,12 @@ public class CuDashboardController implements Initializable {
                     if (respondCode >= 200 && respondCode <= 299) {
                         Authentication.clearToken();
                         Authentication.setLogin(false);
-                        loginPage(event);
+                        closeWindows(event);
 
                     } else {
                         JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, responseObj, null);
+                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);
                             logout(event);
@@ -367,14 +373,14 @@ public class CuDashboardController implements Initializable {
                 } else {
                     String headerText = "Αδυναμία συνδεσης";
                     String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                    AlertDialogs.error(headerText, null, contentText);
+                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             Authentication.clearToken();
-            loginPage(event);
+            closeWindows(event);
         }
     }
 

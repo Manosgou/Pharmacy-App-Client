@@ -63,7 +63,7 @@ public class SpOrdersListController implements Initializable {
         orderQuantityCol.setCellValueFactory(item -> item.getValue().getMedicine().quantityProperty().asObject());
         orderTotalPriceCol.setCellValueFactory(item -> item.getValue().totalPriceProperty().asObject());
         orderStatusCol.setCellValueFactory(item -> item.getValue().getOrderStatus().statusProperty());
-        Callback<TableColumn<Order, String>, TableCell<Order, String>> cellFoctory = (TableColumn<Order, String> param) -> new TableCell<>() {
+        Callback<TableColumn<Order, String>, TableCell<Order, String>> cellFactory = (TableColumn<Order, String> param) -> new TableCell<>() {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -89,8 +89,10 @@ public class SpOrdersListController implements Initializable {
                             spOrderDetailsController.setOrder(order);
                             spOrderDetailsController.setFields();
                             Stage stage = new Stage();
-                            stage.setTitle("Σύνδεση στο σύστημα");
-                            stage.setScene(new Scene(root));
+                            stage.setTitle("Πληροφορίες παραγγελίας - "+order.getUser().getLastname() +" "+order.getUser().getFirstname());
+                            Scene scene = new Scene(root);
+                            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+                            stage.setScene(scene);
                             stage.setResizable(false);
                             stage.show();
                         } catch (Exception e) {
@@ -131,7 +133,7 @@ public class SpOrdersListController implements Initializable {
 
                                         JSONObject responseObj = new JSONObject(response.getResponse());
                                         String headerText = "Αδυναμια συνδεσης";
-                                        AlertDialogs.error(headerText, responseObj, null);
+                                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                                         if (respondCode == 401) {
                                             Authentication.setLogin(false);
                                         }
@@ -139,7 +141,7 @@ public class SpOrdersListController implements Initializable {
                                 } else {
                                     String headerText = "Αδυναμία συνδεσης";
                                     String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                                    AlertDialogs.error(headerText, null, contentText);
+                                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -162,7 +164,7 @@ public class SpOrdersListController implements Initializable {
             }
 
         };
-        ordersOptionCol.setCellFactory(cellFoctory);
+        ordersOptionCol.setCellFactory(cellFactory);
         ordersTable.setItems(orders);
     }
 
@@ -215,8 +217,8 @@ public class SpOrdersListController implements Initializable {
                         String locationStreet = locationObj.getString("street");
                         int locationStreetNum = locationObj.getInt("street_num");
                         String locationCity = locationObj.getString("city");
-                        int lcoationPostalCode = locationObj.getInt("postal_code");
-                        location = new Location(locationId, locationStreet, locationStreetNum, locationCity, lcoationPostalCode);
+                        int locationPostalCode = locationObj.getInt("postal_code");
+                        location = new Location(locationId, locationStreet, locationStreetNum, locationCity, locationPostalCode);
                         int quantity = jsonObject.getInt("quantity");
                         float price = jsonObject.getFloat("total_price");
                         String orderStatusId = jsonObject.getString("order_status");
@@ -239,7 +241,7 @@ public class SpOrdersListController implements Initializable {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -247,7 +249,7 @@ public class SpOrdersListController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
 
         } catch (Exception e) {
@@ -264,6 +266,7 @@ public class SpOrdersListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        ordersTable.setPlaceholder(new Label("Δεν υπάρχουν διαθέσιμες παραγγελίες"));
         fetchOrders();
     }
 }

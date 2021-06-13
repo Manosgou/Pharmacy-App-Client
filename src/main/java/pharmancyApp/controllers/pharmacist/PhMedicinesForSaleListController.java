@@ -29,7 +29,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class PhMedicinesListController implements Initializable {
+public class PhMedicinesForSaleListController implements Initializable {
     @FXML
     private TableView<Medicine> medicinesTable;
     @FXML
@@ -51,7 +51,7 @@ public class PhMedicinesListController implements Initializable {
         medCategoryCol.setCellValueFactory(item -> item.getValue().getMedicineCategory().nameProperty());
         medQuantityCol.setCellValueFactory(item -> item.getValue().quantityProperty().asObject());
         medPriceCol.setCellValueFactory(item -> item.getValue().priceProperty().asObject());
-        Callback<TableColumn<Medicine, String>, TableCell<Medicine, String>> cellFoctory = (TableColumn<Medicine, String> param) -> new TableCell<>() {
+        Callback<TableColumn<Medicine, String>, TableCell<Medicine, String>> cellFactory = (TableColumn<Medicine, String> param) -> new TableCell<>() {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -101,13 +101,13 @@ public class PhMedicinesListController implements Initializable {
             }
 
         };
-        medicineOptionsCol.setCellFactory(cellFoctory);
+        medicineOptionsCol.setCellFactory(cellFactory);
         medicinesTable.setItems(medicines);
     }
 
 
     private void fetchMedicines() {
-        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/pharmacist/get/medicines";
+        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/pharmacist/medicines";
         try {
             Response response = HTTPMethods.get(url);
             if (response != null) {
@@ -136,7 +136,7 @@ public class PhMedicinesListController implements Initializable {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -144,7 +144,7 @@ public class PhMedicinesListController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
 
         } catch (Exception e) {
@@ -161,6 +161,8 @@ public class PhMedicinesListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        medicinesTable.setPlaceholder(new Label("Δεν υπάρχουν φάρμακα για πώληση"));
         fetchMedicines();
     }
 }

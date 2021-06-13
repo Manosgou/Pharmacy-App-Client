@@ -16,7 +16,7 @@
             <HBox alignment="CENTER" layoutX="-1.0" layoutY="8.0" prefHeight="71.0" prefWidth="632.0" spacing="20.0">
                <children>
                   <ImageView fx:id="headerImage" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="headerTitle" text="Ορισμος τιμης πωλησης φαρμκακου" textFill="WHITE">
+                  <Label fx:id="headerTitle" text="Ορισμός τιμής πώλησης φαρμκάκου" textFill="WHITE">
                      <font>
                         <Font name="FreeSans Bold" size="26.0" />
                      </font>
@@ -29,11 +29,11 @@
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                <children>
-                  <Label text="Τιμη πωλησης:" />
+                  <Label text="Τιμή πώλησης:" />
                   <TextField fx:id="medicinePriceFld" />
                </children>
             </HBox>
-            <JFXButton fx:id="submit" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #FF4233;" text="Αποθηκευση" textFill="WHITE" />
+            <JFXButton fx:id="submit" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #FF4233;" text="Αποθήκευση" textFill="WHITE" />
          </children>
       </VBox>
    </children>

@@ -26,11 +26,11 @@
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                <children>
-                  <Label text="Ονομα κατηγοριας:" />
-                  <TextField fx:id="categoryNameFld" prefWidth="220.0" promptText="Εισάγετε όνομα κατηγοριίας" />
+                  <Label text="Όνομα κατηγορίας:" />
+                  <TextField fx:id="categoryNameFld" prefWidth="220.0" promptText="Εισάγετε όνομα κατηγορίας" />
                </children>
             </HBox>
-            <JFXButton fx:id="submitCatBtn" prefHeight="47.0" prefWidth="200.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20;" text="Αποθηκευση" textFill="WHITE" />
+            <JFXButton fx:id="submitCatBtn" prefHeight="47.0" prefWidth="200.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20;" text="Αποθήκευση" textFill="WHITE" />
          </children>
       </VBox>
    </children>

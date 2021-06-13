@@ -119,7 +119,7 @@
                               </Label>
                               <HBox prefHeight="26.0" prefWidth="213.0" spacing="5.0">
                                  <children>
-                                    <Label text="Οδος:" textFill="WHITE">
+                                    <Label text="Οδός:" textFill="WHITE">
                                        <font>
                                           <Font size="17.0" />
                                        </font>
@@ -133,7 +133,7 @@
                               </HBox>
                               <HBox prefHeight="26.0" prefWidth="213.0" spacing="5.0">
                                  <children>
-                                    <Label text="Αριθμος:" textFill="WHITE">
+                                    <Label text="Αριθμός:" textFill="WHITE">
                                        <font>
                                           <Font size="17.0" />
                                        </font>
@@ -147,7 +147,7 @@
                               </HBox>
                               <HBox prefHeight="26.0" prefWidth="213.0" spacing="5.0">
                                  <children>
-                                    <Label text="Πολη:" textFill="WHITE">
+                                    <Label text="Πόλη:" textFill="WHITE">
                                        <font>
                                           <Font size="17.0" />
                                        </font>
@@ -182,8 +182,8 @@
                         <JFXButton onAction="#makeOrder" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Δημιουργία παραγγελίας" />
                         <JFXButton onAction="#getOrdersList" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Παραγγελίες" />
                         <JFXButton onAction="#showAvailableMedicines" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λίστα διαθέσιμων φαρμάκων" />
-                        <JFXButton onAction="#getMedicinesList" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Φαρμακα για πωληση" />
-                        <JFXButton onAction="#showCustomersOrders" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Παραγγελίες πελατων" />
+                        <JFXButton onAction="#getMedicinesForSaleList" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Φάρμακα για πώληση" />
+                        <JFXButton onAction="#showCustomersOrders" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Παραγγελίες πελατών" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="123.0" prefWidth="358.0" spacing="10.0">

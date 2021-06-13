@@ -109,17 +109,17 @@
                   <Separator prefWidth="270.0" />
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="335.0" spacing="10.0">
                      <children>
-                        <JFXButton onAction="#addNewMedicine" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νεο φαρμακο" />
-                        <JFXButton onAction="#showAllMedicines" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λιστα φαρμακων" />
-                        <JFXButton onAction="#addNewCategory" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νέα κατηγορια φαρμακου" />
-                        <JFXButton onAction="#showAllCategories" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λιστα κατηγοριων φαρμακων" />
-                        <JFXButton onAction="#showOrders" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Παρραγελιες" />
+                        <JFXButton onAction="#addNewMedicine" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νέο φάρμακο" />
+                        <JFXButton onAction="#showAllMedicines" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λίστα φαρμάκων" />
+                        <JFXButton onAction="#addNewCategory" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νέα κατηγορία φαρμάκου" />
+                        <JFXButton onAction="#showAllCategories" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λίστα κατηγοριών φαρμάκων" />
+                        <JFXButton onAction="#showOrders" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Παρραγελίες" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="87.0" prefWidth="358.0" spacing="10.0">
                      <children>
-                        <JFXButton onAction="#updateUser" prefHeight="30.0" prefWidth="255.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Ενημερωση στοιχειων χρηστη" />
-                        <JFXButton fx:id="logout" onAction="#logout" prefHeight="30.0" prefWidth="255.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Αποσυνδεση" textFill="#dc2d18" />
+                        <JFXButton onAction="#updateUser" prefHeight="30.0" prefWidth="255.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Ενημέρωση στοιχείων χρήστη" />
+                        <JFXButton fx:id="logout" onAction="#logout" prefHeight="30.0" prefWidth="255.0" style="-fx-background-color: white; -fx-background-radius: 20 20 20 20;" text="Αποσύνδεση" textFill="#dc2d18" />
                      </children>
                   </VBox>
                </children>
@@ -147,7 +147,7 @@
             <Separator prefWidth="550.0" />
             <VBox alignment="CENTER" fillWidth="false" prefHeight="261.0" prefWidth="666.0" spacing="20.0">
                <children>
-                  <Label text="Τελευταίες ενεργειες">
+                  <Label text="Τελευταίες ενέργειες">
                      <font>
                         <Font name="FreeSans Bold" size="25.0" />
                      </font>
@@ -156,7 +156,7 @@
                      <children>
                         <VBox alignment="CENTER" fillWidth="false" prefHeight="77.0" prefWidth="534.0">
                            <children>
-                              <Label text="Τελευταια παραγγελια" textFill="WHITE">
+                              <Label text="Τελευταία παραγγελία" textFill="WHITE">
                                  <font>
                                     <Font name="FreeSans Bold" size="19.0" />
                                  </font>
@@ -175,7 +175,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
                                        <children>
-                                          <Label text="Φαρμακο" textFill="WHITE">
+                                          <Label text="Φάρμακο" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="13.0" />
                                              </font>
@@ -185,7 +185,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
                                        <children>
-                                          <Label text="Ποσοτητα" textFill="WHITE">
+                                          <Label text="Ποσότητα" textFill="WHITE">
                                              <font>
                                                 <Font name="FreeSans Bold" size="13.0" />
                                              </font>
@@ -195,7 +195,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
                                        <children>
-                                          <Label text="Τελικη τιμη" textFill="WHITE">
+                                          <Label text="Τελική τιμή" textFill="WHITE">
                                              <font>
                                                 <Font name="FreeSans Bold" size="13.0" />
                                              </font>
@@ -216,7 +216,7 @@
                      <children>
                         <VBox alignment="CENTER" fillWidth="false" prefHeight="77.0" prefWidth="534.0">
                            <children>
-                              <Label text="Τελευταια προσθηκη φαρμακου" textFill="WHITE">
+                              <Label text="Τελευταία προσθήκη φαρμάκου" textFill="WHITE">
                                  <font>
                                     <Font name="FreeSans Bold" size="19.0" />
                                  </font>
@@ -235,7 +235,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
                                        <children>
-                                          <Label text="Κατηγορια" textFill="WHITE">
+                                          <Label text="Κατηγορία" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="13.0" />
                                              </font>
@@ -245,7 +245,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
                                        <children>
-                                          <Label text="Ποσοτητα" textFill="WHITE">
+                                          <Label text="Ποσότητα" textFill="WHITE">
                                              <font>
                                                 <Font name="FreeSans Bold" size="13.0" />
                                              </font>
@@ -255,7 +255,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" fillWidth="false" prefHeight="49.0" prefWidth="100.0" spacing="12.0">
                                        <children>
-                                          <Label text="Τιμη" textFill="WHITE">
+                                          <Label text="Τιμή" textFill="WHITE">
                                              <font>
                                                 <Font name="FreeSans Bold" size="13.0" />
                                              </font>

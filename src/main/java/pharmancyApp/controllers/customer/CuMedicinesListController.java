@@ -71,7 +71,7 @@ public class CuMedicinesListController implements Initializable {
                 } else {
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -79,7 +79,7 @@ public class CuMedicinesListController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
 
         } catch (Exception e) {
@@ -95,6 +95,7 @@ public class CuMedicinesListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        medicinesTable.setPlaceholder(new Label("Δεν υπάρχουν διαθέσιμα φάρμακα"));
         fetchMedicines();
     }
 }

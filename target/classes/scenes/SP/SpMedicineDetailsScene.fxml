@@ -42,10 +42,10 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label text="Ονομα" />
-            <Label text="Ποσοτητα" GridPane.rowIndex="1" />
-            <Label text="Τιμη" GridPane.rowIndex="2" />
-            <Label text="Κατηγορια" GridPane.rowIndex="3" />
+            <Label text="Όνομα" />
+            <Label text="Ποσότητα" GridPane.rowIndex="1" />
+            <Label text="Τιμή" GridPane.rowIndex="2" />
+            <Label text="Κατηγορία" GridPane.rowIndex="3" />
             <Label fx:id="medicineNameLbl" text="Label" GridPane.columnIndex="1" />
             <Label fx:id="medicineQuaLbl" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label fx:id="medicinePriceLbl" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />

@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.customer;
 
+import javafx.fxml.Initializable;
 import pharmancyApp.rest.Authentication;
 import pharmancyApp.rest.HTTPMethods;
 import pharmancyApp.rest.Response;
@@ -22,14 +23,14 @@ import org.json.JSONObject;
 import pharmancyApp.utils.Colors;
 import pharmancyApp.Settings;
 import pharmancyApp.utils.AlertDialogs;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 
-public class CuOrdersListController {
+public class CuOrdersListController implements Initializable {
     @FXML
     private TableView<Order> ordersTable;
     @FXML
@@ -70,7 +71,7 @@ public class CuOrdersListController {
         orderTotalPriceCol.setCellValueFactory(item -> item.getValue().totalPriceProperty().asObject());
         orderStatusCol.setCellValueFactory(item -> item.getValue().getOrderStatus().statusProperty());
         orderDateTimeCol.setCellValueFactory(item -> item.getValue().getOrderDateFormatedProperty());
-        Callback<TableColumn<Order, String>, TableCell<Order, String>> cellFoctory = (TableColumn<Order, String> param) -> new TableCell<>() {
+        Callback<TableColumn<Order, String>, TableCell<Order, String>> cellFactory = (TableColumn<Order, String> param) -> new TableCell<>() {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -114,7 +115,7 @@ public class CuOrdersListController {
             }
 
         };
-        orderOptionsCol.setCellFactory(cellFoctory);
+        orderOptionsCol.setCellFactory(cellFactory);
         ordersTable.setItems(orders);
     }
 
@@ -166,7 +167,7 @@ public class CuOrdersListController {
                 } else {
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -175,7 +176,7 @@ public class CuOrdersListController {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
 
         } catch (Exception e) {
@@ -190,7 +191,7 @@ public class CuOrdersListController {
     }
 
 
-    private void saveReceipt(Order order, File file) throws FileNotFoundException, IOException {
+    private void saveReceipt(Order order, File file) throws IOException {
         String htmlReceipt = "<html lang=\"en\">\n" +
                 "  <head>\n" +
                 "    <style>\n" +
@@ -346,5 +347,10 @@ public class CuOrdersListController {
                 "</html>";
         HtmlConverter.convertToPdf(htmlReceipt, new FileOutputStream(file));
 
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        ordersTable.setPlaceholder(new Label("Δεν εχετε πραγματοποιήσει παραγγελίες"));
     }
 }

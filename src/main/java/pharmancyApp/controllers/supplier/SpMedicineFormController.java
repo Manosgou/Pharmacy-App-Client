@@ -37,7 +37,7 @@ public class SpMedicineFormController implements Initializable {
     @FXML
     private TextField medicinePriFld;
     @FXML
-    private Button sumbitMedBtn;
+    private Button submitMedBtn;
     @FXML
     private ImageView medHeaderImage;
     @FXML
@@ -71,7 +71,7 @@ public class SpMedicineFormController implements Initializable {
 
         if (!inputIsValid) {
             String headerText = "Ελλιπή στοιχεία";
-            AlertDialogs.error(headerText, null, validationError);
+            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,validationError);
         }
 
         return inputIsValid;
@@ -99,7 +99,7 @@ public class SpMedicineFormController implements Initializable {
 
                         JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, responseObj, null);
+                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);
                         }
@@ -107,7 +107,7 @@ public class SpMedicineFormController implements Initializable {
                 } else {
                     String headerText = "Αδυναμία συνδεσης";
                     String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                    AlertDialogs.error(headerText, null, contentText);
+                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                 }
 
             } catch (Exception e) {
@@ -141,7 +141,7 @@ public class SpMedicineFormController implements Initializable {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -149,7 +149,7 @@ public class SpMedicineFormController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,7 +177,7 @@ public class SpMedicineFormController implements Initializable {
                     } else {
                         JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, responseObj, null);
+                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);
                         }
@@ -185,7 +185,7 @@ public class SpMedicineFormController implements Initializable {
                 } else {
                     String headerText = "Αδυναμία συνδεσης";
                     String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                    AlertDialogs.error(headerText, null, contentText);
+                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -196,8 +196,8 @@ public class SpMedicineFormController implements Initializable {
 
     public void init() {
         if (isUpdate) {
-            sumbitMedBtn.setOnAction(this::updateMedicine);
-            sumbitMedBtn.setText("Ενημέρωση");
+            submitMedBtn.setOnAction(this::updateMedicine);
+            submitMedBtn.setText("Ενημέρωση");
             medHeaderLbl.setText("Ενημέρωση φαρμάκου");
             medHeaderImage.setImage(new Image("assets/icons/update.png"));
             medicineNamFld.setText(medicine.getName());
@@ -210,8 +210,8 @@ public class SpMedicineFormController implements Initializable {
             }
 
         } else {
-            sumbitMedBtn.setOnAction(this::saveMedicine);
-            sumbitMedBtn.setText("Αποθήκευση");
+            submitMedBtn.setOnAction(this::saveMedicine);
+            submitMedBtn.setText("Αποθήκευση");
             medHeaderLbl.setText("Εισαγωγή νέου φαρμάκου");
             medHeaderImage.setImage(new Image("assets/icons/pharmacy_b&w.png"));
         }
@@ -221,7 +221,7 @@ public class SpMedicineFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         medicineNamFld.setTextFormatter(new TextFormatter<String>(TextFieldFilters.stringFilter));
-        medicineQuaFld.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
-        medicinePriFld.setTextFormatter(new TextFormatter<Float>(new FloatStringConverter(), 1.00f, TextFieldFilters.floatFilter));
+        medicineQuaFld.setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
+        medicinePriFld.setTextFormatter(new TextFormatter<>(new FloatStringConverter(), 1.00f, TextFieldFilters.floatFilter));
     }
 }

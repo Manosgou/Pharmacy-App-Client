@@ -89,15 +89,33 @@ public class LoginController implements Initializable {
         }
     }
 
+    private boolean checkUserCredentials(String username, String password) {
+        String validationError = null;
+        boolean isValid = true;
+
+        if (password.isEmpty()) {
+            validationError = "Παρακαλώ συμπληρώστε κωδικό πρόσβασης (Password)";
+            isValid = false;
+        }
+
+        if (username.isEmpty()) {
+            validationError = "Παρακαλώ συμπληρώστε όνομα χρήστη (Username)";
+            isValid = false;
+        }
+
+        if (!isValid) {
+            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα","Ελλιπή στοιχεία",validationError);
+        }
+
+        return isValid;
+    }
+
+
     @FXML
     private void login(ActionEvent event) {
         String username = usernameFld.getText().trim();
         String password = passwordFld.getText().trim();
-        if (username.isEmpty() && password.isEmpty()) {
-            String headerText = "Ελλιπή στοιχεία";
-            String contentText = "Για να συνδεθείτε απαιτείτε username και password.";
-            AlertDialogs.error(headerText, null, contentText);
-        } else {
+        if (checkUserCredentials(username, password)) {
             String jsonString = "{\"username\": \"" + username + "\", \"password\":\"" + password + "\"}";
             String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/login";
 
@@ -115,12 +133,12 @@ public class LoginController implements Initializable {
                     } else {
                         JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, responseObj, null);
+                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     }
-                }else{
+                } else {
                     String headerText = "Αδυναμία συνδεσης";
-                    String contentText="Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                    AlertDialogs.error(headerText, null, contentText);
+                    String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
+                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR, "Σφάλμα", headerText,contentText);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

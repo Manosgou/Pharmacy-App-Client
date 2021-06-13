@@ -28,13 +28,13 @@
                   </Label>
                </children>
             </HBox>
-            <JFXButton layoutX="701.0" layoutY="44.0" onAction="#refreshTable" style="-fx-background-color: white;" text="Ανανεωση" textFill="#ff4233" />
+            <JFXButton layoutX="701.0" layoutY="44.0" onAction="#refreshTable" style="-fx-background-color: white;" text="Ανανέωση" textFill="#ff4233" />
          </children>
       </AnchorPane>
       <TableView fx:id="categoriesTable" layoutY="86.0" prefHeight="314.0" prefWidth="800.0">
         <columns>
-          <TableColumn fx:id="categoryNameCol" prefWidth="75.0" text="Ονομα καηγοριας" />
-          <TableColumn fx:id="categoryOptionsCol" prefWidth="75.0" text="Επιλογες" />
+          <TableColumn fx:id="categoryNameCol" prefWidth="75.0" text="Όνομα καηγορίας" />
+          <TableColumn fx:id="categoryOptionsCol" prefWidth="75.0" text="Επιλογές" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

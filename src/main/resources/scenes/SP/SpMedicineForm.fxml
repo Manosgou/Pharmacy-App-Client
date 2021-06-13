@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import com.jfoenix.controls.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.supplier.SpMedicineFormController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.supplier.SpMedicineFormController">
    <children>
       <AnchorPane prefHeight="86.0" prefWidth="600.0" style="-fx-background-color: #FF4233;">
          <children>
@@ -50,6 +56,6 @@
             <ComboBox fx:id="medCatComboBox" prefHeight="25.0" prefWidth="259.0" promptText="Επιλέξτε κατηγορία φαρμάκου" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
-      <JFXButton fx:id="sumbitMedBtn" layoutX="212.0" layoutY="344.0" prefHeight="42.0" prefWidth="177.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20;" text="Αποθηκευση" textFill="WHITE" />
+      <JFXButton fx:id="submitMedBtn" layoutX="212.0" layoutY="344.0" prefHeight="42.0" prefWidth="177.0" style="-fx-background-color: #FF4233; -fx-background-radius: 20;" text="Αποθήκευση" textFill="WHITE" />
    </children>
 </AnchorPane>

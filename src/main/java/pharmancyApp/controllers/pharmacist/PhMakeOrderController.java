@@ -75,7 +75,7 @@ public class PhMakeOrderController implements Initializable {
         medicineNameCol.setCellValueFactory(item -> item.getValue().nameProperty());
         medicineQuantityCol.setCellValueFactory(item -> item.getValue().quantityProperty().asObject());
         medicinePriceCol.setCellValueFactory(item -> item.getValue().priceProperty().asObject());
-        Callback<TableColumn<Medicine, String>, TableCell<Medicine, String>> cellFoctory = (TableColumn<Medicine, String> param) -> new TableCell<>() {
+        Callback<TableColumn<Medicine, String>, TableCell<Medicine, String>> cellFactory = (TableColumn<Medicine, String> param) -> new TableCell<>() {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -90,7 +90,7 @@ public class PhMakeOrderController implements Initializable {
 
                     TextField quantityFld = new TextField();
                     quantityFld.setMaxWidth(50);
-                    quantityFld.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
+                    quantityFld.setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
 
 
                     addToCart.setOnMouseClicked((MouseEvent event) -> {
@@ -105,18 +105,18 @@ public class PhMakeOrderController implements Initializable {
                                 } else {
                                     String headerText = "";
                                     String contentText = "Το προιόν έχει ήδη προστεθεί στο καλάθι.";
-                                    AlertDialogs.error(headerText, null, contentText);
+                                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                                 }
                             } else {
                                 String headerText = "Λανθασμενη ποσοτητα";
                                 String contentText = "Η ποσότητα που επιλέξατε είναι μεγαλύτερη από αύτη που σας παρέχει ο προμηθευτής";
-                                AlertDialogs.error(headerText, null, contentText);
+                                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                             }
 
                         } else {
                             String headerText = "Λανθασμενη ποσοτητα";
                             String contentText = "Το πεδίο της ποσότητας δεν μπορεί να είναι αρνητικό ή μηδέν.";
-                            AlertDialogs.error(headerText, null, contentText);
+                            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                         }
 
                     });
@@ -136,7 +136,7 @@ public class PhMakeOrderController implements Initializable {
             }
 
         };
-        actionsCol.setCellFactory(cellFoctory);
+        actionsCol.setCellFactory(cellFactory);
         medicineTable.setItems(this.medicines);
     }
 
@@ -145,7 +145,7 @@ public class PhMakeOrderController implements Initializable {
         medicineCartCol.setCellValueFactory(item -> item.getValue().getMedicine().nameProperty());
         quantityCartCol.setCellValueFactory(item -> item.getValue().quantityProperty().asObject());
         cartTotalCol.setCellValueFactory(item -> item.getValue().priceProperty().asObject());
-        Callback<TableColumn<CartItem, String>, TableCell<CartItem, String>> cellFoctory = (TableColumn<CartItem, String> param) -> new TableCell<>() {
+        Callback<TableColumn<CartItem, String>, TableCell<CartItem, String>> cellFactory = (TableColumn<CartItem, String> param) -> new TableCell<>() {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -175,7 +175,7 @@ public class PhMakeOrderController implements Initializable {
             }
 
         };
-        cartActionsCol.setCellFactory(cellFoctory);
+        cartActionsCol.setCellFactory(cellFactory);
         cartTable.setItems(this.cart);
     }
 
@@ -212,7 +212,7 @@ public class PhMakeOrderController implements Initializable {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -220,7 +220,7 @@ public class PhMakeOrderController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -248,7 +248,7 @@ public class PhMakeOrderController implements Initializable {
         }
         String headerText = "H παραγγελία δεν μπορεί να πραγματοποιηθεί.";
         String contentText = "Το καλάθι δεν μπορεί να είναι κενό.";
-        AlertDialogs.error(headerText, null, contentText);
+        AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
         return null;
     }
 
@@ -271,7 +271,7 @@ public class PhMakeOrderController implements Initializable {
 
                         JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, responseObj, null);
+                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);
                         }
@@ -279,7 +279,7 @@ public class PhMakeOrderController implements Initializable {
                 } else {
                     String headerText = "Αδυναμία συνδεσης";
                     String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                    AlertDialogs.error(headerText, null, contentText);
+                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

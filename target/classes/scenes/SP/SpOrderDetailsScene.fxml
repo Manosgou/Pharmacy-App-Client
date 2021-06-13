@@ -26,7 +26,7 @@
                         <Image url="@../../assets/icons/details.png" />
                      </image>
                   </ImageView>
-                  <Label text="Στοιχεια παραγγελιας" textFill="WHITE">
+                  <Label text="Στοιχεία παραγγελίας" textFill="WHITE">
                      <font>
                         <Font name="FreeSans Bold" size="26.0" />
                      </font>
@@ -42,7 +42,7 @@
          <children>
             <VBox alignment="CENTER_LEFT" prefHeight="296.0" prefWidth="525.0" spacing="10.0">
                <children>
-                  <Label text="Στοιχεια αγοραστη ">
+                  <Label text="Στοιχεία αγοραστή ">
                      <font>
                         <Font name="FreeSans Bold" size="26.0" />
                      </font>
@@ -60,11 +60,11 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Ονομα" GridPane.rowIndex="1" />
-                        <Label text="Επιθετο" GridPane.rowIndex="2" />
+                        <Label text="Όνομα" GridPane.rowIndex="1" />
+                        <Label text="Επίθετο" GridPane.rowIndex="2" />
                         <Label text="email" GridPane.rowIndex="3" />
                         <Label text="username" />
-                        <Label text="Ιδιοτητα" GridPane.rowIndex="4" />
+                        <Label text="Ιδιότητα" GridPane.rowIndex="4" />
                         <Label fx:id="userNameLbl" text="Label" GridPane.columnIndex="1" />
                         <Label fx:id="firstNameLbl" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="lastNameLbl" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -76,7 +76,7 @@
             </VBox>
             <VBox alignment="CENTER_LEFT" prefHeight="240.0" prefWidth="525.0" spacing="10.0">
                <children>
-                  <Label text="Φαρμακο παραγγελιας">
+                  <Label text="Φάρμακο παραγγελίας">
                      <font>
                         <Font name="FreeSans Bold" size="26.0" />
                      </font>
@@ -91,8 +91,8 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label text="Κατηγορια" GridPane.rowIndex="1" />
-                        <Label text="Ονομα" />
+                        <Label text="Κατηγορία" GridPane.rowIndex="1" />
+                        <Label text="Όνομα" />
                         <Label fx:id="medNameLbl" text="Label" GridPane.columnIndex="1" />
                         <Label fx:id="medCatLbl" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
@@ -101,7 +101,7 @@
             </VBox>
             <VBox alignment="CENTER_LEFT" prefHeight="270.0" prefWidth="525.0" spacing="10.0">
                <children>
-                  <Label text="Τοποθεσια αποστολης">
+                  <Label text="Τοποθεσία αποστολής">
                      <font>
                         <Font name="FreeSans Bold" size="26.0" />
                      </font>
@@ -118,9 +118,9 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label text="Αρ. διευθυνσης" GridPane.rowIndex="1" />
-                        <Label text="Διευθυνση" />
-                        <Label text="Πολη" GridPane.rowIndex="2" />
+                        <Label text="Αρ. διεύθυνσης" GridPane.rowIndex="1" />
+                        <Label text="Διεύθυνση" />
+                        <Label text="Πόλη" GridPane.rowIndex="2" />
                         <Label text="Τ.Κ" GridPane.rowIndex="3" />
                         <Label fx:id="streetLbl" text="Label" GridPane.columnIndex="1" />
                         <Label fx:id="streetNumLbl" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -145,10 +145,10 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label text="Τελικη τιμη" GridPane.rowIndex="1" />
-                        <Label text="Ποσοτητα φαρμκακου" />
-                        <Label text="Κατασταση παραγγελιας" GridPane.rowIndex="2" />
-                        <Label text="Ημερομηνια παραγγελιας" GridPane.rowIndex="3" />
+                        <Label text="Τελική τιμή" GridPane.rowIndex="1" />
+                        <Label text="Ποσότητα φαρμκάκου" />
+                        <Label text="Κατάσταση παραγγελίας" GridPane.rowIndex="2" />
+                        <Label text="Ημερομηνία παραγγελίας" GridPane.rowIndex="3" />
                         <Label fx:id="quantityLbl" text="Label" GridPane.columnIndex="1" />
                         <Label fx:id="totalPriceLbl" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="orderDateLbl" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />

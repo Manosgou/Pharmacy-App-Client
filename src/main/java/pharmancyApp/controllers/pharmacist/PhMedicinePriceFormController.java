@@ -64,7 +64,7 @@ public class PhMedicinePriceFormController implements Initializable {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -72,7 +72,7 @@ public class PhMedicinePriceFormController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,7 +96,7 @@ public class PhMedicinePriceFormController implements Initializable {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -104,7 +104,7 @@ public class PhMedicinePriceFormController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -128,6 +128,6 @@ public class PhMedicinePriceFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        medicinePriceFld.setTextFormatter(new TextFormatter<Float>(new FloatStringConverter(), 1.00f, TextFieldFilters.floatFilter));
+        medicinePriceFld.setTextFormatter(new TextFormatter<>(new FloatStringConverter(), 1.00f, TextFieldFilters.floatFilter));
     }
 }

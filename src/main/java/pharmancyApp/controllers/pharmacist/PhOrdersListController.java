@@ -1,5 +1,6 @@
 package pharmancyApp.controllers.pharmacist;
 
+import javafx.fxml.Initializable;
 import pharmancyApp.rest.Authentication;
 import pharmancyApp.rest.HTTPMethods;
 import pharmancyApp.rest.Response;
@@ -27,13 +28,14 @@ import pharmancyApp.utils.Colors;
 import pharmancyApp.Settings;
 import pharmancyApp.utils.AlertDialogs;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 
-public class PhOrdersListController{
+public class PhOrdersListController implements Initializable {
 
     @FXML
     private TableView<Order> ordersTable;
@@ -80,7 +82,7 @@ public class PhOrdersListController{
         orderTotalPriceCol.setCellValueFactory(item -> item.getValue().totalPriceProperty().asObject());
         orderStatusCol.setCellValueFactory(item -> item.getValue().getOrderStatus().statusProperty());
         orderDateTimeCol.setCellValueFactory(item -> item.getValue().getOrderDateFormatedProperty());
-        Callback<TableColumn<Order, String>, TableCell<Order, String>> cellFoctory = (TableColumn<Order, String> param) -> new TableCell<>() {
+        Callback<TableColumn<Order, String>, TableCell<Order, String>> cellFactory = (TableColumn<Order, String> param) -> new TableCell<>() {
             @Override
             public void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -122,7 +124,7 @@ public class PhOrdersListController{
                         } else {
                             String headerText = "Αδυναμια συνδεσης";
                             String contentText = "Για να διαθέσετε το φάρμακο " + order.getMedicine().getName() + " προς πωληση,πρεπει η κατασταση παραγγελιιας να ειναι η τελικη";
-                            AlertDialogs.error(headerText, null, contentText);
+                            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                         }
 
 
@@ -158,7 +160,7 @@ public class PhOrdersListController{
             }
 
         };
-        orderOptionsCol.setCellFactory(cellFoctory);
+        orderOptionsCol.setCellFactory(cellFactory);
         ordersTable.setItems(orders);
     }
 
@@ -212,7 +214,7 @@ public class PhOrdersListController{
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -220,7 +222,7 @@ public class PhOrdersListController{
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
 
         } catch (Exception e) {
@@ -392,5 +394,10 @@ public class PhOrdersListController{
     private void refreshTable() {
         orders.clear();
         fetchOrders();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        ordersTable.setPlaceholder(new Label("Δεν υπάρχουν διαθέσιμες παραγγελίες"));
     }
 }

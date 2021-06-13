@@ -52,7 +52,7 @@ public class SpCategoryFormController implements Initializable {
         }
         if (!inputIsValid) {
             String headerText = "Ελλιπή στοιχεία";
-            AlertDialogs.error(headerText, null, validationError);
+            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,validationError);
         }
 
         return inputIsValid;
@@ -75,7 +75,7 @@ public class SpCategoryFormController implements Initializable {
 
                         JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, responseObj, null);
+                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);
                         }
@@ -83,7 +83,7 @@ public class SpCategoryFormController implements Initializable {
                 } else {
                     String headerText = "Αδυναμία συνδεσης";
                     String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                    AlertDialogs.error(headerText, null, contentText);
+                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -100,16 +100,14 @@ public class SpCategoryFormController implements Initializable {
                 Response response = HTTPMethods.post(jsonString, url);
                 if (response != null) {
                     int respondCode = response.getRespondCode();
-                    JSONObject jsonResponse = new JSONObject(response.getResponse());
                     if (respondCode >= 200 && respondCode <= 299) {
                         final Node source = (Node) event.getSource();
                         final Stage stage = (Stage) source.getScene().getWindow();
                         stage.close();
                     } else {
-
                         JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, responseObj, null);
+                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);
                         }
@@ -117,7 +115,7 @@ public class SpCategoryFormController implements Initializable {
                 } else {
                     String headerText = "Αδυναμία συνδεσης";
                     String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                    AlertDialogs.error(headerText, null, contentText);
+                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

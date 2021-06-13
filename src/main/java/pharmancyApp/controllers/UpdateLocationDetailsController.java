@@ -1,5 +1,6 @@
 package pharmancyApp.controllers;
 
+import javafx.scene.control.Alert;
 import pharmancyApp.rest.Authentication;
 import pharmancyApp.rest.HTTPMethods;
 import pharmancyApp.rest.Response;
@@ -77,7 +78,7 @@ public class UpdateLocationDetailsController implements Initializable {
         }
         if (!inputIsValid) {
             String headerText = "Ελλιπή στοιχεία";
-            AlertDialogs.error(headerText, null, validationError);
+            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,validationError);
         }
 
 
@@ -101,7 +102,6 @@ public class UpdateLocationDetailsController implements Initializable {
                 if (response != null) {
                     int respondCode = response.getRespondCode();
                     if (respondCode >= 200 && respondCode <= 299) {
-                        JSONObject jsonResponse = new JSONObject(response.getResponse());
                         updatePharmancy(street, streetNum, city, postalCode);
                         final Node source = (Node) event.getSource();
                         final Stage stage = (Stage) source.getScene().getWindow();
@@ -110,7 +110,7 @@ public class UpdateLocationDetailsController implements Initializable {
 
                         JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, responseObj, null);
+                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);
                         }
@@ -118,7 +118,7 @@ public class UpdateLocationDetailsController implements Initializable {
                 }else{
                     String headerText = "Αδυναμία συνδεσης";
                     String contentText="Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                    AlertDialogs.error(headerText, null, contentText);
+                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                 }
 
             } catch (Exception e) {
@@ -131,8 +131,8 @@ public class UpdateLocationDetailsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         streetFld.setTextFormatter(new TextFormatter<String>(TextFieldFilters.stringFilter));
         cityFld.setTextFormatter(new TextFormatter<String>(TextFieldFilters.stringFilter));
-        streetNumFld.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
-        postalCodeFld.setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
+        streetNumFld.setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
+        postalCodeFld.setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 1, TextFieldFilters.integerFilter));
     }
 }
 

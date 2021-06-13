@@ -1,5 +1,7 @@
 package pharmancyApp.controllers.pharmacist;
 
+import javafx.scene.control.Alert;
+import javafx.stage.Window;
 import pharmancyApp.rest.Authentication;
 import pharmancyApp.rest.HTTPMethods;
 import pharmancyApp.rest.Response;
@@ -28,8 +30,7 @@ import pharmancyApp.utils.AlertDialogs;
 import pharmancyApp.controllers.UpdateLocationDetailsController;
 import pharmancyApp.controllers.UpdateUserDetailsController;
 import java.net.URL;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class PhDashboardController implements Initializable {
 
@@ -163,7 +164,7 @@ public class PhDashboardController implements Initializable {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
-                    AlertDialogs.error(headerText, responseObj, null);
+                    AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
                     }
@@ -171,7 +172,7 @@ public class PhDashboardController implements Initializable {
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                AlertDialogs.error(headerText, null, contentText);
+                AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -230,26 +231,26 @@ public class PhDashboardController implements Initializable {
         String errorMessage = null;
         boolean isValid = true;
 
-        if (username.isEmpty() || username.equals("(κενό)")) {
+        if (username.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε το username";
             isValid = false;
         }
-        if (lastname.isEmpty() || lastname.equals("(κενό)")) {
+        if (lastname.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε το επίθετο";
             isValid = false;
         }
-        if (firstname.isEmpty() || firstname.equals("(κενό)")) {
+        if (firstname.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε το όνομα";
             isValid = false;
         }
-        if (email.isEmpty() || email.equals("(κενό)")) {
+        if (email.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε το email";
             isValid = false;
         }
 
         if (!isValid) {
             String headerText = "Ελλιπή στοιχεία";
-            AlertDialogs.error(headerText, null, errorMessage);
+            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,errorMessage);
         }
 
 
@@ -264,19 +265,19 @@ public class PhDashboardController implements Initializable {
         String errorMessage = null;
         boolean isValid = true;
 
-        if (street.isEmpty() || street.equals("(κενό)")) {
+        if (street.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε το όδο";
             isValid = false;
         }
 
-        if (city.isEmpty() || city.equals("(κενό)")) {
+        if (city.isEmpty()) {
             errorMessage = "Παρακαλώ συμπληρώστε την πόλη";
             isValid = false;
         }
 
         if (!isValid) {
             String headerText = "Ελλιπή στοιχεία";
-            AlertDialogs.error(headerText, null, errorMessage);
+            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,errorMessage);
         }
 
         return isValid;
@@ -328,9 +329,9 @@ public class PhDashboardController implements Initializable {
     }
 
     @FXML
-    private void getMedicinesList() {
+    private void getMedicinesForSaleList() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMedicinesListScene.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMedicinesForSaleListScene.fxml")));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Δημιουργία παραγγελίας");
@@ -399,6 +400,14 @@ public class PhDashboardController implements Initializable {
         }
     }
 
+    private void closeWindows(ActionEvent event){
+        Window currentWindow = ((Node) event.getSource()).getScene().getWindow();
+        ArrayList<Window> windows = new ArrayList<>(Window.getWindows());
+        windows.remove(currentWindow);
+        windows.forEach(w->((Stage)w).close());
+        loginPage(event);
+    }
+
     @FXML
     private void logout(ActionEvent event) {
         if (Authentication.isLoggedIn()) {
@@ -410,12 +419,12 @@ public class PhDashboardController implements Initializable {
                     if (respondCode >= 200 && respondCode <= 299) {
                         Authentication.clearToken();
                         Authentication.setLogin(false);
-                        loginPage(event);
+                        closeWindows(event);
 
                     } else {
                         JSONObject responseObj = new JSONObject(response.getResponse());
                         String headerText = "Αδυναμια συνδεσης";
-                        AlertDialogs.error(headerText, responseObj, null);
+                        AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);
                             logout(event);
@@ -425,14 +434,14 @@ public class PhDashboardController implements Initializable {
                 } else {
                     String headerText = "Αδυναμία συνδεσης";
                     String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
-                    AlertDialogs.error(headerText, null, contentText);
+                    AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             Authentication.clearToken();
-            loginPage(event);
+            closeWindows(event);
         }
     }
 
