@@ -1,4 +1,4 @@
-package pharmancyApp.controllers.pharmacist;
+package pharmancyApp.controllers.customer;
 
 import javafx.fxml.Initializable;
 import pharmancyApp.rest.Authentication;
@@ -9,11 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -31,30 +27,22 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 
-public class PhOrdersListController implements Initializable {
-
+public class CuOrdersTableController implements Initializable {
     @FXML
     private TableView<Order> ordersTable;
-
     @FXML
     private TableColumn<Order, String> medicineNameCol;
-
     @FXML
     private TableColumn<Order, String> medCategoryCol;
-
     @FXML
     private TableColumn<Order, Integer> orderQuantityCol;
-
     @FXML
     private TableColumn<Order, Float> orderTotalPriceCol;
-
     @FXML
     private TableColumn<Order, String> orderStatusCol;
-
     @FXML
     private TableColumn<Order, String> orderDateTimeCol;
     @FXML
@@ -65,6 +53,7 @@ public class PhOrdersListController implements Initializable {
 
     private User user;
     private Location location;
+
 
     public void setUser(User user) {
         this.user = user;
@@ -91,44 +80,9 @@ public class PhOrdersListController implements Initializable {
 
                 } else {
 
-                    JFXButton makeItAvailable = new JFXButton("Προσθήκη στο κατάστημα");
-                    makeItAvailable.setStyle("-fx-background-color:" + Colors.PRIMARY);
-                    makeItAvailable.setTextFill(Paint.valueOf(Colors.WHITE));
-
                     JFXButton saveReceipt = new JFXButton("Αποθήκευση απόδειξης");
                     saveReceipt.setStyle("-fx-background-color:" + Colors.BLUE);
                     saveReceipt.setTextFill(Paint.valueOf(Colors.WHITE));
-
-
-
-
-
-                    makeItAvailable.setOnMouseClicked((MouseEvent event) -> {
-                        order = getTableView().getItems().get(getIndex());
-                        if (order.getOrderStatus().getStatudId().equals("DE")) {
-                            try {
-                                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMedicinePriceForm.fxml")));
-                                Parent root = loader.load();
-                                PhMedicinePriceFormController phMedicinePriceFormController = loader.getController();
-                                phMedicinePriceFormController.setOrderId(order.getId());
-                                phMedicinePriceFormController.init();
-                                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                                stage.setTitle("Hello World");
-                                stage.setScene(new Scene(root));
-                                stage.setResizable(false);
-                                stage.show();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-
-                            }
-                        } else {
-                            String headerText = "Αδυναμια συνδεσης";
-                            String contentText = "Για να διαθέσετε το φάρμακο " + order.getMedicine().getName() + " προς πωληση,πρεπει η κατασταση παραγγελιιας να ειναι η τελικη";
-                            AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
-                        }
-
-
-                    });
 
 
                     saveReceipt.setOnMouseClicked((MouseEvent event) -> {
@@ -138,7 +92,7 @@ public class PhOrdersListController implements Initializable {
                         File dest = fileChooser.showSaveDialog(new Stage());
                         if (dest != null) {
                             String filePath = dest.getAbsolutePath();
-                            if(!filePath.endsWith(".pdf")) {
+                            if (!filePath.endsWith(".pdf")) {
                                 try {
                                     saveReceipt(order, new File(filePath + ".pdf"));
                                 } catch (IOException e) {
@@ -149,7 +103,8 @@ public class PhOrdersListController implements Initializable {
                         }
                     });
 
-                    HBox actionsBtns = new HBox(makeItAvailable,saveReceipt);
+
+                    HBox actionsBtns = new HBox(saveReceipt);
                     actionsBtns.setAlignment(Pos.CENTER);
                     actionsBtns.setSpacing(5);
 
@@ -165,7 +120,7 @@ public class PhOrdersListController implements Initializable {
     }
 
     public void fetchOrders() {
-        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/pharmacist/get/orders";
+        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/customer/get/orders";
 
         try {
             Response response = HTTPMethods.get(url);
@@ -176,7 +131,6 @@ public class PhOrdersListController implements Initializable {
                     Medicine medicine;
                     MedicineCategory medicineCategory;
                     OrderStatus orderStatus;
-                    Order order;
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -204,14 +158,13 @@ public class PhOrdersListController implements Initializable {
                         String orderTimeDate = jsonObject.getString("date_ordered");
                         orderStatus = new OrderStatus(orderStatusId, ordStatus);
                         medicine = new Medicine(medicineId, medicineName, medicineQuantity, medicinePrice, medicineCategory);
-                        order = new Order(id, user, medicine, quantity, price, orderStatus, location, orderTimeDate);
+                        Order order = new Order(id, user, medicine, quantity, price, orderStatus, location, orderTimeDate);
                         orders.add(order);
 
 
                     }
                     getOrdersTable();
                 } else {
-
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
                     AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
@@ -219,6 +172,7 @@ public class PhOrdersListController implements Initializable {
                         Authentication.setLogin(false);
                     }
                 }
+
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
@@ -228,6 +182,12 @@ public class PhOrdersListController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void refreshTable() {
+        orders.clear();
+        fetchOrders();
     }
 
 
@@ -333,11 +293,11 @@ public class PhOrdersListController implements Initializable {
                 "            <table>\n" +
                 "              <tr>\n" +
                 "                <td class=\"title\">\n" +
-                "                <h4>Pharma[Co]</h4>"+
+                "                <h4>Pharma[Co]</h4>" +
                 "                </td>\n" +
                 "                <td>\n" +
-                "                  Αρ. απόδειξης #: "+order.getId()+"<br />\n" +
-                "                  Ημ. παραγγελίας: "+order.getOrderDateFormatedProperty().get()+"<br />\n" +
+                "                  Αρ. απόδειξης #: " + order.getId() + "<br />\n" +
+                "                  Ημ. παραγγελίας: " + order.getOrderDateFormatedProperty().get() + "<br />\n" +
                 "                </td>\n" +
                 "              </tr>\n" +
                 "            </table>\n" +
@@ -349,13 +309,13 @@ public class PhOrdersListController implements Initializable {
                 "              <tr>\n" +
                 "                <td>\n" +
                 "                  <b>Στοιχεία τοποθεσίας</b>.<br />\n" +
-                "                  "+order.getLocation().getStreet()+" "+order.getLocation().getStreetNum()+"<br />\n" +
-                "                  "+order.getLocation().getCity()+", Τ.Κ "+order.getLocation().getPostalCode()+"\n" +
+                "                  " + order.getLocation().getStreet() + " " + order.getLocation().getStreetNum() + "<br />\n" +
+                "                  " + order.getLocation().getCity() + ", Τ.Κ " + order.getLocation().getPostalCode() + "\n" +
                 "                </td>\n" +
                 "                <td>\n" +
                 "                  <b>Στοιχεία πελάτη</b>.<br />\n" +
-                "                  "+order.getUser().getLastname()+" "+order.getUser().getFirstname()+"<br />\n" +
-                "                  "+order.getUser().getEmail()+"\n" +
+                "                  " + order.getUser().getLastname() + " " + order.getUser().getFirstname() + "<br />\n" +
+                "                  " + order.getUser().getEmail() + "\n" +
                 "                </td>\n" +
                 "              </tr>\n" +
                 "            </table>\n" +
@@ -366,20 +326,20 @@ public class PhOrdersListController implements Initializable {
                 "          <td>Κωδικός κατάστασης</td>\n" +
                 "        </tr>\n" +
                 "        <tr class=\"details\">\n" +
-                "          <td>"+order.getOrderStatus().getStatus()+"</td>\n" +
-                "          <td><i>"+order.getOrderStatus().getStatudId()+"</i></td>\n" +
+                "          <td>" + order.getOrderStatus().getStatus() + "</td>\n" +
+                "          <td><i>" + order.getOrderStatus().getStatudId() + "</i></td>\n" +
                 "        </tr>\n" +
                 "        <tr class=\"heading\">\n" +
                 "          <td>Όνομα φαρμάκου</td>\n" +
                 "          <td>Τιμή φαρμάκου * Ποσότητα</td>\n" +
                 "        </tr>\n" +
                 "        <tr class=\"item\">\n" +
-                "          <td>"+order.getMedicine().getName()+" - "+order.getMedicine().getMedicineCategory().getName()+"</td>\n" +
-                "          <td>"+order.getMedicine().getPrice()+" € * "+order.getQuantity()+"</td>\n" +
+                "          <td>" + order.getMedicine().getName() + " - " + order.getMedicine().getMedicineCategory().getName() + "</td>\n" +
+                "          <td>" + order.getMedicine().getPrice() + " € * " + order.getQuantity() + "</td>\n" +
                 "        </tr>\n" +
                 "        <tr class=\"total\">\n" +
                 "          <td></td>\n" +
-                "          <td>Σύνολο: "+order.getTotalPrice()+" €</td>\n" +
+                "          <td>Σύνολο: " + order.getTotalPrice() + " €</td>\n" +
                 "        </tr>\n" +
                 "      </table>\n" +
                 "    </div>\n" +
@@ -389,15 +349,8 @@ public class PhOrdersListController implements Initializable {
 
     }
 
-
-    @FXML
-    private void refreshTable() {
-        orders.clear();
-        fetchOrders();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ordersTable.setPlaceholder(new Label("Δεν υπάρχουν διαθέσιμες παραγγελίες"));
+        ordersTable.setPlaceholder(new Label("Δεν εχετε πραγματοποιήσει παραγγελίες"));
     }
 }

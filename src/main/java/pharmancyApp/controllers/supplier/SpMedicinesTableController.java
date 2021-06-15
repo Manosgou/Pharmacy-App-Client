@@ -33,7 +33,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class SpMedicinesListController implements Initializable {
+public class SpMedicinesTableController implements Initializable {
     @FXML
     private TableView<Medicine> medicinesTable;
 
@@ -86,8 +86,10 @@ public class SpMedicinesListController implements Initializable {
                             spMedicineDetailsController.setMedicine(medicine);
                             spMedicineDetailsController.init();
                             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            stage.setTitle("Hello World");
-                            stage.setScene(new Scene(root));
+                            stage.setTitle("Προβολή φαρμάκου: "+medicine.getName());
+                            Scene scene = new Scene(root);
+                            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+                            stage.setScene(scene);
                             stage.setResizable(false);
                             stage.show();
                         } catch (Exception e) {
@@ -110,8 +112,10 @@ public class SpMedicinesListController implements Initializable {
                             spMedicineFormController.setMedicine(medicine);
                             spMedicineFormController.init();
                             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                            stage.setTitle("Hello World");
-                            stage.setScene(new Scene(root));
+                            stage.setTitle("Επεξεργασία φαρμάκου");
+                            Scene scene = new Scene(root);
+                            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
+                            stage.setScene(scene);
                             stage.setResizable(false);
                             stage.show();
                         } catch (Exception e) {

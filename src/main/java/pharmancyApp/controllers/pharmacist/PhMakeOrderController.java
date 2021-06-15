@@ -108,13 +108,13 @@ public class PhMakeOrderController implements Initializable {
                                     AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                                 }
                             } else {
-                                String headerText = "Λανθασμενη ποσοτητα";
+                                String headerText = "Λανθασμένη ποσότητα";
                                 String contentText = "Η ποσότητα που επιλέξατε είναι μεγαλύτερη από αύτη που σας παρέχει ο προμηθευτής";
                                 AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                             }
 
                         } else {
-                            String headerText = "Λανθασμενη ποσοτητα";
+                            String headerText = "Λανθασμένη ποσότητα";
                             String contentText = "Το πεδίο της ποσότητας δεν μπορεί να είναι αρνητικό ή μηδέν.";
                             AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
                         }
@@ -211,7 +211,7 @@ public class PhMakeOrderController implements Initializable {
                 } else {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
-                    String headerText = "Αδυναμια συνδεσης";
+                    String headerText = "Αδυναμία σύνδεσης";
                     AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
@@ -270,7 +270,7 @@ public class PhMakeOrderController implements Initializable {
                     } else {
 
                         JSONObject responseObj = new JSONObject(response.getResponse());
-                        String headerText = "Αδυναμια συνδεσης";
+                        String headerText = "Αδυναμία σύνδεσης";
                         AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);

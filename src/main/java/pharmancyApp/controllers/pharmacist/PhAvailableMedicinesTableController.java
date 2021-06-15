@@ -1,4 +1,4 @@
-package pharmancyApp.controllers.customer;
+package pharmancyApp.controllers.pharmacist;
 
 import pharmancyApp.rest.Authentication;
 import pharmancyApp.rest.HTTPMethods;
@@ -18,39 +18,45 @@ import pharmancyApp.utils.AlertDialogs;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CuMedicinesListController implements Initializable {
+public class PhAvailableMedicinesTableController implements Initializable {
+
     @FXML
     private TableView<Medicine> medicinesTable;
+
     @FXML
     private TableColumn<Medicine, String> medicineNameCol;
+
     @FXML
-    private TableColumn<Medicine, String> medicineCategoryCol;
+    private TableColumn<Medicine, String> medicineCategoryNameCol;
+
     @FXML
     private TableColumn<Medicine, Integer> medicineQuantityCol;
+
     @FXML
     private TableColumn<Medicine, Float> medicinePriceCol;
 
     private final ObservableList<Medicine> medicines = FXCollections.observableArrayList();
 
-
+    @FXML
     private void getMedicinesTable() {
         medicineNameCol.setCellValueFactory(item -> item.getValue().nameProperty());
-        medicineCategoryCol.setCellValueFactory(item -> item.getValue().getMedicineCategory().nameProperty());
+        medicineCategoryNameCol.setCellValueFactory(item -> item.getValue().getMedicineCategory().nameProperty());
         medicineQuantityCol.setCellValueFactory(item -> item.getValue().quantityProperty().asObject());
         medicinePriceCol.setCellValueFactory(item -> item.getValue().priceProperty().asObject());
         medicinesTable.setItems(medicines);
     }
 
     private void fetchMedicines() {
-        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/customer/get/medicines";
+        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/pharmacist/get/medicines";
         try {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
+
                 if (respondCode >= 200 && respondCode <= 299) {
                     JSONArray jsonArray = new JSONArray(response.getResponse());
-                    MedicineCategory medicineCategory;
                     Medicine medicine;
+                    MedicineCategory medicineCategory;
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -63,12 +69,15 @@ public class CuMedicinesListController implements Initializable {
                         String categoryName = categoryObj.getString("name");
                         medicineCategory = new MedicineCategory(categoryId, categoryName);
                         medicine = new Medicine(id, name, quantity, price, medicineCategory);
-                        medicines.add(medicine);
-
+                        medicines.addAll(medicine);
 
                     }
+
                     getMedicinesTable();
+
+
                 } else {
+
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
                     AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
@@ -81,7 +90,6 @@ public class CuMedicinesListController implements Initializable {
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
                 AlertDialogs.alertPlainText(Alert.AlertType.ERROR,"Σφάλμα",headerText,contentText);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

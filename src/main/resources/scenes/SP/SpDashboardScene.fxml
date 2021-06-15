@@ -15,7 +15,7 @@
                <children>
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="335.0">
                      <children>
-                        <Label text="Στοιχεια χρηστη" textFill="WHITE">
+                        <Label text="Στοιχεία χρήστη" textFill="WHITE">
                            <font>
                               <Font name="FreeSans Bold" size="30.0" />
                            </font>
@@ -110,10 +110,10 @@
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="335.0" spacing="10.0">
                      <children>
                         <JFXButton onAction="#addNewMedicine" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νέο φάρμακο" />
-                        <JFXButton onAction="#showAllMedicines" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λίστα φαρμάκων" />
+                        <JFXButton onAction="#showAllMedicines" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Πίνακας φαρμάκων" />
                         <JFXButton onAction="#addNewCategory" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Νέα κατηγορία φαρμάκου" />
-                        <JFXButton onAction="#showAllCategories" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Λίστα κατηγοριών φαρμάκων" />
-                        <JFXButton onAction="#showOrders" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Παρραγελίες" />
+                        <JFXButton onAction="#showAllCategories" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Πίνακας κατηγοριών φαρμάκων" />
+                        <JFXButton onAction="#showOrders" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: white;" text="Πίνακας παρραγελιών" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="87.0" prefWidth="358.0" spacing="10.0">

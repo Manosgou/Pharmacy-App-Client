@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.effect.GaussianBlur?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.customer.CuDashboardController">
+<AnchorPane prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.customer.CuDashboardController">
    <children>
       <ImageView fitHeight="600.0" fitWidth="1202.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -23,11 +17,11 @@
             <GaussianBlur />
          </effect>
       </ImageView>
-      <AnchorPane fx:id="userInformationContainer" prefHeight="458.0" prefWidth="342.0" style="-fx-background-color: #FF4233; -fx-background-radius: 0 0 70 0;">
+      <AnchorPane fx:id="userInformationContainer" prefHeight="490.0" prefWidth="342.0" style="-fx-background-color: #FF4233; -fx-background-radius: 0 0 70 0;">
          <children>
-            <VBox alignment="TOP_CENTER" layoutX="10.0" prefHeight="458.0" prefWidth="325.0" spacing="8.0">
+            <VBox alignment="TOP_CENTER" layoutX="10.0" prefHeight="490.0" prefWidth="325.0" spacing="8.0">
                <children>
-                  <Label text="Στοιχεια χρηστη" textFill="WHITE">
+                  <Label text="Στοιχεία χρηστη" textFill="WHITE">
                      <font>
                         <Font name="FreeSans Bold" size="30.0" />
                      </font>

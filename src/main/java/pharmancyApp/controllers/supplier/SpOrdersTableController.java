@@ -1,4 +1,4 @@
-package pharmancyApp.controllers.pharmacist;
+package pharmancyApp.controllers.supplier;
 
 import pharmancyApp.rest.Authentication;
 import pharmancyApp.rest.HTTPMethods;
@@ -30,8 +30,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-
-public class PhCustomersOrdersListController implements Initializable {
+public class SpOrdersTableController implements Initializable {
     @FXML
     private TableView<Order> ordersTable;
     @FXML
@@ -54,6 +53,7 @@ public class PhCustomersOrdersListController implements Initializable {
     private Order order;
     private final ObservableList<Order> orders = FXCollections.observableArrayList();
 
+
     @FXML
     private void getOrdersTable() {
         buyersFirstNameCol.setCellValueFactory(item -> item.getValue().getUser().firstnameProperty());
@@ -72,7 +72,7 @@ public class PhCustomersOrdersListController implements Initializable {
 
                 } else {
 
-                    JFXButton viewOrder = new JFXButton("Προβολη");
+                    JFXButton viewOrder = new JFXButton("Προβολή");
                     viewOrder.setStyle("-fx-background-color:" + Colors.BLUE);
                     viewOrder.setTextFill(Paint.valueOf(Colors.WHITE));
 
@@ -83,11 +83,11 @@ public class PhCustomersOrdersListController implements Initializable {
                     viewOrder.setOnMouseClicked((MouseEvent event) -> {
                         order = getTableView().getItems().get(getIndex());
                         try {
-                            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhCustomerOrderDetailsScene.fxml")));
+                            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpOrderDetailsScene.fxml")));
                             Parent root = loader.load();
-                            PhCustomerOrderDetailsController phCustomerOrderDetailsController = loader.getController();
-                            phCustomerOrderDetailsController.setOrder(order);
-                            phCustomerOrderDetailsController.setFields();
+                            SpOrderDetailsController spOrderDetailsController = loader.getController();
+                            spOrderDetailsController.setOrder(order);
+                            spOrderDetailsController.setFields();
                             Stage stage = new Stage();
                             stage.setTitle("Πληροφορίες παραγγελίας - "+order.getUser().getLastname() +" "+order.getUser().getFirstname());
                             Scene scene = new Scene(root);
@@ -99,12 +99,13 @@ public class PhCustomersOrdersListController implements Initializable {
                             e.printStackTrace();
 
                         }
+
                     });
 
 
                     deleteOrder.setOnMouseClicked((MouseEvent event) -> {
                         order = getTableView().getItems().get(getIndex());
-                        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/pharmacist/delete/customer/order/" + order.getId();
+                        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/delete/order/" + order.getId();
                         Alert alert;
 
                         ButtonType delete = new ButtonType("Διαγραφή", ButtonBar.ButtonData.OK_DONE);
@@ -129,6 +130,7 @@ public class PhCustomersOrdersListController implements Initializable {
                                     if (respondCode > 200 && respondCode < 299) {
                                         orders.removeIf(m -> m.getId() == order.getId());
                                     } else {
+
                                         JSONObject responseObj = new JSONObject(response.getResponse());
                                         String headerText = "Αδυναμια συνδεσης";
                                         AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
@@ -166,14 +168,14 @@ public class PhCustomersOrdersListController implements Initializable {
         ordersTable.setItems(orders);
     }
 
-    @FXML
+
     public void fetchOrders() {
-        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/pharmacist/get/customers/orders";
+        String url = (Settings.DEBUG ? "http://127.0.0.1:8000/" : "https://pharmacyapp-api.herokuapp.com/") + "api/v1/supplier/get/orders";
+
         try {
             Response response = HTTPMethods.get(url);
             if (response != null) {
                 int respondCode = response.getRespondCode();
-
                 if (respondCode >= 200 && respondCode <= 299) {
                     JSONArray jsonArray = new JSONArray(response.getResponse());
                     User user;
@@ -181,9 +183,11 @@ public class PhCustomersOrdersListController implements Initializable {
                     MedicineCategory medicineCategory;
                     Location location;
                     OrderStatus orderStatus;
+                    Order order;
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
+
                         int id = jsonObject.getInt("id");
                         JSONObject userProfileJson = jsonObject.getJSONObject("user_profile");
                         JSONObject userDetails = userProfileJson.getJSONObject("user");
@@ -227,13 +231,14 @@ public class PhCustomersOrdersListController implements Initializable {
                         String orderDateTime = jsonObject.getString("date_ordered");
                         orderStatus = new OrderStatus(orderStatusId, ordStatus);
                         medicine = new Medicine(medicineId, medicineName, medicineQuantity, medicinePrice, medicineCategory);
-                        Order order = new Order(id, user, medicine, quantity, price, orderStatus, location, orderDateTime);
+                        order = new Order(id, user, medicine, quantity, price, orderStatus, location, orderDateTime);
                         orders.add(order);
 
 
                     }
                     getOrdersTable();
                 } else {
+
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
                     AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
@@ -241,7 +246,6 @@ public class PhCustomersOrdersListController implements Initializable {
                         Authentication.setLogin(false);
                     }
                 }
-
             } else {
                 String headerText = "Αδυναμία συνδεσης";
                 String contentText = "Η επικοινωνία με τον εξυπηρετητή απέτυχε";
@@ -252,7 +256,6 @@ public class PhCustomersOrdersListController implements Initializable {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     private void refreshTable() {

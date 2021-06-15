@@ -29,7 +29,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class PhMedicinesForSaleListController implements Initializable {
+public class PhMedicinesForSaleTableController implements Initializable {
     @FXML
     private TableView<Medicine> medicinesTable;
     @FXML

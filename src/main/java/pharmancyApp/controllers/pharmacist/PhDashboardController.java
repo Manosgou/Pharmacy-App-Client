@@ -309,12 +309,12 @@ public class PhDashboardController implements Initializable {
     @FXML
     public void getOrdersList() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhOrdersListScene.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhOrdersTableScene.fxml")));
             Parent root = loader.load();
-            PhOrdersListController phOrdersListController = loader.getController();
-            phOrdersListController.setUser(user);
-            phOrdersListController.setLocation(location);
-            phOrdersListController.fetchOrders();
+            PhOrdersTableController phOrdersTableController = loader.getController();
+            phOrdersTableController.setUser(user);
+            phOrdersTableController.setLocation(location);
+            phOrdersTableController.fetchOrders();
             Stage stage = new Stage();
             stage.setTitle("Δημιουργία παραγγελίας");
             Scene scene = new Scene(root);
@@ -331,7 +331,7 @@ public class PhDashboardController implements Initializable {
     @FXML
     private void getMedicinesForSaleList() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMedicinesForSaleListScene.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhMedicinesForSaleTableScene.fxml")));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Δημιουργία παραγγελίας");
@@ -349,7 +349,7 @@ public class PhDashboardController implements Initializable {
     @FXML
     private void showAvailableMedicines() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhAvailableMedicinesListScene.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhAvailableMedicinesTableScene.fxml")));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Δημιουργία παραγγελίας");
@@ -367,7 +367,7 @@ public class PhDashboardController implements Initializable {
     @FXML
     private void showCustomersOrders() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhCustomersOrdersListScene.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/PH/PhCustomersOrdersTableScene.fxml")));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Δημιουργία παραγγελίας");

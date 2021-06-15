@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.supplier.SpCategoriesListController">
+<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pharmancyApp.controllers.supplier.SpCategoriesTableController">
    <children>
       <AnchorPane prefHeight="86.0" prefWidth="800.0" style="-fx-background-color: #FF4233;">
          <children>
@@ -21,7 +21,7 @@
                         <Image url="@../../assets/icons/clipboard.png" />
                      </image>
                   </ImageView>
-                  <Label text="Λίστα Κατηγοριών" textFill="WHITE">
+                  <Label text="Πίνακας κατηγοριών" textFill="WHITE">
                      <font>
                         <Font name="FreeSans Bold" size="26.0" />
                      </font>
@@ -33,7 +33,7 @@
       </AnchorPane>
       <TableView fx:id="categoriesTable" layoutY="86.0" prefHeight="314.0" prefWidth="800.0">
         <columns>
-          <TableColumn fx:id="categoryNameCol" prefWidth="75.0" text="Όνομα καηγορίας" />
+          <TableColumn fx:id="categoryNameCol" prefWidth="75.0" text="Όνομα" />
           <TableColumn fx:id="categoryOptionsCol" prefWidth="75.0" text="Επιλογές" />
         </columns>
          <columnResizePolicy>

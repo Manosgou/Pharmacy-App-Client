@@ -103,7 +103,7 @@ public class UpdateUserDetailsController implements Initializable {
                     } else {
 
                         JSONObject responseObj = new JSONObject(response.getResponse());
-                        String headerText = "Αδυναμια συνδεσης";
+                        String headerText = "Αδυναμία σύνδεσης";
                         AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);

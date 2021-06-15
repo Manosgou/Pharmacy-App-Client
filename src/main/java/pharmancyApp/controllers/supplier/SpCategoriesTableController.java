@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class SpCategoriesListController implements Initializable {
+public class SpCategoriesTableController implements Initializable {
     @FXML
     private TableView<MedicineCategory> categoriesTable;
 
@@ -69,7 +69,7 @@ public class SpCategoriesListController implements Initializable {
                 } else {
 
                     JSONObject responseObj = new JSONObject(response.getResponse());
-                    String headerText = "Αδυναμια συνδεσης";
+                    String headerText = "Αδυναμία συνδεσης";
                     AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                     if (respondCode == 401) {
                         Authentication.setLogin(false);
@@ -121,7 +121,7 @@ public class SpCategoriesListController implements Initializable {
                             Scene scene = new Scene(root);
                             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
                             stage.setScene(scene);
-                            stage.setTitle("Επεξεργασία κατηγορίας.");
+                            stage.setTitle("Επεξεργασία κατηγορίας");
                             stage.setResizable(false);
                             stage.show();
                         } catch (Exception e) {

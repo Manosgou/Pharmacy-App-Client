@@ -172,7 +172,6 @@ public class SpDashboardController implements Initializable {
                     bindEmployeeLabels(this.user);
                     setLastActionsLabels(customerName, orderMedicine, orderQuantity, orderPrice, medicineName, medicineCategory, medicineQuantity, medicinePrice);
                 } else {
-
                     JSONObject responseObj = new JSONObject(response.getResponse());
                     String headerText = "Αδυναμια συνδεσης";
                     AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
@@ -222,7 +221,7 @@ public class SpDashboardController implements Initializable {
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
             stage.setScene(scene);
-            stage.setTitle("Εισαγωγή νέου φαρμάκου");
+            stage.setTitle("Εισαγωγή νέας κατηγορίας");
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
@@ -234,13 +233,13 @@ public class SpDashboardController implements Initializable {
     @FXML
     private void showAllCategories() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpCategoriesListScene.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpCategoriesTableScene.fxml")));
             Parent root = loader.load();
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
             stage.setScene(scene);
-            stage.setTitle("Προβολή όλων των κατηγοριών");
+            stage.setTitle("Πίνακας κατηγοριών");
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
@@ -252,13 +251,13 @@ public class SpDashboardController implements Initializable {
     @FXML
     private void showAllMedicines() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpMedicinesListScene.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpMedicinesTableScene.fxml")));
             Parent root = loader.load();
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/styling/FlatBee.css")).toExternalForm());
             stage.setScene(scene);
-            stage.setTitle("Λίστα φαρμάκων");
+            stage.setTitle("Πίνακας φαρμάκων");
             stage.setResizable(false);
             stage.show();
         } catch (Exception e) {
@@ -293,7 +292,7 @@ public class SpDashboardController implements Initializable {
     @FXML
     private void showOrders() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpOrdersListScene.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/SP/SpOrdersTableScene.fxml")));
             Parent root = loader.load();
             Stage stage = new Stage();
             Scene scene = new Scene(root);
@@ -345,7 +344,7 @@ public class SpDashboardController implements Initializable {
                     if (respondCode >= 200 && respondCode <= 299) {
                         Authentication.clearToken();
                         Authentication.setLogin(false);
-                        loginPage(event);
+                        closeWindows(event);
 
                     } else {
 
@@ -354,6 +353,7 @@ public class SpDashboardController implements Initializable {
                         AlertDialogs.alertJSONResponse(Alert.AlertType.ERROR,"Σφάλμα",headerText,responseObj);
                         if (respondCode == 401) {
                             Authentication.setLogin(false);
+                            closeWindows(event);
                         }
                     }
 
@@ -367,7 +367,7 @@ public class SpDashboardController implements Initializable {
             }
         } else {
             Authentication.clearToken();
-            loginPage(event);
+            closeWindows(event);
         }
     }
 

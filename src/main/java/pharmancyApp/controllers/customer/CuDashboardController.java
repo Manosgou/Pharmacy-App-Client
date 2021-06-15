@@ -201,12 +201,12 @@ public class CuDashboardController implements Initializable {
     @FXML
     private void showOrders() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuOrdersListScene.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuOrdersTableScene.fxml")));
             Parent root = loader.load();
-            CuOrdersListController cuOrdersListController =loader.getController();
-            cuOrdersListController.setUser(user);
-            cuOrdersListController.setLocation(location);
-            cuOrdersListController.fetchOrders();
+            CuOrdersTableController cuOrdersTableController =loader.getController();
+            cuOrdersTableController.setUser(user);
+            cuOrdersTableController.setLocation(location);
+            cuOrdersTableController.fetchOrders();
             Stage stage = new Stage();
             stage.setTitle("Προβολή παραγγελιών");
             Scene scene = new Scene(root);
@@ -223,7 +223,7 @@ public class CuDashboardController implements Initializable {
     @FXML
     private void showMedicinesList() {
         try {
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuMedicinesListScene.fxml")));
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/CU/CuMedicinesTableScene.fxml")));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Δημιουργία παραγγελίας");
